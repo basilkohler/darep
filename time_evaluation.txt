@@ -1,0 +1,23 @@
+expected time needed:
+
+- for each person in the group 1h of installing/ get used to IDE/java/git… = 4h total.
+
+- total 2h of planning of conceptual architecture planning	=   8h total.
+
+- command add: 
+	5h implementing, 4h implement tests, 2h test,  2h bugfixing (after testing), 1 document total = 14h.
+
+- command replace:
+	total 8h.
+
+- command delete:
+	total 2h.
+
+- command list
+	total 6h.
+
+- command export
+	total 6h.
+
+
+total total = 48h or 12h for each person in the group.
