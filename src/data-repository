@@ -7,16 +7,16 @@ DAREP_JAR="./darep.jar"
 # return 0 if found, 1 if not.
 function find_java_bin() {
 
-	# Maybe java is included in $PATH ?
+	# maybe java is included in $PATH ?
 	local JAVABIN=$(which java)
 
-	# If not, try $JAVA_HOME variable
+	# if not, try $JAVA_HOME variable
 	if [ -z "$JAVABIN" -a -n "$JAVA_HOME" ]; then
 		local JAVABIN="$JAVA_HOME/bin/java"
 	fi
 
 
-	# Echo path to java-binary if found and executable
+	# echo path to java-binary if found and executable
 	# else return 1
 	if [ -x "$JAVABIN" ]; then
 		echo "$JAVABIN"
@@ -28,13 +28,14 @@ function find_java_bin() {
 }
 
 ################
-# Begin script #
+# begin script #
 ################
 
 JAVA_BIN=$(find_java_bin)
 
 if [ $? -ne 0 ]; then
 	echo "Could not find java-executable. Try including it in \$PATH or setting \$JAVA_HOME"
+	exit 1
 else
 	# call the data-repository binary with given arguments
 	$JAVA_BIN -jar $DAREP_JAR "$@"
