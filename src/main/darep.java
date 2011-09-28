@@ -7,7 +7,6 @@ public class darep {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Sick data repository you got there, bro");
-
 	}
 
 }
