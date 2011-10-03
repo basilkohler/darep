@@ -1,13 +1,34 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package darep;
 
 import java.util.Arrays;
 import java.util.Map;
 
+import com.sun.tools.javac.code.Attribute.Array;
+
 /**
+ * This class contains all options, flags and parameters given
+ * by a Commandline call.
+ * 
+ * It is created by the parser and passed to the actual action that
+ * will be performed.
+ * 
+ * Nomenclature:
+ * 
+ * - action:      the name of the command
+ * - option:      options passed with a "-" that can have a value
+ * - flag:        like option but doesn't have a value
+ * - param(eter): arguments that don't start with a "-"
+ * 
+ * Example:
+ * 
+ *     add -n uberfile -m path/to/a/file
+ *     
+ *     add is the action
+ *     "-n uberfile" is an option
+ *     "-m" is a flag
+ *     "path/to/a/file" is a parameter
+ * 
+ * 
  *
  * @author kevin
  */
@@ -43,19 +64,39 @@ public class Command {
 		return action;
 	}
 
+	/**
+	 * Returns a {@link String} {@link Array} with the given parameters.
+	 * @return
+	 */
 	public String[] getParams() {
 		return parameters;
 	}
 
+	/**
+	 * Returns true, if a flag is given and false otherwise.
+	 * @param name
+	 * @return
+	 */
 	public boolean hasFlag(String name) {
 		return Helper.arrayContains(name, flags);
 	}
 	
+	/**
+	 * Returns true, if a flag or option with the name "key" is given,
+	 * false otherwise.
+	 * @param key
+	 * @return
+	 */
 	public boolean isSet(String key) {
 		return (hasFlag(key)
 				|| options.containsKey(key));
 	}
 
+	/**
+	 * Returns the value (param) of an option or null if not set.
+	 * @param key
+	 * @return
+	 */
 	public String getOptionParam(String key) {
 		return options.get(key);
 	}
