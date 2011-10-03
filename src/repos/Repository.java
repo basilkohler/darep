@@ -4,11 +4,20 @@ import java.io.File;
 
 import darep.Command;
 
+
+/*the repository provides methods to acces the Database.class
+ * represents the physical folder located at 'location', which contains the db
+ * the repository ensures he correctness of the contents of the db !!!!
+ * FINDET IHR DAS SINVOLL? 
+ * (Repository.class KONTROLLIERT, Database.class SPEICHERT NUR WAS IHR GESAGT WIRD?)
+ */
 public class Repository {
 	private File location;
 	private Database db;
 	
-	//loads(/creates) the default repo in user.home
+	/* loads(/creates) the default repo in user.home
+	 * 
+	 */
 	public Repository() {
 		location=new File(System.getProperty("user.home")+"/.data-repository");
 		if (!location.exists()) {
@@ -18,7 +27,10 @@ public class Repository {
 		db=new Database(location.getAbsolutePath());
 	}
 
-	//loads(/creates) the repo located at path
+	/* loads(/creates) the repo located at path
+	 * 
+	 *  @param path where to find/create repo
+	 */
 	public Repository(String path) {
 		location=new File(path);
 		if (!location.exists()) {
@@ -28,6 +40,9 @@ public class Repository {
 		db=new Database(location.getAbsolutePath());
 	}
 
+	/*adds a dataset to the db, as specified by the option in 'command'
+	 *  @param command the command object which stores the options
+	 */
 	public void add(Command command) {
 		File dataset =new File(command.getParams()[0]);
 		if (!dataset.exists()) {
