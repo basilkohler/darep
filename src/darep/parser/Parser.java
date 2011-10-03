@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package darep.parser;
 
 import darep.Command;
@@ -12,8 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author kevin
+ * Parses an args-array like the one given to the main-method and produces
+ * a {@link Command} object. Uses a {@link CommandSyntax}-array to parse it.
  */
 public class Parser {
 

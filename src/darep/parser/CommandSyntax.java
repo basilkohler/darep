@@ -1,15 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package darep.parser;
 
 import darep.Command;
 import darep.Helper;
 
 /**
- *
- * @author kevin
+ * Defines the syntax for one action. There should be one CommandSyntax-object
+ * for each action. Contains information such as allowed flags and options,
+ * allowed number of arguments and the {@link Command.ActionType}.
+ * 
+ * See {@link Command} for nomenclature.
  */
 public class CommandSyntax {
 

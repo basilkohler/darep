@@ -1,12 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package darep.parser;
 
 /**
- *
- * @author kevin
+ * Thrown by the Parser when a syntax error occurs
  */
 public class ParseException extends Exception {
 
