@@ -27,7 +27,7 @@ public class Command {
 
 	private String[] flags;
 
-	private String[] arguments;
+	private String[] parameters;
 
 	public Command(ActionType action, String[] arguments, 
 			Map<String, String> options, String[] flags) {
@@ -35,22 +35,27 @@ public class Command {
 		this.action = action;
 		this.options = options;
 		this.flags = flags;
-		this.arguments = arguments;
+		this.parameters = arguments;
 	}
 
 	public ActionType getAction() {
 		return action;
 	}
 
-	public String[] getArguments() {
-		return arguments;
+	public String[] getParams() {
+		return parameters;
 	}
 
-	public boolean hasFlag(String key) {
-		return Helper.arrayContains(key, flags);
+	public boolean hasFlag(String name) {
+		return Helper.arrayContains(name, flags);
+	}
+	
+	public boolean isSet(String key) {
+		return (hasFlag(key)
+				|| options.containsKey(key));
 	}
 
-	public String getOption(String key) {
+	public String getOptionParam(String key) {
 		return options.get(key);
 	}
 
@@ -64,7 +69,7 @@ public class Command {
 		sb.append("\n");
 		
 		sb.append("Arguments:\t");
-		sb.append(Arrays.toString(arguments));
+		sb.append(Arrays.toString(parameters));
 		
 		sb.append("\n");
 

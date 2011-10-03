@@ -2,8 +2,7 @@ package repos;
 
 import java.io.File;
 
-import parser.Command;
-import parser.OptionId;
+import darep.Command;
 
 public class Repository {
 	private File location;
@@ -30,13 +29,13 @@ public class Repository {
 	}
 
 	public void add(Command command) {
-		File dataset =new File(command.getParams().get(0));
+		File dataset =new File(command.getParams()[0]);
 		if (!dataset.exists()) {
 			System.out.println("file/folder does not exist.");
 			System.exit(1);
 		}
 		Metadata meta=makeMetadata(command);
-		db.add(dataset.getAbsoluteFile(),meta, !command.IsSet(OptionId.M));
+		db.add(dataset.getAbsoluteFile(),meta, !command.isSet("m"));
 		System.out.println("The file/folder "+meta.getOriginalName()+
 				" has been successfully added to the repository" +
 				" as data set named "+meta.getName());
@@ -44,12 +43,12 @@ public class Repository {
 
 	private Metadata makeMetadata(Command command) {
 		Metadata meta=new Metadata();
-		meta.setOriginalName(new File(command.getParams().get(0)).getName());
-		if (command.IsSet(OptionId.D))
-			meta.setDescription(command.getOptionParam(OptionId.D));
+		meta.setOriginalName(new File(command.getParams()[0]).getName());
+		if (command.isSet("d"))
+			meta.setDescription(command.getOptionParam("d"));
 		String name;
-		if (command.IsSet(OptionId.N)) {
-			name=command.getOptionParam(OptionId.N);
+		if (command.isSet("n")) {
+			name=command.getOptionParam("n");
 			if (db.contains(name)) {
 				System.out.println("ERROR: There is already a data set named data set name in the repository.");
 				System.exit(1);
