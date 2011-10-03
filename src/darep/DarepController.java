@@ -6,8 +6,16 @@ import darep.parser.CommandSyntax;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 
+/**
+ * Controls the flow of the program. Contains the main-method.
+ *
+ */
 public class DarepController {
 
+	/**
+	 * The CommandSyntax-Array given to the parser.
+	 * Defines the allowed syntax when calling the program.
+	 */
 	private static final CommandSyntax[] syntax = new CommandSyntax[] {
 		new CommandSyntax(
 			Command.ActionType.add,
