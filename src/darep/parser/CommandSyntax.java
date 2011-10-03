@@ -12,10 +12,10 @@ import darep.Helper;
  */
 public class CommandSyntax {
 
-	Command.ActionType action;
-	String[] options;
-	String[] flags;
-	int numArgs;
+	private Command.ActionType action;
+	private String[] options;
+	private String[] flags;
+	private int numArgs;
 
 	public CommandSyntax(Command.ActionType action, int numArgs,
 			String[] options, String[] flags) {
