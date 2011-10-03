@@ -21,23 +21,15 @@ public class Repository {
 
 	//loads(/creates) the repo located at path
 	public Repository(String path) {
-		location=new File(path+"/.data-reository");
+		location=new File(path);
 		if (!location.exists()) {
 			location.mkdir();
-			System.out.println("created new repository "+path+"/.data-repository");	
+			System.out.println("created new repository "+path);	
 		}
 		db=new Database(location.getAbsolutePath());
 	}
 
-	public void exec(Command command) {
-		switch (command.getId()) {
-		case ADD:
-			add(command);
-			break;	
-		}
-	}
-
-	private void add(Command command) {
+	public void add(Command command) {
 		File dataset =new File(command.getParams().get(0));
 		if (!dataset.exists()) {
 			System.out.println("file/folder does not exist.");

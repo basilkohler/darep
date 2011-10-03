@@ -84,4 +84,15 @@ public class Command {
 	public ArrayList<String> getParams() {
 		return params;
 	}
+
+	public boolean IsSet(OptionId r) {
+		if (options.containsKey(r)) 
+			return true;
+		else
+			return false;
+	}
+
+	public String getOptionParam(OptionId r) {
+		return options.get(r).getParam();
+	}
 }
