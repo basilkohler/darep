@@ -18,7 +18,8 @@ public class Command {
 		replace,
 		delete,
 		export,
-		list
+		list,
+		help
 	}
 
 	private ActionType action;

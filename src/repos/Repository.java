@@ -55,7 +55,7 @@ public class Repository {
 		}
 		}
 		else {
-			name=meta.getOriginalName();
+			name=meta.getOriginalName().toUpperCase();
 			if (name.length()>40)
 				name=name.substring(0,39);
 		if (db.contains(name)) {
