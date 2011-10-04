@@ -52,7 +52,6 @@ public class Parser {
 
 				// Add Option
 				if (syntax.allowsOption(optName)) {
-					
 					this.insertOptionToMap(optName, iterator.next(), options);
 
 				// Add Flag
@@ -86,7 +85,18 @@ public class Parser {
 		
 	}
 
-	private void insertOptionToMap(String optName, String value, Map<String, String> map) throws ParseException {
+	/**
+	 * Inserts an option to a map if its valid according to constraints-map
+	 * and not already present inside the map.
+	 * 
+	 * Throws a {@link ParseException} if input is not valid or already present.
+	 * @param optName
+	 * @param value
+	 * @param map
+	 * @throws ParseException
+	 */
+	private void insertOptionToMap(String optName, String value, Map<String, String> map)
+					throws ParseException {
 		
 		// check for constraints
 		ArgConstraint constraint = constraints.get(optName);
