@@ -1,11 +1,13 @@
 package darep.parser;
 
-import darep.Command;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import darep.Command;
 
 /**
  * Parses an args-array like the one given to the main-method and produces
@@ -14,9 +16,11 @@ import java.util.List;
 public class Parser {
 
 	private CommandSyntax[] allowedSyntax;
+	private Map<String, ArgConstraint> constraints;
 
-	public Parser(CommandSyntax[] allowedSyntax) {
+	public Parser(CommandSyntax[] allowedSyntax, Map<String, ArgConstraint> constraints) {
 		this.allowedSyntax = allowedSyntax;
+		this.constraints = constraints;
 	}
 
 	public Command parse(String[] args) throws ParseException {
@@ -48,7 +52,8 @@ public class Parser {
 
 				// Add Option
 				if (syntax.allowsOption(optName)) {
-					options.put(optName, iterator.next());
+					
+					this.insertOption(optName, iterator.next());
 
 				// Add Flag
 				} else if (syntax.allowsFlag(optName)) {
@@ -79,6 +84,15 @@ public class Parser {
 		
 		return new Command(action, argumentsArray, options, flagsArray);
 		
+	}
+
+	private void insertOption(String optName, String value) throws ParseException {
+		ArgConstraint constraint = constraints.get(optName);
+		if ((constraint != null)
+				&& !constraint.isValid(value)) {
+			throw new ParseException("Option \"" + optName + "\" was given" +
+					" an invalid value (" + constraint.getDescription() + ")");
+		}
 	}
 
 	private CommandSyntax parseAction(String[] args) 
