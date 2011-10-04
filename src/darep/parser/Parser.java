@@ -53,7 +53,7 @@ public class Parser {
 				// Add Option
 				if (syntax.allowsOption(optName)) {
 					
-					this.insertOption(optName, iterator.next());
+					this.insertOptionToMap(optName, iterator.next(), options);
 
 				// Add Flag
 				} else if (syntax.allowsFlag(optName)) {
@@ -86,13 +86,23 @@ public class Parser {
 		
 	}
 
-	private void insertOption(String optName, String value) throws ParseException {
+	private void insertOptionToMap(String optName, String value, Map<String, String> map) throws ParseException {
+		
+		// check for constraints
 		ArgConstraint constraint = constraints.get(optName);
 		if ((constraint != null)
 				&& !constraint.isValid(value)) {
 			throw new ParseException("Option \"" + optName + "\" was given" +
 					" an invalid value (" + constraint.getDescription() + ")");
 		}
+		
+		// check if already included
+		if (map.containsKey(optName)) {
+			throw new ParseException("Option \"" + optName + "\" was given" +
+					" more than once");
+		}
+		
+		map.put(optName, value);
 	}
 
 	private CommandSyntax parseAction(String[] args) 
