@@ -3,6 +3,7 @@ package repos;
 import java.io.File;
 
 import darep.Command;
+import darep.Command.ActionType;
 
 /*the repository provides methods to access the Database.class
  * and represents the physical folder located at 'location', which contains the db
@@ -47,14 +48,20 @@ public class Repository {
 	 * @param command the command object which stores the options
 	 */
 	public boolean add(Command command) {
-		File dataset = new File(command.getParams()[0]);
+		File dataset=null;
+		if (command.getAction()==ActionType.replace) { //sourcefile in param[0] or param[1] ?
+			dataset = new File(command.getParams()[1]);
+		} else {
+			dataset = new File(command.getParams()[0]);	
+		}
+		
 		if (!dataset.exists()) {
 			System.out.println("ERROR: file/folder does not exist.");
 			System.exit(1);
 		//	return false;
 		}
 		
-		Metadata meta = makeMetadata(command);
+		Metadata meta = makeNewEntry(command);
 		
 		db.add(dataset, meta, !command.isSet("m"));
 		
@@ -79,10 +86,14 @@ public class Repository {
 	 * "valid" means the returned Metadata is safe to be entered into the db.
 	 *@ param command  
 	 */
-	private Metadata makeMetadata(Command command) {
+	private Metadata makeNewEntry(Command command) {
 		Metadata meta = new Metadata();
-		meta.setOriginalName(new File(command.getParams()[0]).getName());
 		
+		if (command.getAction()==ActionType.replace) {
+		meta.setOriginalName(new File(command.getParams()[1]).getName());
+		}else {
+			meta.setOriginalName(new File(command.getParams()[0]).getName());			
+		}
 		if (command.isSet("d"))
 			meta.setDescription(command.getOptionParam("d"));
 		
@@ -95,28 +106,34 @@ public class Repository {
 				System.exit(1);
 			}
 		} else { //no name provided, make a unique name from originalname
-			name = meta.getOriginalName().toUpperCase();
-			if (name.length() > 40)
-				name = name.substring(0, 39);
-			if (db.contains(name)) { //if name exists append number 
-				int append = 1;
-				while (db.contains(name.concat(Integer.toString(append)))) {
-					append++;
-				}
-				name = name.concat(Integer.toString(append));
-			}
+			name = createUniqueName(meta.getOriginalName());
 		}
 		meta.setName(name);
+		
 		return meta;
 	}
 
+	private String createUniqueName(String name) {
+		name=name.toUpperCase();
+		if (name.length() > 40)
+			name = name.substring(0, 39);
+		if (db.contains(name)) { //if name exists append number 
+			int append = 1;
+			while (db.contains(name.concat(Integer.toString(append)))) {
+				append++;
+			}
+			name = name.concat(Integer.toString(append));
+		}
+		return name;
+	}
+
 	public void replace(Command command) {
-	/*	boolean success1=delete(command);
-		boolean success2=add(command); ////geht so nicht
+		boolean success1=delete(command);
+		boolean success2=add(command);
 		if (success1 && success2)  {
 			System.out.println("The data set named "+command.getParams()[0]+" has been successfully replaced by the file/folder ’file/folder name’.");
 	}
-	*/	
+	
 	}
 
 }

@@ -81,7 +81,7 @@ public class Database {
 	}
 
 	/*
-	 * return true if the db contains a dataset named 'name', else false
+	 * return true if the repo/db contains a dataset named 'name', else false
 	 * 
 	 * @ param name name of the file you are searching for
 	 */
