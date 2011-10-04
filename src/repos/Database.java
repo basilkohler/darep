@@ -36,7 +36,7 @@ public class Database {
 	 * does not check if 'name' is already used, this happens in
 	 * Repository.add()
 	 * 
-	 * @param dataset the path to the dataset to be added
+	 * @param dataset the (path to) the dataset to be added
 	 * 
 	 * @param meta the metada corresponig to 'dataset'
 	 * 
@@ -44,18 +44,31 @@ public class Database {
 	 * is moved into the db
 	 */
 	public void add(File dataset, Metadata meta, boolean copyMode) {
-		String datasetPath = filedb.getAbsolutePath() + "/" + meta.getName();
-		String metadataPath = metadb.getAbsolutePath() + "/" + meta.getName();
+		String datasetDest = filedb.getAbsolutePath() + "/" + meta.getName();
+		String metadataDest = metadb.getAbsolutePath() + "/" + meta.getName();
 		
-		meta.saveAt(metadataPath);
+		meta.saveAt(metadataDest);
 		
 		if (copyMode) {
+			copyDataset(dataset, new File(datasetDest));
+		} else {
+			dataset.renameTo(new File(datasetDest));
+		}
+	}
+
+	private void copyDataset(File dataset, File datasetDest) {
+		if (dataset.isDirectory()) {
+				datasetDest.mkdir();
+			File[] content=dataset.listFiles();
+			for (int i=0;i<content.length;i++) {
+				copyDataset(content[i], new File(datasetDest.getAbsolutePath()+"/"+content[i].getName()));
+			}
+		} else {
 			FileChannel source = null;
 			FileChannel destination = null;
 			try {
-				dataset.createNewFile();
 				source = new FileInputStream(dataset).getChannel();
-				destination = new FileOutputStream(new File(datasetPath))
+				destination = new FileOutputStream(datasetDest)
 						.getChannel();
 				destination.transferFrom(source, 0, source.size());
 				source.close();
@@ -64,8 +77,6 @@ public class Database {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else {
-			dataset.renameTo(new File(datasetPath));
 		}
 	}
 
@@ -80,6 +91,31 @@ public class Database {
 			return true;
 		else
 			return false;
+	}
+
+	public boolean delete(String name) {
+		if (contains(name)) {
+			File meta=new File(metadb.getAbsolutePath()+"/"+name);
+			boolean success1=meta.delete();
+			boolean success2=deleteDataset(new File(filedb.getAbsolutePath()+"/"+name));
+			if(success1 && success2) {
+				return true;
+			} else {
+				System.out.println("error deleting dataset "+name);
+				return false;
+			}
+		}else
+			return false;
+	}
+
+	private boolean deleteDataset(File dataset) {
+		if (dataset.isDirectory()) {
+			File[] content=dataset.listFiles();
+			for (int i=0;i<content.length;i++) {
+				deleteDataset(content[i]);
+			}
+		}
+		return dataset.delete();
 	}
 
 }

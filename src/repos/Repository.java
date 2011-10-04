@@ -46,20 +46,33 @@ public class Repository {
 	 * 
 	 * @param command the command object which stores the options
 	 */
-	public void add(Command command) {
+	public boolean add(Command command) {
 		File dataset = new File(command.getParams()[0]);
 		if (!dataset.exists()) {
 			System.out.println("ERROR: file/folder does not exist.");
 			System.exit(1);
+		//	return false;
 		}
 		
 		Metadata meta = makeMetadata(command);
 		
-		db.add(dataset.getAbsoluteFile(), meta, !command.isSet("m"));
+		db.add(dataset, meta, !command.isSet("m"));
 		
 		System.out.println("The file/folder " + meta.getOriginalName()
 				+ " has been successfully added to the repository"
 				+ " as data set named " + meta.getName());
+		return true;
+	}
+	
+	public boolean delete(Command command) {
+		if(db.delete(command.getParams()[0])) {
+			System.out.println("The data set "+ command.getParams()[0] +"(original name: file/folder name) has been successfully removed from the repository.");
+			return true;
+		} else {
+		System.out.println("ERROR: Unknown data set data set "+command.getParams()[0]);
+		System.exit(1);
+		return false;
+		}
 	}
 
 	/* creates a new valid metadata for a new dataset. 
@@ -95,6 +108,15 @@ public class Repository {
 		}
 		meta.setName(name);
 		return meta;
+	}
+
+	public void replace(Command command) {
+	/*	boolean success1=delete(command);
+		boolean success2=add(command); ////geht so nicht
+		if (success1 && success2)  {
+			System.out.println("The data set named "+command.getParams()[0]+" has been successfully replaced by the file/folder ’file/folder name’.");
+	}
+	*/	
 	}
 
 }

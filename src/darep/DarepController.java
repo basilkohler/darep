@@ -60,7 +60,11 @@ public class DarepController {
 				repository.add(command);
 				break;
 			case delete:
+				repository.delete(command);
+				break;
 			case replace:
+				repository.replace(command);
+				break;
 			case list:
 			case export:
 				System.out.println(command.getAction() + ": not yet implemented");
