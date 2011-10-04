@@ -3,6 +3,7 @@ package repos;
 import java.io.File;
 
 import darep.Command;
+import darep.Command.ActionType;
 
 /*the repository provides methods to access the Database.class
  * and represents the physical folder located at 'location', which contains the db
@@ -47,7 +48,13 @@ public class Repository {
 	 * @param command the command object which stores the options
 	 */
 	public boolean add(Command command) {
-		File dataset = new File(command.getParams()[0]);
+		File dataset=null;
+		if (command.getAction()==ActionType.replace) { //sourcefile in param[0] or param[1] ?
+			dataset = new File(command.getParams()[1]);
+		} else {
+			dataset = new File(command.getParams()[0]);	
+		}
+		
 		if (!dataset.exists()) {
 			System.out.println("ERROR: file/folder does not exist.");
 			System.exit(1);
@@ -81,8 +88,11 @@ public class Repository {
 	 */
 	private Metadata makeMetadata(Command command) {
 		Metadata meta = new Metadata();
-		meta.setOriginalName(new File(command.getParams()[0]).getName());
-		
+		if (command.getAction()==ActionType.replace) {
+		meta.setOriginalName(new File(command.getParams()[1]).getName());
+		}else {
+			meta.setOriginalName(new File(command.getParams()[0]).getName());			
+		}
 		if (command.isSet("d"))
 			meta.setDescription(command.getOptionParam("d"));
 		
@@ -111,12 +121,12 @@ public class Repository {
 	}
 
 	public void replace(Command command) {
-	/*	boolean success1=delete(command);
+		boolean success1=delete(command);
 		boolean success2=add(command); ////geht so nicht
 		if (success1 && success2)  {
 			System.out.println("The data set named "+command.getParams()[0]+" has been successfully replaced by the file/folder ’file/folder name’.");
 	}
-	*/	
+	
 	}
 
 }
