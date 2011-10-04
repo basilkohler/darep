@@ -4,7 +4,7 @@ import java.io.File;
 
 import darep.Command;
 
-/*the repository provides methods to acces the Database.class
+/*the repository provides methods to access the Database.class
  * and represents the physical folder located at 'location', which contains the db
  * the repository ensures he correctness of the contents of the db !!!!
  * FINDET IHR DAS SINVOLL? 
