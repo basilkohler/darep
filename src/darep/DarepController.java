@@ -17,7 +17,7 @@ import darep.parser.Parser;
 public class DarepController {
 
 	/**
-	 * The CommandSyntax-Array given to the parser. Defines the allowed syntax
+	 * The {@link CommandSyntax}-Array given to the parser. Defines the allowed syntax
 	 * when calling the program. The Format for a Command is: (Name,#Options
 	 * with Value,Flags)
 	 */
@@ -25,19 +25,27 @@ public class DarepController {
 		new CommandSyntax(Command.ActionType.add, 1, new String[] { "r","n", "d" }, new String[] { "m" }),
 		new CommandSyntax(Command.ActionType.delete, 1,	new String[] { "r" }, new String[0]),
 		new CommandSyntax(Command.ActionType.replace, 2, new String[] { "r", "d" }, new String[] { "m" }),
-		new CommandSyntax(Command.ActionType.help, 0, new String[] {},new String[0]),
+		new CommandSyntax(Command.ActionType.help, 0, new String[0], new String[0]),
 		new CommandSyntax(Command.ActionType.list, 0, new String[] { "r" },	new String[] { "p" }),
 		new CommandSyntax(Command.ActionType.export, 2, new String[] { "r" }, new String[0])
 	};
 	
+	/**
+	 * Map with {@link ArgConstraint}s for the Parser. Values are
+	 * added in static initializer since there is no short syntax
+	 * for Maps in Java.
+	 */
 	private static final Map<String, ArgConstraint> constraints = new HashMap<String, ArgConstraint>();
 	
+	/*
+	 * Adds anonymous child objects of ArgConstraint to the constraints-map.
+	 */
 	static {
+		// name only consists of word chars (digit, letter, _) and -
+		// and is no longer than 40 chars long
 		constraints.put("n", new ArgConstraint() {
 			@Override
 			public boolean isValid(String arg) {
-				// arg only consists of word chars (digit, letter, _) and -
-				// and is no longer than 40 chars long
 				return (arg.matches("[\\w-]*") && arg.length() <= 40);
 			}
 
@@ -48,11 +56,12 @@ public class DarepController {
 						" and must not be longer than 40 characters";
 			}
 		});
+		
+		// Description does not contain control characters and is no longer
+		// than 1000 chars
 		constraints.put("d", new ArgConstraint() {
 			@Override
 			public boolean isValid(String arg) {
-				// arg does not contain control characters and is no longer
-				// than 1000 chars
 				return (arg.matches("[^\\p{Cntrl}]*") && arg.length() <= 1000);
 			}
 
