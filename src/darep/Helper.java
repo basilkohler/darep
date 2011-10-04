@@ -24,6 +24,22 @@ public class Helper {
 		}
 		return false;
 	}
+	
+	public static <T> boolean arrayIsPermutation(T[] a1, T[] a2) {
+		boolean sameLength = (a1.length == a2.length);
+		
+		// create array with booleans which items are in the other array
+		boolean[] cmp = new boolean[a1.length];
+		for (int i = 0; i < a1.length; i++) {
+			cmp[i] = arrayContains(a1[i], a2);
+		}
+		
+		for (boolean curr: cmp) {
+			if (!curr) return false;
+		}
+		
+		return (true && sameLength);
+	}
 
 	/**
 	 * Returns a pretty String with key-value pairs form a map.
