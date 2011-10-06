@@ -18,11 +18,12 @@ public class Repository {
 	 * loads(/creates) the default (hidden) repo in user.home
 	 */
 	public Repository() {
-		location = new File(System.getProperty("user.home") + "/.data-repository");
+		// XXX kevin: default-repository ordner vllt in konstante?
+		location = new File(System.getProperty("user.home") + "/.data-repository"); 
 		if (!location.exists()) {
 			location.mkdir();
 			System.out.println("created new repository "
-					+ System.getProperty("user.home") + "/.data-reository");
+					+ System.getProperty("user.home") + "/.data-repository");
 		}
 		db = new Database(location.getAbsolutePath());
 	}
@@ -35,7 +36,7 @@ public class Repository {
 	public Repository(String path) {
 		location = new File(path);
 		if (!location.exists()) {
-			location.mkdir();
+			location.mkdir(); // XXX kevin: mkdir_s_() ?
 			System.out.println("created new repository " + path);
 		}
 		db = new Database(location.getAbsolutePath());
@@ -114,7 +115,8 @@ public class Repository {
 			name = name.substring(0, 39);
 		if (db.contains(name)) { //if name exists append number 
 			int append = 1;
-			while (db.contains(name.concat(Integer.toString(append)))) {
+			// XXX kevin: ergibt das nicht 41 chars?
+			while (db.contains(name.concat(Integer.toString(append)))) { 
 				append++;
 			}
 			name = name.concat(Integer.toString(append));

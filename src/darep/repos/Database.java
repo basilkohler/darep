@@ -25,7 +25,7 @@ public class Database {
 		filedb = new File(reposPath + "/datasets");
 		metadb = new File(reposPath + "/metadata");
 		if (!filedb.exists())
-			filedb.mkdir();
+			filedb.mkdir(); // XXX kevin: mkdir_s_() benutzen?
 		if (!metadb.exists())
 			metadb.mkdir();
 
@@ -110,6 +110,7 @@ public class Database {
 	 * @ param name name of the file you are searching for
 	 */
 	public boolean contains(String name) {
+		// XXX kevin: folgende Zeile in methode auslagern? (getFile(name) oder so); wird in delete() nochmal verwendet
 		File file = new File(metadb.getAbsolutePath() + "/" + name);
 		if (file.exists())
 			return true;
