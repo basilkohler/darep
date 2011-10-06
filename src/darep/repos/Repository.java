@@ -8,8 +8,7 @@ import darep.Command.ActionType;
 /*the repository provides methods to access the Database.class
  * and represents the physical folder located at 'location', which contains the db
  * the repository ensures he correctness of the contents of the db !!!!
- * FINDET IHR DAS SINVOLL? 
- * (Repository.class KONTROLLIERT, Database.class SPEICHERT NUR WAS IHR GESAGT WIRD?)
+ * 
  */
 public class Repository {
 	private File location;
