@@ -3,12 +3,12 @@ package darep;
 import java.util.HashMap;
 import java.util.Map;
 
-import repos.Repository;
 import darep.Command.ActionType;
 import darep.parser.ArgConstraint;
 import darep.parser.CommandSyntax;
 import darep.parser.ParseException;
 import darep.parser.Parser;
+import darep.repos.Repository;
 
 /**
  * Controls the flow of the program. Contains the main-method.
