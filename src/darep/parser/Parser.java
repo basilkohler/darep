@@ -1,11 +1,13 @@
 package darep.parser;
 
-import darep.Command;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import darep.Command;
 
 /**
  * Parses an args-array like the one given to the main-method and produces
@@ -14,12 +16,20 @@ import java.util.List;
 public class Parser {
 
 	private CommandSyntax[] allowedSyntax;
+	private Map<String, ArgConstraint> constraints;
+	private Command.ActionType defaultAction;
 
-	public Parser(CommandSyntax[] allowedSyntax) {
+	public Parser(CommandSyntax[] allowedSyntax, Map<String, ArgConstraint> constraints, Command.ActionType defaultAction) {
 		this.allowedSyntax = allowedSyntax;
+		this.constraints = constraints;
+		this.defaultAction = defaultAction;
 	}
 
 	public Command parse(String[] args) throws ParseException {
+		
+		if (args.length == 0) {
+			args = new String[] {defaultAction.toString()};
+		}
 
 		// determine action and get syntax for it
 		CommandSyntax syntax = parseAction(args);
@@ -48,7 +58,7 @@ public class Parser {
 
 				// Add Option
 				if (syntax.allowsOption(optName)) {
-					options.put(optName, iterator.next());
+					this.insertOptionToMap(optName, iterator.next(), options);
 
 				// Add Flag
 				} else if (syntax.allowsFlag(optName)) {
@@ -81,14 +91,42 @@ public class Parser {
 		
 	}
 
+	/**
+	 * Inserts an option to a map if its valid according to constraints-map
+	 * and not already present inside the map.
+	 * 
+	 * Throws a {@link ParseException} if input is not valid or already present.
+	 * @param optName
+	 * @param value
+	 * @param map
+	 * @throws ParseException
+	 */
+	private void insertOptionToMap(String optName, String value, Map<String, String> map)
+					throws ParseException {
+		
+		// check for constraints
+		ArgConstraint constraint = constraints.get(optName);
+		if ((constraint != null)
+				&& !constraint.isValid(value)) {
+			throw new ParseException("Option \"" + optName + "\" was given" +
+					" an invalid value (" + constraint.getDescription() + ")");
+		}
+		
+		// check if already included
+		if (map.containsKey(optName)) {
+			throw new ParseException("Option \"" + optName + "\" was given" +
+					" more than once");
+		}
+		
+		map.put(optName, value);
+	}
+
 	private CommandSyntax parseAction(String[] args) 
 							throws ParseException {
 
-		if (args.length < 1) {
-			throw new ParseException("No action specified");
-		}
-		
-		// determine action name 
+		if (args.length == 0) {
+			throw new ParseException("args contains no items");
+		} 
 		String actionName = args[0];
 
 		// get CommandSyntax
@@ -101,8 +139,13 @@ public class Parser {
 		return syntax;
 	}
 
-	private CommandSyntax getSyntax(String actionName) {
-		Command.ActionType action = Command.ActionType.valueOf(actionName);
+	private CommandSyntax getSyntax(String actionName){
+		Command.ActionType action;
+		try {
+			action = Command.ActionType.valueOf(actionName);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
 		for (CommandSyntax currSyntax: allowedSyntax) {
 			if (currSyntax.getAction() == action) {
 				return currSyntax;

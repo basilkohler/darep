@@ -1,0 +1,58 @@
+<project name="Darep" default="zipdist" basedir=".">
+	<property name="src" location="src" />
+	<property name="srcTest" location="test" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	<property name="wrapperScript" location="${src}/data-repository" />
+	<property name="distZip" location="data-repository.zip" />
+	<path id="junitLib">
+		<pathelement location="lib/junit-4.10.jar" />
+	</path>
+	
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${distZip}" />
+	</target>
+	
+	<target name="init" depends="clean" description="Init">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+		<tstamp />
+	</target>
+	
+	<target name="compile" depends="init" description="Compile sources">
+		<javac srcdir="${src}" destdir="${build}" />
+	</target>
+	
+	<target name="jar" depends="compile" description="Generate JAR">
+		<jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}" />
+	</target>
+
+	<target name="compile-test" depends="compile" description="Compile test sources.">
+		<javac srcdir="${srcTest}" destdir="${build}" classpathref="junitLib" />
+	</target>
+	
+	<target name="test" depends="compile-test" description="Run all tests">
+		<junit haltonfailure="true">
+			<classpath refid="junitLib" />
+			<classpath path="${build}" />
+			<formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${srcTest}">
+					<include name="**/*" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="dist" depends="jar, test">
+		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
+	</target>
+	
+	<target name="zipdist" depends="dist">
+		<zip destfile="${distZip}">
+			<fileset dir="dist" />
+		</zip>
+	</target>
+</project>

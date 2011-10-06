@@ -100,6 +100,30 @@ public class Command {
 	public String getOptionParam(String key) {
 		return options.get(key);
 	}
+	
+	/**
+	 * Returns the options, null if not set.
+	 * @return
+	 */
+	public Map<String, String> getOptions() {
+		return this.options;
+	}
+	
+	/**
+	 * Returns the parameters, null if not set.
+	 * @return
+	 */
+	public String[] getParameters() {
+		return this.parameters;
+	}
+	
+	/**
+	 * Returns the flags, null if not set.
+	 * @return
+	 */
+	public String[] getFlags() {
+		return this.flags;
+	}
 
 	@Override
 	public String toString() {
@@ -125,5 +149,24 @@ public class Command {
 
 		return sb.toString();
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if((obj instanceof Command) == false)
+			return false;
+		
+		Command other = (Command)obj;
+
+		if(this.action != other.action)
+			return false;
+		if(Helper.arrayIsPermutation(this.flags,other.flags) == false)
+			return false;
+		if(Helper.arrayIsPermutation(this.parameters, other.parameters) == false)
+			return false;
+		if(this.options.equals(other.options) == false) 
+			return false;
+		
+		return true;
+	}
+
 	
 }

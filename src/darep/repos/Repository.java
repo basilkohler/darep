@@ -1,4 +1,4 @@
-package repos;
+package darep.repos;
 
 import java.io.File;
 
@@ -132,7 +132,7 @@ public class Repository {
 		boolean success1=delete(command);
 		boolean success2=add(command);
 		if (success1 && success2)  {
-			System.out.println("The data set named "+command.getParams()[0]+" has been successfully replaced by the file/folder Õfile/folder nameÕ.");
+			System.out.println("The data set named "+command.getParams()[0]+" has been successfully replaced by the file/folder ï¿½file/folder nameï¿½.");
 	}
 	
 	}
