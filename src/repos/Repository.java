@@ -90,10 +90,11 @@ public class Repository {
 		Metadata meta = new Metadata();
 		
 		if (command.getAction()==ActionType.replace) {
-		meta.setOriginalName(new File(command.getParams()[1]).getName());
+			meta.setOriginalName(new File(command.getParams()[1]).getName());
 		}else {
 			meta.setOriginalName(new File(command.getParams()[0]).getName());			
 		}
+		
 		if (command.isSet("d"))
 			meta.setDescription(command.getOptionParam("d"));
 		
