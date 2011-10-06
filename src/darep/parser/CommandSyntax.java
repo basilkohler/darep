@@ -15,12 +15,12 @@ public class CommandSyntax {
 	private Command.ActionType action;
 	private String[] options;
 	private String[] flags;
-	private int numArgs;
+	private int numParams;
 
-	public CommandSyntax(Command.ActionType action, int numArgs,
+	public CommandSyntax(Command.ActionType action, int numParams,
 			String[] options, String[] flags) {
 		this.action = action;
-		this.numArgs = numArgs;
+		this.numParams = numParams;
 		this.options = options;
 		this.flags = flags;
 	}
@@ -37,8 +37,8 @@ public class CommandSyntax {
 		return action;
 	}
 
-	public int getNumArgs() {
-		return numArgs;
+	public int getNumParams() {
+		return numParams;
 	}
 
 }

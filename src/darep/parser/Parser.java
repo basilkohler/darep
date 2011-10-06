@@ -27,6 +27,7 @@ public class Parser {
 
 	public Command parse(String[] args) throws ParseException {
 		
+		// if no args are given, do defaultAction
 		if (args.length == 0) {
 			args = new String[] {defaultAction.toString()};
 		}
@@ -44,7 +45,7 @@ public class Parser {
 		ArrayList<String> arguments = new ArrayList<String>();
 
 		// Number of arguments that are passed
-		int numArgs = 0;
+		int numParams = 0;
 
 		// Iterate over args List
 		Iterator<String> iterator = argList.iterator();
@@ -72,15 +73,15 @@ public class Parser {
 
 			// String doesn't start with "-" => normal argument
 			} else {
-				numArgs++;
+				numParams++;
 				arguments.add(currentArg);
 			}
 		}
 
 		// If given arguments doesn't match syntax, throw error
-		if (numArgs != syntax.getNumArgs()) {
+		if (numParams != syntax.getNumParams()) {
 			throw new ParseException("Action \"" + action + "\" "
-					+ "takes " + syntax.getNumArgs() + " arguments");
+					+ "takes " + syntax.getNumParams() + " argument(s)");
 		}
 
 		// Make variables that can be passed to the Command-Constructor
