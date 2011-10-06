@@ -21,6 +21,16 @@ public class Metadata implements Serializable {
 		timestamp = new Date();
 		description = new String();
 	}
+	
+	public Metadata(String name, String origName, String descr, int nrFiles, int size, String reposPath) {
+		this.timestamp = new Date();
+		this.description = descr;
+		this.name=name;
+		this.originalName=origName;
+		this.numberOfFiles=nrFiles;
+		this.size=size;
+		this.path=new File(reposPath+"/metadata/"+name);
+	}
 
 	public void saveAt(String pathStr) throws RepositoryExeption {
 		path = new File(pathStr);
@@ -35,7 +45,7 @@ public class Metadata implements Serializable {
 			out.close();
 			fileOut.close();
 		} catch (IOException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			throw new RepositoryExeption("could not save metadata");
 		}
 	}
