@@ -14,7 +14,7 @@ public class Metadata implements Serializable {
 	private Date timestamp;
 	private String description;
 	private int numberOfFiles;
-	private int size;
+	private long size;
 	private File path;
 
 	public Metadata() {
@@ -70,12 +70,19 @@ public class Metadata implements Serializable {
 		return originalName;
 	}
 	
-	public void setNumberOfFiles(int numberOfFiles) {
-		this.numberOfFiles = numberOfFiles;
+	public void incrementNumberOfFiles() {
+		this.numberOfFiles++;
 	}
 	
-	public void setFileSize(int size) {
-		this.size = size;
+	public void addFileSize(long sizeToAdd) {
+		this.size += sizeToAdd;
+	}
+	
+	@Override
+	public String toString() {
+		return "numberOfFiles: " + numberOfFiles + " size: " + size;
+		//return "METADATA\nname: " + name + "\noriginalName: " + originalName + "\ntimestamp: " + timestamp.toString() +
+		//		"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size + "\npath: " + path.getAbsolutePath();
 	}
 
 }
