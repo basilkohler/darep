@@ -6,3 +6,5 @@ bin/*
 nbproject/*
 manifest.mf
 build/*
+dist/*
+data-repository.zip
