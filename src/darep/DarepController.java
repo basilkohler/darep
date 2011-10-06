@@ -117,6 +117,7 @@ public class DarepController {
 			}
 		} catch (ParseException ex) {
 			System.err.println("ERROR: " + ex.getMessage());
+			System.exit(1);
 		} catch (RepositoryExeption e) {
 			e.printStackTrace();
 		}
