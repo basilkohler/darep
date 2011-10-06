@@ -46,7 +46,7 @@ public class DarepController {
 		constraints.put("n", new ArgConstraint() {
 			@Override
 			public boolean isValid(String arg) {
-				return (arg.matches("[\\w-]*") && arg.length() <= 40);
+				return (arg.matches("[A-Z0-9_-]*") && arg.length() <= 40);
 			}
 
 			@Override
