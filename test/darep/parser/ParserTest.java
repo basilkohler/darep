@@ -56,22 +56,16 @@ public class ParserTest {
 		parser.parse(args);
 	}
 	
-	@Test
-	public void testParseHelp() throws ParseException {
-		setAction(ActionType.help);
-		test();
+	@Test (expected = ParseException.class)
+	public void testParseOptionTooManyArguments() throws ParseException {
+		String[] args = {"add", "-d", "description", "notallwoed", "path"};
+		parser.parse(args);
 	}
 	
 	@Test
 	public void testParseNoArgs() throws ParseException {
 		String[] args = {};
 		assertEquals(ActionType.help, parser.parse(args).getAction());
-	}
-	
-	@Test (expected = ParseException.class)
-	public void testParseOptionTooManyArguments() throws ParseException {
-		String[] args = {"add", "-d", "description", "notallwoed", "path"};
-		parser.parse(args);
 	}
 
 	// default cases for add command
@@ -120,7 +114,7 @@ public class ParserTest {
 	}
 	
 	@Test
-	public void testParseAddFull() throws ParseException {
+	public void testParseAddFullDefaultOrder() throws ParseException {
 		setAction(ActionType.add);
 		addOption("n", "DATASETNAME");
 		addOption("r", "repository");
@@ -130,7 +124,68 @@ public class ParserTest {
 		
 		test();			
 	}
-
+	
+	@Test
+	public void testParseAddFullOtherOrder() throws ParseException {
+		setAction(ActionType.add);
+		addParameter("path");
+		addOption("n", "DATASETNAME");
+		addOption("r", "repository");
+		addOption("d", "description");
+		addFlag("m");
+		
+		test();			
+	}
+	
+	// error cases for add
+	@Test (expected = ParseException.class)
+	public void testParseAddTooLongDescription() throws ParseException{
+		setAction(ActionType.add);
+		addOption("d", "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feug");
+		addParameter("path");
+		
+		test();
+	}
+	
+	@Test (expected = ParseException.class)
+	public void testParseAddLowerCaseDatasetName() throws ParseException{
+		setAction(ActionType.add);
+		addOption("n", "datasetname");
+		addParameter("path");
+		
+		test();
+	}
+	
+	@Test (expected = ParseException.class)
+	public void testParseAddSystemSymbolInDatasetName() throws ParseException{
+		setAction(ActionType.add);
+		addOption("n", "name_with_&_not_allowed");
+		addParameter("path");
+		
+		test();
+	}
+	
+	@Test (expected = ParseException.class)
+	public void testParseAddSystemSymbolInDescription() throws ParseException{
+		setAction(ActionType.add);
+		addOption("d", "\tdescription_not_allowed");
+		addParameter("path");
+		
+		test();
+	}
+	
+	@Test (expected = ParseException.class)
+	public void testParseTooManyArguments() throws ParseException {
+		String[] args = {"add", "-d", "description", "not_allowed", "path"};
+		parser.parse(args);
+	}
+	
+	// default test cases for help
+	@Test
+	public void testParseHelp() throws ParseException {
+		setAction(ActionType.help);
+		test();
+	}
 	
 	// helper functions for default cases
 	private Command getExpectedCommand() throws ParseException {
