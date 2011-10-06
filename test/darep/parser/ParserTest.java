@@ -107,7 +107,7 @@ public class ParserTest {
 	@Test
 	public void testParseAddName() throws ParseException {
 		setAction(ActionType.add);
-		addOption("n", "datasetname");
+		addOption("n", "DATASETNAME");
 		addParameter("path");
 		
 		test();		
@@ -116,7 +116,7 @@ public class ParserTest {
 	@Test
 	public void testParseAddFull() throws ParseException {
 		setAction(ActionType.add);
-		addOption("n", "datasetname");
+		addOption("n", "DATASETNAME");
 		addOption("r", "repository");
 		addOption("d", "description");
 		addFlag("m");
