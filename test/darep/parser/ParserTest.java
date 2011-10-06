@@ -21,7 +21,7 @@ import darep.parser.Parser;
  *
  */
 public class ParserTest {
-	private static final Parser parser = new Parser(DarepController.syntax);
+	private static final Parser parser = new Parser(DarepController.syntax, DarepController.constraints);
 
 	private ArrayList<String> args;
 	private ActionType action;

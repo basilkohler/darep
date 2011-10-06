@@ -21,7 +21,7 @@ public class DarepController {
 	 * when calling the program. The Format for a Command is: (Name,#Options
 	 * with Value,Flags)
 	 */
-	private static final CommandSyntax[] syntax = new CommandSyntax[] {
+	public static final CommandSyntax[] syntax = new CommandSyntax[] {
 		new CommandSyntax(Command.ActionType.add, 1, new String[] { "r","n", "d" }, new String[] { "m" }),
 		new CommandSyntax(Command.ActionType.delete, 1,	new String[] { "r" }, new String[0]),
 		new CommandSyntax(Command.ActionType.replace, 2, new String[] { "r", "d" }, new String[] { "m" }),
@@ -35,7 +35,7 @@ public class DarepController {
 	 * added in static initializer since there is no short syntax
 	 * for Maps in Java.
 	 */
-	private static final Map<String, ArgConstraint> constraints = new HashMap<String, ArgConstraint>();
+	public static final Map<String, ArgConstraint> constraints = new HashMap<String, ArgConstraint>();
 	
 	/*
 	 * Adds anonymous child objects of ArgConstraint to the constraints-map.
