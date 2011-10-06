@@ -47,7 +47,7 @@ public class Repository {
 	 * 
 	 * @param command the command object which stores the options
 	 */
-	public boolean add(Command command) {
+	public boolean add(Command command) throws RepositoryExeption {
 		File dataset=null;
 		if (command.getAction()==ActionType.replace) { //sourcefile in param[0] or param[1] ?
 			dataset = new File(command.getParams()[1]);
@@ -56,9 +56,7 @@ public class Repository {
 		}
 		
 		if (!dataset.exists()) {
-			System.out.println("ERROR: file/folder does not exist.");
-			System.exit(1);
-		//	return false;
+				throw new RepositoryExeption(dataset.getAbsolutePath()+" does not exist.");
 		}
 		
 		Metadata meta = makeNewEntry(command);
@@ -71,14 +69,12 @@ public class Repository {
 		return true;
 	}
 	
-	public boolean delete(Command command) {
+	public boolean delete(Command command) throws RepositoryExeption {
 		if(db.delete(command.getParams()[0])) {
 			System.out.println("The data set "+ command.getParams()[0] +"(original name: file/folder name) has been successfully removed from the repository.");
 			return true;
 		} else {
-		System.out.println("ERROR: Unknown data set data set "+command.getParams()[0]);
-		System.exit(1);
-		return false;
+				throw new RepositoryExeption("Unknown data set "+ command.getParams()[0]);
 		}
 	}
 
@@ -86,7 +82,7 @@ public class Repository {
 	 * "valid" means the returned Metadata is safe to be entered into the db.
 	 *@ param command  
 	 */
-	private Metadata makeNewEntry(Command command) {
+	private Metadata makeNewEntry(Command command) throws RepositoryExeption {
 		Metadata meta = new Metadata();
 		
 		if (command.getAction()==ActionType.replace) {
@@ -102,9 +98,8 @@ public class Repository {
 		if (command.isSet("n")) { //name option set?
 			name = command.getOptionParam("n");
 			if (db.contains(name)) { //if name exists, exit
-				System.out.println("ERROR: There is already a data set named "
+				throw new RepositoryExeption("There is already a data set named "
 										+name+" name in the repository.");
-				System.exit(1);
 			}
 		} else { //no name provided, make a unique name from originalname
 			name = createUniqueName(meta.getOriginalName());
@@ -128,7 +123,7 @@ public class Repository {
 		return name;
 	}
 
-	public void replace(Command command) {
+	public void replace(Command command) throws RepositoryExeption {
 		boolean success1=delete(command);
 		boolean success2=add(command);
 		if (success1 && success2)  {

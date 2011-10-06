@@ -9,6 +9,7 @@ import darep.parser.CommandSyntax;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 import darep.repos.Repository;
+import darep.repos.RepositoryExeption;
 
 /**
  * Controls the flow of the program. Contains the main-method.
@@ -101,7 +102,7 @@ public class DarepController {
 
 			switch (command.getAction()) {
 			case add:
-				repository.add(command);
+					repository.add(command);
 				break;
 			case delete:
 				repository.delete(command);
@@ -116,6 +117,8 @@ public class DarepController {
 			}
 		} catch (ParseException ex) {
 			System.err.println("ERROR: " + ex.getMessage());
+		} catch (RepositoryExeption e) {
+			e.printStackTrace();
 		}
 	}
 

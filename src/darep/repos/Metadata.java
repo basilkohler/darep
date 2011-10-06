@@ -22,12 +22,12 @@ public class Metadata implements Serializable {
 		description = new String();
 	}
 
-	public void saveAt(String pathStr) {
+	public void saveAt(String pathStr) throws RepositoryExeption {
 		path = new File(pathStr);
 		save();
 	}
 	
-	public void save() {
+	public void save() throws RepositoryExeption {
 		try {
 			FileOutputStream fileOut = new FileOutputStream(path);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -35,8 +35,8 @@ public class Metadata implements Serializable {
 			out.close();
 			fileOut.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			throw new RepositoryExeption("could not save metadata");
 		}
 	}
 
