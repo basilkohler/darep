@@ -48,14 +48,14 @@ public class Database {
 		String metadataDest = metadb.getAbsolutePath() + "/" + meta.getName();
 		
 		meta.saveAt(metadataDest);
-		
+		File bla = null;
 		if (copyMode) {
 			copyDataset(dataset, new File(datasetDest));
 		} else {
 			dataset.renameTo(new File(datasetDest));
 		}
 	}
-
+	
 	private void copyDataset(File dataset, File datasetDest) throws RepositoryExeption {
 		if (dataset.isDirectory()) {
 				datasetDest.mkdir();

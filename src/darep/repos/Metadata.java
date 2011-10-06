@@ -69,5 +69,13 @@ public class Metadata implements Serializable {
 	public String getOriginalName() {
 		return originalName;
 	}
+	
+	public void setNumberOfFiles(int numberOfFiles) {
+		this.numberOfFiles = numberOfFiles;
+	}
+	
+	public void setFileSize(int size) {
+		this.size = size;
+	}
 
 }

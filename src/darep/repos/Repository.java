@@ -105,6 +105,7 @@ public class Repository {
 		}
 		meta.setName(name);
 		
+		
 		return meta;
 	}
 
@@ -131,4 +132,25 @@ public class Repository {
 	
 	}
 
+	/*
+	 * recursively calculates the size of the dataset
+	 */
+	private long getDatasetSize(File dataset) {
+		long size = 0;
+		if(dataset.isFile()) {
+			size = dataset.length();
+		} else {
+			File[] filesOrDirs = dataset.listFiles();
+			
+			for(File f:filesOrDirs) {
+				if(f.isFile()) {
+					size += f.length();
+				} else {
+					size += getDatasetSize(dataset);
+				}
+			}
+		}
+		return size;
+	}
+	
 }
