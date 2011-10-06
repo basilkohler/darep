@@ -17,16 +17,18 @@ public class Parser {
 
 	private CommandSyntax[] allowedSyntax;
 	private Map<String, ArgConstraint> constraints;
+	private Command.ActionType defaultAction;
 
-	public Parser(CommandSyntax[] allowedSyntax, Map<String, ArgConstraint> constraints) {
+	public Parser(CommandSyntax[] allowedSyntax, Map<String, ArgConstraint> constraints, Command.ActionType defaultAction) {
 		this.allowedSyntax = allowedSyntax;
 		this.constraints = constraints;
+		this.defaultAction = defaultAction;
 	}
 
 	public Command parse(String[] args) throws ParseException {
 		
 		if (args.length == 0) {
-			args = new String[] {"help"};
+			args = new String[] {defaultAction.toString()};
 		}
 
 		// determine action and get syntax for it

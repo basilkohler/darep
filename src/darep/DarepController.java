@@ -120,7 +120,7 @@ public class DarepController {
 	}
 
 	public DarepController() {
-		this.parser = new Parser(DarepController.syntax, DarepController.constraints);
+		this.parser = new Parser(DarepController.syntax, DarepController.constraints, ActionType.help);
 	}
 
 	private void printHelp() {
