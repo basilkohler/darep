@@ -25,6 +25,13 @@ public class Helper {
 		return false;
 	}
 	
+	/**
+	 * Tests if two arrays are permutations of each other
+	 * (same length and same values, but maybe in a different order)
+	 * @param a1
+	 * @param a2
+	 * @return
+	 */
 	public static <T> boolean arrayIsPermutation(T[] a1, T[] a2) {
 		boolean sameLength = (a1.length == a2.length);
 		
@@ -34,10 +41,13 @@ public class Helper {
 			cmp[i] = arrayContains(a1[i], a2);
 		}
 		
+		// if one value of cmp-array is false return false
 		for (boolean curr: cmp) {
 			if (!curr) return false;
 		}
 		
+		// if all values of cmp-array are true and arrays have the same length,
+		// return true
 		return (true && sameLength);
 	}
 

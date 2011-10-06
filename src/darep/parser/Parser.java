@@ -135,8 +135,13 @@ public class Parser {
 		return syntax;
 	}
 
-	private CommandSyntax getSyntax(String actionName) {
-		Command.ActionType action = Command.ActionType.valueOf(actionName);
+	private CommandSyntax getSyntax(String actionName){
+		Command.ActionType action;
+		try {
+			action = Command.ActionType.valueOf(actionName);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
 		for (CommandSyntax currSyntax: allowedSyntax) {
 			if (currSyntax.getAction() == action) {
 				return currSyntax;
