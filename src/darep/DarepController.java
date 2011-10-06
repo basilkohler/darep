@@ -23,12 +23,12 @@ public class DarepController {
 	 * with Value,Flags)
 	 */
 	public static final CommandSyntax[] syntax = new CommandSyntax[] {
-		new CommandSyntax(Command.ActionType.add, 1, new String[] { "r","n", "d" }, new String[] { "m" }),
-		new CommandSyntax(Command.ActionType.delete, 1,	new String[] { "r" }, new String[0]),
-		new CommandSyntax(Command.ActionType.replace, 2, new String[] { "r", "d" }, new String[] { "m" }),
-		new CommandSyntax(Command.ActionType.help, 0, new String[0], new String[0]),
-		new CommandSyntax(Command.ActionType.list, 0, new String[] { "r" },	new String[] { "p" }),
-		new CommandSyntax(Command.ActionType.export, 2, new String[] { "r" }, new String[0])
+		new CommandSyntax(ActionType.add, 1, new String[] { "r","n", "d" }, new String[] { "m" }),
+		new CommandSyntax(ActionType.delete, 1,	new String[] { "r" }, new String[0]),
+		new CommandSyntax(ActionType.replace, 2, new String[] { "r", "d" }, new String[] { "m" }),
+		new CommandSyntax(ActionType.help, 0, new String[0], new String[0]),
+		new CommandSyntax(ActionType.list, 0, new String[] { "r" },	new String[] { "p" }),
+		new CommandSyntax(ActionType.export, 2, new String[] { "r" }, new String[0])
 	};
 	
 	/**
@@ -53,7 +53,7 @@ public class DarepController {
 			@Override
 			public String getDescription() {
 				return "Argument must only contain" +
-						" digits, letters, \"_\" or \"-\"" +
+						" digits, uppercase letters, \"_\" or \"-\"" +
 						" and must not be longer than 40 characters";
 			}
 		});
