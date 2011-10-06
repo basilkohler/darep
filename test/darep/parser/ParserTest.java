@@ -56,10 +56,16 @@ public class ParserTest {
 		parser.parse(args);
 	}
 	
-	@Test (expected = ParseException.class)
+	@Test
+	public void testParseHelp() throws ParseException {
+		setAction(ActionType.help);
+		test();
+	}
+	
+	@Test
 	public void testParseNoArgs() throws ParseException {
 		String[] args = {};
-		parser.parse(args);
+		assertEquals(ActionType.help, parser.parse(args).getAction());
 	}
 	
 	@Test (expected = ParseException.class)

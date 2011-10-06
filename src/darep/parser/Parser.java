@@ -24,6 +24,10 @@ public class Parser {
 	}
 
 	public Command parse(String[] args) throws ParseException {
+		
+		if (args.length == 0) {
+			args = new String[] {"help"};
+		}
 
 		// determine action and get syntax for it
 		CommandSyntax syntax = parseAction(args);
@@ -118,11 +122,9 @@ public class Parser {
 	private CommandSyntax parseAction(String[] args) 
 							throws ParseException {
 
-		if (args.length < 1) {
-			throw new ParseException("No action specified");
-		}
-		
-		// determine action name 
+		if (args.length == 0) {
+			throw new ParseException("args contains no items");
+		} 
 		String actionName = args[0];
 
 		// get CommandSyntax
