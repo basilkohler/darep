@@ -58,7 +58,7 @@ public class RepositoryTest {
 	public void testAddNonexistingFile() throws RepositoryExeption {
 		command = getCommand("add NONEXISTINGFILE");
 		repo.add(command);
-		fail("no exeption occured");
+		fail("nonexistant input file. no exeption occured");
 	}
 
 	@Test(expected = RepositoryExeption.class)
@@ -83,8 +83,8 @@ public class RepositoryTest {
 			repo.add(command);
 
 			for (int j = 1; j <= i; j++) {
-				newDataset = new File(testRepo + "/datasets/TESTDATASET" + i);
-				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + i);
+				newDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
+				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + j);
 				assertEquals(true, newDataset.exists());
 				assertEquals(true, newMetadata.exists());
 			}

@@ -35,7 +35,7 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testAddCopy() {
+	public void testAddCopyFile() {
 		File newDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
 
@@ -47,6 +47,51 @@ public class DatabaseTest {
 		assertEquals(true, newDataset.exists());
 		assertEquals(true, newMetadata.exists());
 		assertEquals(true, testDataSet.exists());
+	}
+	
+	@Test
+	public void testAddCopyFolder() throws IOException {
+		File newDataset = new File(testRepo + "/datasets/TESTDATADIR");
+		File newMetadata = new File(testRepo + "/metadata/TESTDATADIR");
+		File sampleFolder = createSampleFolder();
+		meta = new Metadata("TESTDATADIR", sampleFolder.getName(), "", 0, 0,
+				testRepo.getAbsolutePath());
+		try {
+			db.add(sampleFolder, meta, true);
+		} catch (RepositoryExeption e) {
+			e.printStackTrace();
+		}
+		assertEquals(true, newDataset.exists());
+		assertEquals(true, newMetadata.exists());
+		assertEquals(true, testDataSet.exists());
+		checkFolderContents(newDataset);
+	}
+	
+	private void checkFolderContents(File dirToCheck) {
+		File fileToCheck;
+		for (int i=0;i<4;i++) {
+			dirToCheck=new File(dirToCheck.getAbsolutePath()+"/"+i);
+			assertEquals(true, dirToCheck.exists());
+			for (int j=0;j<4;j++) {
+				fileToCheck=new File(dirToCheck.getAbsolutePath()+"/file"+j);
+				assertEquals(true, fileToCheck.exists());
+			}
+		}
+	}
+
+	private File createSampleFolder() throws IOException {
+		File sampleFolder=new File(testDir.getAbsolutePath()+"/testDataDir");
+		sampleFolder.mkdir();
+		File sampleFile;
+		for (int i=0;i<4;i++) {
+			sampleFolder=new File(sampleFolder.getAbsolutePath()+"/"+i);
+			sampleFolder.mkdir();
+			for (int j=0;j<4;j++) {
+				sampleFile=new File(sampleFolder.getAbsolutePath()+"/file"+j);
+				sampleFile.createNewFile();
+			}
+		}
+		return new File(testDir.getAbsolutePath()+"/testDataDir");
 	}
 
 	@Test
@@ -78,8 +123,8 @@ public class DatabaseTest {
 				e.printStackTrace();
 			}
 			for (int j = 0; j <= i; j++) {
-				newDataset = new File(testRepo + "/datasets/TESTDATASET" + i);
-				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + i);
+				newDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
+				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + j);
 				assertEquals(true, newDataset.exists());
 				assertEquals(true, newMetadata.exists());
 			}
