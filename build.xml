@@ -22,15 +22,19 @@
 	</target>
 	
 	<target name="compile" depends="init" description="Compile sources">
-		<javac srcdir="${src}" destdir="${build}" />
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false" />
 	</target>
 	
 	<target name="jar" depends="compile" description="Generate JAR">
-		<jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}" />
+		<jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value="darep.DarepController"/>
+			</manifest>
+		</jar>
 	</target>
 
 	<target name="compile-test" depends="compile" description="Compile test sources.">
-		<javac srcdir="${srcTest}" destdir="${build}" classpathref="junitLib" />
+		<javac srcdir="${srcTest}" destdir="${build}" classpathref="junitLib" includeantruntime="false" />
 	</target>
 	
 	<target name="test" depends="compile-test" description="Run all tests">

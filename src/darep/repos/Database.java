@@ -25,7 +25,7 @@ public class Database {
 		filedb = new File(reposPath + "/datasets");
 		metadb = new File(reposPath + "/metadata");
 		if (!filedb.exists())
-			filedb.mkdir();
+			filedb.mkdir(); // XXX kevin: mkdir_s_() benutzen?
 		if (!metadb.exists())
 			metadb.mkdir();
 
@@ -47,15 +47,37 @@ public class Database {
 		String datasetDest = filedb.getAbsolutePath() + "/" + meta.getName();
 		String metadataDest = metadb.getAbsolutePath() + "/" + meta.getName();
 		
-		meta.saveAt(metadataDest);
+		setDatasetSize(dataset, meta);
 		
+		meta.saveAt(metadataDest);
 		if (copyMode) {
 			copyDataset(dataset, new File(datasetDest));
 		} else {
 			dataset.renameTo(new File(datasetDest));
 		}
 	}
-
+	
+	/*
+	 * recursively calculates and sets the size of the dataset and the number of files in it
+	 */
+	private void setDatasetSize(File dataset, Metadata meta) {
+		if(dataset.isFile()) {
+			meta.addFileSize(dataset.length());
+			meta.incrementNumberOfFiles();
+		} else {
+			File[] subDatasets = dataset.listFiles();
+			
+			for(File subDataset:subDatasets) {
+				if(subDataset.isFile()) {
+					meta.addFileSize(subDataset.length());
+					meta.incrementNumberOfFiles();
+				} else {
+					setDatasetSize(subDataset, meta);
+				}
+			}
+		}
+	}
+	
 	private void copyDataset(File dataset, File datasetDest) throws RepositoryExeption {
 		if (dataset.isDirectory()) {
 				datasetDest.mkdir();
@@ -88,6 +110,7 @@ public class Database {
 	 * @ param name name of the file you are searching for
 	 */
 	public boolean contains(String name) {
+		// XXX kevin: folgende Zeile in methode auslagern? (getFile(name) oder so); wird in delete() nochmal verwendet
 		File file = new File(metadb.getAbsolutePath() + "/" + name);
 		if (file.exists())
 			return true;
