@@ -36,23 +36,23 @@ public class DatabaseTest {
 
 	@Test
 	public void testAddCopyFile() {
-		File newDataset = new File(testRepo + "/datasets/TESTDATASET");
-		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
+		File expectedDataset = new File(testRepo + "/datasets/TESTDATASET");
+		File expectedMeta = new File(testRepo + "/metadata/TESTDATASET");
 
 		try {
 			db.add(testDataSet, meta, true);
 		} catch (RepositoryExeption e) {
 			e.printStackTrace();
 		}
-		assertEquals(true, newDataset.exists());
-		assertEquals(true, newMetadata.exists());
+		assertEquals(true, expectedDataset.exists());
+		assertEquals(true, expectedMeta.exists());
 		assertEquals(true, testDataSet.exists());
 	}
 	
 	@Test
 	public void testAddCopyFolder() throws IOException {
-		File newDataset = new File(testRepo + "/datasets/TESTDATADIR");
-		File newMetadata = new File(testRepo + "/metadata/TESTDATADIR");
+		File expectedDataset = new File(testRepo + "/datasets/TESTDATADIR");
+		File expectedMeta = new File(testRepo + "/metadata/TESTDATADIR");
 		File sampleFolder = createSampleFolder();
 		meta = new Metadata("TESTDATADIR", sampleFolder.getName(), "", 0, 0,
 				testRepo.getAbsolutePath());
@@ -61,10 +61,10 @@ public class DatabaseTest {
 		} catch (RepositoryExeption e) {
 			e.printStackTrace();
 		}
-		assertEquals(true, newDataset.exists());
-		assertEquals(true, newMetadata.exists());
+		assertEquals(true, expectedDataset.exists());
+		assertEquals(true, expectedMeta.exists());
 		assertEquals(true, testDataSet.exists());
-		checkFolderContents(newDataset);
+		checkFolderContents(expectedDataset);
 	}
 	
 	private void checkFolderContents(File dirToCheck) {
@@ -96,26 +96,24 @@ public class DatabaseTest {
 
 	@Test
 	public void testAddMove() {
-		File newDataset = new File(testRepo + "/datasets/TESTDATASET");
-		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
+		File expectedDataset = new File(testRepo + "/datasets/TESTDATASET");
+		File expectedMeta = new File(testRepo + "/metadata/TESTDATASET");
 
 		try {
 			db.add(testDataSet, meta, false);
 		} catch (RepositoryExeption e) {
 			e.printStackTrace();
 		}
-		assertEquals(true, newDataset.exists());
-		assertEquals(true, newMetadata.exists());
+		assertEquals(true, expectedDataset.exists());
+		assertEquals(true, expectedMeta.exists());
 		assertEquals(false, testDataSet.exists());
 	}
 
 	@Test
 	public void testAddMultiple() {
-		File newDataset = null;
-		File newMetadata = null;
+		File expectedDataset = null;
+		File expectedMeta = null;
 		for (int i = 0; i < 4; i++) {
-			newDataset = new File(testRepo + "/datasets/TESTDATASET" + i);
-			newMetadata = new File(testRepo + "/metadata/TESTDATASET" + i);
 			meta.setName("TESTDATASET" + i);
 			try {
 				db.add(testDataSet, meta, true);
@@ -123,10 +121,10 @@ public class DatabaseTest {
 				e.printStackTrace();
 			}
 			for (int j = 0; j <= i; j++) {
-				newDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
-				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + j);
-				assertEquals(true, newDataset.exists());
-				assertEquals(true, newMetadata.exists());
+				expectedDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
+				expectedMeta = new File(testRepo + "/metadata/TESTDATASET" + j);
+				assertEquals(true, expectedDataset.exists());
+				assertEquals(true, expectedMeta.exists());
 			}
 		}
 	}

@@ -11,6 +11,7 @@ import darep.Command.ActionType;
  * 
  */
 public class Repository {
+	private static final String DEFAULT_LOCATION = System.getProperty("user.home") + "/.data-repository";
 	private File location;
 	private Database db;
 
@@ -18,12 +19,10 @@ public class Repository {
 	 * loads(/creates) the default (hidden) repo in user.home
 	 */
 	public Repository() {
-		// XXX kevin: default-repository ordner vllt in konstante?
-		location = new File(System.getProperty("user.home") + "/.data-repository"); 
+		location = new File(DEFAULT_LOCATION); 
 		if (!location.exists()) {
 			location.mkdir();
-			System.out.println("created new repository "
-					+ System.getProperty("user.home") + "/.data-repository");
+			System.out.println("created new repository " + DEFAULT_LOCATION);
 		}
 		db = new Database(location.getAbsolutePath());
 	}
@@ -116,6 +115,7 @@ public class Repository {
 		if (db.contains(name)) { //if name exists append number 
 			int append = 1;
 			// XXX kevin: ergibt das nicht 41 chars?
+			// XXX aeneas: @kevin ja stimmt, sogar noch viel mehr jnd. merci, mach ich noch.
 			while (db.contains(name.concat(Integer.toString(append)))) { 
 				append++;
 			}

@@ -110,17 +110,20 @@ public class Database {
 	 * @ param name name of the file you are searching for
 	 */
 	public boolean contains(String name) {
-		// XXX kevin: folgende Zeile in methode auslagern? (getFile(name) oder so); wird in delete() nochmal verwendet
-		File file = new File(metadb.getAbsolutePath() + "/" + name);
+		File file = getMetaFile(name);
 		if (file.exists())
 			return true;
 		else
 			return false;
 	}
 
+	private File getMetaFile(String name) {
+		return new File(metadb.getAbsolutePath() + "/" + name);
+	}
+
 	public boolean delete(String name) throws RepositoryExeption {
 		if (contains(name)) {
-			File meta=new File(metadb.getAbsolutePath()+"/"+name);
+			File meta=getMetaFile(name);
 			boolean success1=meta.delete();
 			boolean success2=deleteDataset(new File(filedb.getAbsolutePath()+"/"+name));
 			if(success1 && success2) {
