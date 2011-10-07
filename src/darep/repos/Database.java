@@ -58,7 +58,7 @@ public class Database {
 	}
 	
 	/*
-	 * recursively calculates and sets the size of the dataset and the number of files in it
+	 * recursively calculates and sets inplace the size of the dataset and the number of files in it
 	 */
 	private void setDatasetSize(File dataset, Metadata meta) {
 		if(dataset.isFile()) {
