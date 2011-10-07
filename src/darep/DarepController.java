@@ -85,7 +85,6 @@ public class DarepController {
 	private void processCommand(String[] args) {
 		try {
 			Command command = parser.parse(args);
-			System.out.println(command);
 
 			// check if command=help => dont need to load the repo, just print
 			// help
