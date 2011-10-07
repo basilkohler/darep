@@ -20,6 +20,9 @@ public class Metadata implements Serializable {
 	public Metadata() {
 		timestamp = new Date();
 		description = new String();
+		name = new String();
+		originalName = new String();
+		path = null;
 	}
 	
 	public Metadata(String name, String origName, String descr, int nrFiles, int size, String reposPath) {
@@ -80,9 +83,14 @@ public class Metadata implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "numberOfFiles: " + numberOfFiles + " size: " + size;
-		//return "METADATA\nname: " + name + "\noriginalName: " + originalName + "\ntimestamp: " + timestamp.toString() +
-		//		"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size + "\npath: " + path.getAbsolutePath();
+		String filePath = null;
+		if(path != null)
+			filePath = path.getAbsolutePath();
+		else
+			filePath = new String();
+			
+		return "METADATA:\nname: " + name + "\noriginalName: " + originalName + "\ntimestamp: " + timestamp.toString() +
+				"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size + "\npath: " + filePath;
 	}
 
 }
