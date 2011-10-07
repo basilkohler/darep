@@ -110,14 +110,17 @@ public class Repository {
 
 	private String createUniqueName(String name) {
 		name=name.toUpperCase();
-		if (name.length() > 40)
-			name = name.substring(0, 39);
+		int max=40;
+		if (name.length() > max)
+			name = name.substring(0, max-1);
 		if (db.contains(name)) { //if name exists append number 
 			int append = 1;
-			// XXX kevin: ergibt das nicht 41 chars?
-			// XXX aeneas: @kevin ja stimmt, sogar noch viel mehr jnd. merci, mach ich noch.
+			if (name.length() == max)
+				name = name.substring(0, max-2);
 			while (db.contains(name.concat(Integer.toString(append)))) { 
 				append++;
+				if (name.concat(Integer.toString(append)).length() > max)
+					name = name.substring(0, name.length()-2);
 			}
 			name = name.concat(Integer.toString(append));
 		}
