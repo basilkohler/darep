@@ -1,17 +1,17 @@
 package darep.repos;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import darep.Command;
-import darep.DarepController;
 import darep.Command.ActionType;
+import darep.DarepController;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 
