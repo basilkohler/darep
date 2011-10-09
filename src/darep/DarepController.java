@@ -38,10 +38,13 @@ public class DarepController {
 	 */
 	public static final Map<String, ArgConstraint> constraints = new HashMap<String, ArgConstraint>();
 	
-	/*
+	/**
 	 * Adds anonymous child objects of ArgConstraint to the constraints-map.
 	 */
-	static {
+	private static void createConstraints() {
+		
+		constraints.clear();
+		
 		// name only consists of word chars (digit, letter, _) and -
 		// and is no longer than 40 chars long
 		constraints.put("n", new ArgConstraint() {
@@ -78,6 +81,7 @@ public class DarepController {
 	private Repository repository;
 
 	public static void main(String[] args) {
+		createConstraints();
 		DarepController controller = new DarepController();
 		controller.processCommand(args);
 	}

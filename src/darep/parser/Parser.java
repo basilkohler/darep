@@ -59,6 +59,10 @@ public class Parser {
 
 				// Add Option
 				if (syntax.allowsOption(optName)) {
+					if (!iterator.hasNext()) {
+						throw new ParseException("Option \"" + optName + "\"" +
+								" needs a parameter");
+					}
 					this.insertOptionToMap(optName, iterator.next(), options);
 
 				// Add Flag
