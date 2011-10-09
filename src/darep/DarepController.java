@@ -9,7 +9,7 @@ import darep.parser.CommandSyntax;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 import darep.repos.Repository;
-import darep.repos.RepositoryExeption;
+import darep.repos.RepositoryException;
 
 /**
  * Controls the flow of the program. Contains the main-method.
@@ -121,7 +121,7 @@ public class DarepController {
 		} catch (ParseException ex) {
 			System.err.println("ERROR: " + ex.getMessage());
 			System.exit(1);
-		} catch (RepositoryExeption e) {
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
 	}

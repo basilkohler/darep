@@ -41,7 +41,7 @@ public class DatabaseTest {
 
 		try {
 			db.add(testDataSet, meta, true);
-		} catch (RepositoryExeption e) {
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
 		assertEquals(true, expectedDataset.exists());
@@ -58,7 +58,7 @@ public class DatabaseTest {
 				testRepo.getAbsolutePath());
 		try {
 			db.add(sampleFolder, meta, true);
-		} catch (RepositoryExeption e) {
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
 		assertEquals(true, expectedDataset.exists());
@@ -101,7 +101,7 @@ public class DatabaseTest {
 
 		try {
 			db.add(testDataSet, meta, false);
-		} catch (RepositoryExeption e) {
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
 		assertEquals(true, expectedDataset.exists());
@@ -117,7 +117,7 @@ public class DatabaseTest {
 			meta.setName("TESTDATASET" + i);
 			try {
 				db.add(testDataSet, meta, true);
-			} catch (RepositoryExeption e) {
+			} catch (RepositoryException e) {
 				e.printStackTrace();
 			}
 			for (int j = 0; j <= i; j++) {
@@ -143,7 +143,7 @@ public class DatabaseTest {
 		assertEquals(true, existingMetadata.exists());
 		try {
 			db.delete("TESTDATASET");
-		} catch (RepositoryExeption e) {
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
 		assertEquals(false, existingDataset.exists());

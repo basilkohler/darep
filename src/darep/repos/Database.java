@@ -43,7 +43,7 @@ public class Database {
 	 * @param copyMode true if dataset should be copied to the db, else dataset
 	 * is moved into the db
 	 */
-	public void add(File dataset, Metadata meta, boolean copyMode) throws RepositoryExeption {
+	public void add(File dataset, Metadata meta, boolean copyMode) throws RepositoryException {
 		String datasetDest = filedb.getAbsolutePath() + "/" + meta.getName();
 		String metadataDest = metadb.getAbsolutePath() + "/" + meta.getName();
 		
@@ -78,7 +78,7 @@ public class Database {
 		}
 	}
 	
-	private void copyDataset(File dataset, File datasetDest) throws RepositoryExeption {
+	private void copyDataset(File dataset, File datasetDest) throws RepositoryException {
 		if (dataset.isDirectory()) {
 				datasetDest.mkdir();
 			File[] content=dataset.listFiles();
@@ -97,7 +97,7 @@ public class Database {
 				source.close();
 			} catch (IOException e) {
 				//e.printStackTrace();
-				throw new RepositoryExeption("could not copy file "
+				throw new RepositoryException("could not copy file "
 						+dataset.getAbsolutePath()+" to "
 						+datasetDest.getAbsolutePath());
 			}
@@ -121,7 +121,7 @@ public class Database {
 		return new File(metadb.getAbsolutePath() + "/" + name);
 	}
 
-	public boolean delete(String name) throws RepositoryExeption {
+	public boolean delete(String name) throws RepositoryException {
 		if (contains(name)) {
 			File meta=getMetaFile(name);
 			boolean success1=meta.delete();
@@ -129,7 +129,7 @@ public class Database {
 			if(success1 && success2) {
 				return true;
 			} else {
-				throw new RepositoryExeption("could not delete dataset "+name);
+				throw new RepositoryException("could not delete dataset "+name);
 			}
 		}else
 			return false;

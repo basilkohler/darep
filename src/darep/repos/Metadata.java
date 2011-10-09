@@ -35,12 +35,12 @@ public class Metadata implements Serializable {
 		this.path=new File(reposPath+"/metadata/"+name);
 	}
 
-	public void saveAt(String pathStr) throws RepositoryExeption {
+	public void saveAt(String pathStr) throws RepositoryException {
 		path = new File(pathStr);
 		save();
 	}
 	
-	public void save() throws RepositoryExeption {
+	public void save() throws RepositoryException {
 		try {
 			FileOutputStream fileOut = new FileOutputStream(path);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -49,7 +49,7 @@ public class Metadata implements Serializable {
 			fileOut.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new RepositoryExeption("could not save metadata");
+			throw new RepositoryException("could not save metadata");
 		}
 	}
 
