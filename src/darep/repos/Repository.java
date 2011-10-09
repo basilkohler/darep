@@ -21,7 +21,7 @@ public class Repository {
 	public Repository() {
 		location = new File(DEFAULT_LOCATION); 
 		if (!location.exists()) {
-			location.mkdir();
+			location.mkdirs();
 			System.out.println("created new repository " + DEFAULT_LOCATION);
 		}
 		db = new Database(location.getAbsolutePath());
@@ -35,7 +35,7 @@ public class Repository {
 	public Repository(String path) {
 		location = new File(path);
 		if (!location.exists()) {
-			location.mkdir(); // XXX kevin: mkdir_s_() ?
+			location.mkdirs();
 			System.out.println("created new repository " + path);
 		}
 		db = new Database(location.getAbsolutePath());

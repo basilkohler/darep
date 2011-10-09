@@ -25,9 +25,9 @@ public class Database {
 		filedb = new File(reposPath + "/datasets");
 		metadb = new File(reposPath + "/metadata");
 		if (!filedb.exists())
-			filedb.mkdir(); // XXX kevin: mkdir_s_() benutzen?
+			filedb.mkdirs();
 		if (!metadb.exists())
-			metadb.mkdir();
+			metadb.mkdirs();
 
 	}
 
