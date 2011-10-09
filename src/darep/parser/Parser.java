@@ -42,7 +42,7 @@ public class Parser {
 		// Datastructures to hand over to Command-Object
 		ArrayList<String> flags = new ArrayList<String>();
 		HashMap<String, String> options = new HashMap<String, String>();
-		ArrayList<String> arguments = new ArrayList<String>();
+		ArrayList<String> parameters = new ArrayList<String>();
 
 		// Number of arguments that are passed
 		int numParams = 0;
@@ -78,7 +78,7 @@ public class Parser {
 			// String doesn't start with "-" => normal argument
 			} else {
 				numParams++;
-				arguments.add(currentArg);
+				parameters.add(currentArg);
 			}
 		}
 
@@ -89,7 +89,7 @@ public class Parser {
 		}
 
 		// Make variables that can be passed to the Command-Constructor
-		String[] argumentsArray = arguments.toArray(new String[0]);
+		String[] argumentsArray = parameters.toArray(new String[0]);
 		String[] flagsArray = flags.toArray(new String[0]);
 		
 		return new Command(action, argumentsArray, options, flagsArray);
