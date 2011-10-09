@@ -89,10 +89,10 @@ public class Parser {
 		}
 
 		// Make variables that can be passed to the Command-Constructor
-		String[] argumentsArray = parameters.toArray(new String[0]);
+		String[] parametersArray = parameters.toArray(new String[0]);
 		String[] flagsArray = flags.toArray(new String[0]);
 		
-		return new Command(action, argumentsArray, options, flagsArray);
+		return new Command(action, parametersArray, options, flagsArray);
 		
 	}
 
