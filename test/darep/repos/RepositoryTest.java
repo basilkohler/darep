@@ -93,7 +93,7 @@ public class RepositoryTest {
 
 	private Command getCommand(String args) {
 		Parser parser = new Parser(DarepController.syntax,
-				DarepController.constraints, ActionType.help);
+				DarepController.getConstraints(), ActionType.help);
 		;
 		try {
 			command = parser.parse(args.split(" "));

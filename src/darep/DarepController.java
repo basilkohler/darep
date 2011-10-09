@@ -36,14 +36,14 @@ public class DarepController {
 	 * added in static initializer since there is no short syntax
 	 * for Maps in Java.
 	 */
-	public static final Map<String, ArgConstraint> constraints = new HashMap<String, ArgConstraint>();
+	private static Map<String, ArgConstraint> constraints;
 	
 	/**
 	 * Adds anonymous child objects of ArgConstraint to the constraints-map.
 	 */
 	private static void createConstraints() {
 		
-		constraints.clear();
+		constraints = new HashMap<String, ArgConstraint>();
 		
 		// name only consists of word chars (digit, letter, _) and -
 		// and is no longer than 40 chars long
@@ -76,12 +76,18 @@ public class DarepController {
 			}
 		});
 	}
+	
+	public static Map<String, ArgConstraint> getConstraints() {
+		if (constraints == null) {
+			createConstraints();
+		}
+		return constraints;
+	}
 
 	private Parser parser;
 	private Repository repository;
 
 	public static void main(String[] args) {
-		createConstraints();
 		DarepController controller = new DarepController();
 		controller.processCommand(args);
 	}
@@ -127,7 +133,7 @@ public class DarepController {
 	}
 
 	public DarepController() {
-		this.parser = new Parser(DarepController.syntax, DarepController.constraints, ActionType.help);
+		this.parser = new Parser(DarepController.syntax, DarepController.getConstraints(), ActionType.help);
 	}
 
 	private void printHelp() {
