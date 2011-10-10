@@ -93,8 +93,6 @@ public class Database {
 				destination = new FileOutputStream(datasetDest).getChannel();
 				try {
 					destination.transferFrom(source, 0, source.size());
-					source.close();
-					destination.close();
 				} finally {
 					source.close();
 					destination.close();
