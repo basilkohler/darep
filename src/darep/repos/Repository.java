@@ -47,12 +47,7 @@ public class Repository {
 	 * @param command the command object which stores the options
 	 */
 	public boolean add(Command command) throws RepositoryException {
-		File dataset=null;
-		if (command.getAction()==ActionType.replace) { //sourcefile in param[0] or param[1] ?
-			dataset = new File(command.getParams()[1]);
-		} else {
-			dataset = new File(command.getParams()[0]);	
-		}
+		File dataset=getInputFile(command);
 		
 		if (!dataset.exists()) {
 				throw new RepositoryException(dataset.getAbsolutePath()+" does not exist.");
@@ -83,12 +78,7 @@ public class Repository {
 	 */
 	private Metadata makeNewEntry(Command command) throws RepositoryException {
 		Metadata meta = new Metadata();
-		
-		if (command.getAction()==ActionType.replace) {
-			meta.setOriginalName(new File(command.getParams()[1]).getName());
-		}else {
-			meta.setOriginalName(new File(command.getParams()[0]).getName());			
-		}
+		meta.setOriginalName(getInputFile(command).getName());
 		
 		if (command.isSet("d"))
 			meta.setDescription(command.getOptionParam("d"));
@@ -108,19 +98,28 @@ public class Repository {
 		return meta;
 	}
 
+	private File getInputFile(Command command) {
+		// is the input file stored in the second or first parameter?
+		if (command.getAction()==ActionType.replace) { 
+			return new File(command.getParams()[1]);
+		}else {
+			return new File(command.getParams()[0]);			
+		}		
+	}
+
 	private String createUniqueName(String name) {
 		name=name.toUpperCase();
 		int max=40;
 		if (name.length() > max)
-			name = name.substring(0, max-1);
+			name = name.substring(0, max);
 		if (db.contains(name)) { //if name exists append number 
 			int append = 1;
 			if (name.length() == max)
-				name = name.substring(0, max-2);
+				name = name.substring(0, max-1);
 			while (db.contains(name.concat(Integer.toString(append)))) { 
 				append++;
 				if (name.concat(Integer.toString(append)).length() > max)
-					name = name.substring(0, name.length()-2);
+					name = name.substring(0, name.length()-1);
 			}
 			name = name.concat(Integer.toString(append));
 		}

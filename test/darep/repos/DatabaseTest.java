@@ -35,32 +35,27 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testAddCopyFile() {
+	public void testAddCopyFile() throws RepositoryException {
 		File expectedDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File expectedMeta = new File(testRepo + "/metadata/TESTDATASET");
 
-		try {
-			db.add(testDataSet, meta, true);
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
+		db.add(testDataSet, meta, true);
+	
 		assertEquals(true, expectedDataset.exists());
 		assertEquals(true, expectedMeta.exists());
 		assertEquals(true, testDataSet.exists());
 	}
 	
 	@Test
-	public void testAddCopyFolder() throws IOException {
+	public void testAddCopyFolder() throws IOException, RepositoryException {
 		File expectedDataset = new File(testRepo + "/datasets/TESTDATADIR");
 		File expectedMeta = new File(testRepo + "/metadata/TESTDATADIR");
 		File sampleFolder = createSampleFolder();
 		meta = new Metadata("TESTDATADIR", sampleFolder.getName(), "", 0, 0,
 				testRepo.getAbsolutePath());
-		try {
-			db.add(sampleFolder, meta, true);
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
+
+		db.add(sampleFolder, meta, true);
+	
 		assertEquals(true, expectedDataset.exists());
 		assertEquals(true, expectedMeta.exists());
 		assertEquals(true, testDataSet.exists());
@@ -95,31 +90,26 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testAddMove() {
+	public void testAddMove() throws RepositoryException {
 		File expectedDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File expectedMeta = new File(testRepo + "/metadata/TESTDATASET");
 
-		try {
-			db.add(testDataSet, meta, false);
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
+		db.add(testDataSet, meta, false);
+		
 		assertEquals(true, expectedDataset.exists());
 		assertEquals(true, expectedMeta.exists());
 		assertEquals(false, testDataSet.exists());
 	}
 
 	@Test
-	public void testAddMultiple() {
+	public void testAddMultiple() throws RepositoryException {
 		File expectedDataset = null;
 		File expectedMeta = null;
 		for (int i = 0; i < 4; i++) {
 			meta.setName("TESTDATASET" + i);
-			try {
-				db.add(testDataSet, meta, true);
-			} catch (RepositoryException e) {
-				e.printStackTrace();
-			}
+			
+			db.add(testDataSet, meta, true);
+		
 			for (int j = 0; j <= i; j++) {
 				expectedDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
 				expectedMeta = new File(testRepo + "/metadata/TESTDATASET" + j);
@@ -130,22 +120,18 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testDelete() {
+	public void testDelete() throws IOException, RepositoryException {
 		File existingDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File existingMetadata = new File(testRepo + "/metadata/TESTDATASET");
-		try {
-			existingDataset.createNewFile();
-			existingMetadata.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		existingDataset.createNewFile();
+		existingMetadata.createNewFile();
+
 		assertEquals(true, existingDataset.exists());
 		assertEquals(true, existingMetadata.exists());
-		try {
-			db.delete("TESTDATASET");
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
+
+		db.delete("TESTDATASET");
+	
 		assertEquals(false, existingDataset.exists());
 		assertEquals(false, existingMetadata.exists());
 	}
