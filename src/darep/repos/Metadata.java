@@ -44,9 +44,12 @@ public class Metadata implements Serializable {
 		try {
 			FileOutputStream fileOut = new FileOutputStream(path);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(this);
-			out.close();
-			fileOut.close();
+			try {
+				out.writeObject(this);
+			} finally {
+				out.close();
+				fileOut.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RepositoryException("could not save metadata");
