@@ -4,6 +4,7 @@
 	<property name="build" location="bin" />
 	<property name="dist" location="dist" />
 	<property name="wrapperScript" location="${src}/data-repository" />
+	<property name="README" location="README" />
 	<property name="distZip" location="data-repository.zip" />
 	<path id="junitLib">
 		<pathelement location="lib/junit-4.10.jar" />
@@ -52,6 +53,7 @@
 	
 	<target name="dist" depends="jar, test">
 		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
+		<copy tofile="${dist}/README" file="${README}" />
 	</target>
 	
 	<target name="zipdist" depends="dist">
