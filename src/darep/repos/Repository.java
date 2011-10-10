@@ -21,7 +21,7 @@ public class Repository {
 	public Repository() {
 		location = new File(DEFAULT_LOCATION); 
 		if (!location.exists()) {
-			location.mkdir();
+			location.mkdirs();
 			System.out.println("created new repository " + DEFAULT_LOCATION);
 		}
 		db = new Database(location.getAbsolutePath());
@@ -35,7 +35,7 @@ public class Repository {
 	public Repository(String path) {
 		location = new File(path);
 		if (!location.exists()) {
-			location.mkdir(); // XXX kevin: mkdir_s_() ?
+			location.mkdirs();
 			System.out.println("created new repository " + path);
 		}
 		db = new Database(location.getAbsolutePath());
@@ -46,7 +46,7 @@ public class Repository {
 	 * 
 	 * @param command the command object which stores the options
 	 */
-	public boolean add(Command command) throws RepositoryExeption {
+	public boolean add(Command command) throws RepositoryException {
 		File dataset=null;
 		if (command.getAction()==ActionType.replace) { //sourcefile in param[0] or param[1] ?
 			dataset = new File(command.getParams()[1]);
@@ -55,7 +55,7 @@ public class Repository {
 		}
 		
 		if (!dataset.exists()) {
-				throw new RepositoryExeption(dataset.getAbsolutePath()+" does not exist.");
+				throw new RepositoryException(dataset.getAbsolutePath()+" does not exist.");
 		}
 		
 		Metadata meta = makeNewEntry(command);
@@ -68,12 +68,12 @@ public class Repository {
 		return true;
 	}
 	
-	public boolean delete(Command command) throws RepositoryExeption {
+	public boolean delete(Command command) throws RepositoryException {
 		if(db.delete(command.getParams()[0])) {
 			System.out.println("The data set "+ command.getParams()[0] +"(original name: file/folder name) has been successfully removed from the repository.");
 			return true;
 		} else {
-				throw new RepositoryExeption("Unknown data set "+ command.getParams()[0]);
+				throw new RepositoryException("Unknown data set "+ command.getParams()[0]);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class Repository {
 	 * "valid" means the returned Metadata is safe to be entered into the db.
 	 *@ param command  
 	 */
-	private Metadata makeNewEntry(Command command) throws RepositoryExeption {
+	private Metadata makeNewEntry(Command command) throws RepositoryException {
 		Metadata meta = new Metadata();
 		
 		if (command.getAction()==ActionType.replace) {
@@ -97,7 +97,7 @@ public class Repository {
 		if (command.isSet("n")) { //name option set?
 			name = command.getOptionParam("n");
 			if (db.contains(name)) { //if name exists, exit
-				throw new RepositoryExeption("There is already a data set named "
+				throw new RepositoryException("There is already a data set named "
 										+name+" name in the repository.");
 			}
 		} else { //no name provided, make a unique name from originalname
@@ -127,7 +127,7 @@ public class Repository {
 		return name;
 	}
 
-	public void replace(Command command) throws RepositoryExeption {
+	public void replace(Command command) throws RepositoryException {
 		boolean success1=delete(command);
 		boolean success2=add(command);
 		if (success1 && success2)  {

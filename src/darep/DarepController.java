@@ -9,7 +9,7 @@ import darep.parser.CommandSyntax;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 import darep.repos.Repository;
-import darep.repos.RepositoryExeption;
+import darep.repos.RepositoryException;
 
 /**
  * Controls the flow of the program. Contains the main-method.
@@ -36,12 +36,15 @@ public class DarepController {
 	 * added in static initializer since there is no short syntax
 	 * for Maps in Java.
 	 */
-	public static final Map<String, ArgConstraint> constraints = new HashMap<String, ArgConstraint>();
+	private static Map<String, ArgConstraint> constraints;
 	
-	/*
+	/**
 	 * Adds anonymous child objects of ArgConstraint to the constraints-map.
 	 */
-	static {
+	private static void createConstraints() {
+		
+		constraints = new HashMap<String, ArgConstraint>();
+		
 		// name only consists of word chars (digit, letter, _) and -
 		// and is no longer than 40 chars long
 		constraints.put("n", new ArgConstraint() {
@@ -72,6 +75,13 @@ public class DarepController {
 						" and must not be longer than 1000 characters";
 			}
 		});
+	}
+	
+	public static Map<String, ArgConstraint> getConstraints() {
+		if (constraints == null) {
+			createConstraints();
+		}
+		return constraints;
 	}
 
 	private Parser parser;
@@ -117,13 +127,13 @@ public class DarepController {
 		} catch (ParseException ex) {
 			System.err.println("ERROR: " + ex.getMessage());
 			System.exit(1);
-		} catch (RepositoryExeption e) {
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public DarepController() {
-		this.parser = new Parser(DarepController.syntax, DarepController.constraints, ActionType.help);
+		this.parser = new Parser(DarepController.syntax, DarepController.getConstraints(), ActionType.help);
 	}
 
 	private void printHelp() {

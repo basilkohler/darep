@@ -21,7 +21,7 @@ import darep.parser.Parser;
  *
  */
 public class ParserTest {
-	private static final Parser parser = new Parser(DarepController.syntax, DarepController.constraints, ActionType.help);
+	private static final Parser parser = new Parser(DarepController.syntax, DarepController.getConstraints(), ActionType.help);
 
 	private ArrayList<String> args;
 	private ActionType action;
@@ -185,6 +185,12 @@ public class ParserTest {
 	public void testParseHelp() throws ParseException {
 		setAction(ActionType.help);
 		test();
+	}
+	
+	@Test (expected = ParseException.class)
+	public void testOptionNameLast() throws ParseException {
+		String[] args = {"add", "-d"};
+		parser.parse(args);
 	}
 	
 	// helper functions for default cases

@@ -3,8 +3,6 @@ package darep;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.sun.tools.javac.code.Attribute.Array;
-
 /**
  * This class contains all options, flags and parameters given
  * by a Commandline call.

@@ -1,17 +1,17 @@
 package darep.repos;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import darep.Command;
-import darep.DarepController;
 import darep.Command.ActionType;
+import darep.DarepController;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 
@@ -47,22 +47,22 @@ public class RepositoryTest {
 		assertEquals(false, newMetadata.exists());
 		try {
 			repo.add(command);
-		} catch (RepositoryExeption e) {
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
 		assertEquals(true, newDataset.exists());
 		assertEquals(true, newMetadata.exists());
 	}
 
-	@Test(expected = RepositoryExeption.class)
-	public void testAddNonexistingFile() throws RepositoryExeption {
+	@Test(expected = RepositoryException.class)
+	public void testAddNonexistingFile() throws RepositoryException {
 		command = getCommand("add NONEXISTINGFILE");
 		repo.add(command);
 		fail("nonexistant input file. no exeption occured");
 	}
 
-	@Test(expected = RepositoryExeption.class)
-	public void testAddNonUniqueName() throws RepositoryExeption {
+	@Test(expected = RepositoryException.class)
+	public void testAddNonUniqueName() throws RepositoryException {
 		command = getCommand("add -n NAME " + testDataSet.getAbsolutePath());
 		repo.add(command);
 		command = getCommand("add -n NAME " + testDataSet.getAbsolutePath());
@@ -71,7 +71,7 @@ public class RepositoryTest {
 	}
 
 	@Test
-	public void testAddMultiple() throws RepositoryExeption {
+	public void testAddMultiple() throws RepositoryException {
 		File newDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
 		command = getCommand("add " + testDataSet.getAbsolutePath());
@@ -93,7 +93,7 @@ public class RepositoryTest {
 
 	private Command getCommand(String args) {
 		Parser parser = new Parser(DarepController.syntax,
-				DarepController.constraints, ActionType.help);
+				DarepController.getConstraints(), ActionType.help);
 		;
 		try {
 			command = parser.parse(args.split(" "));
