@@ -20,9 +20,9 @@ public class DatabaseTest {
 	public void setUp() throws Exception {
 		testDir = new File("jUnitDatabaseTestDir");
 		testDir.mkdir();
-		testDataSet = new File(testDir.getAbsolutePath() + "/testDataSet");
+		testDataSet = new File(testDir.getAbsolutePath(), "/testDataSet");
 		testDataSet.createNewFile();
-		testRepo = new File(testDir.getAbsolutePath() + "/testRepo");
+		testRepo = new File(testDir.getAbsolutePath(), "/testRepo");
 		testRepo.mkdir();
 		meta = new Metadata("TESTDATASET", "testDataSet", "", 0, 0,
 				testRepo.getAbsolutePath());
