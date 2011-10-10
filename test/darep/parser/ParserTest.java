@@ -187,6 +187,12 @@ public class ParserTest {
 		test();
 	}
 	
+	@Test (expected = ParseException.class)
+	public void testOptionNameLast() throws ParseException {
+		String[] args = {"add", "-d"};
+		parser.parse(args);
+	}
+	
 	// helper functions for default cases
 	private Command getExpectedCommand() throws ParseException {
 		String[] args = this.args.toArray(new String[0]);
