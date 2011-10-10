@@ -116,12 +116,12 @@ public class Repository {
 			int append = 1;
 			if (name.length() == max)
 				name = name.substring(0, max-1);
-			while (db.contains(name.concat(Integer.toString(append)))) { 
+			while (db.contains(name + append)) { 
 				append++;
-				if (name.concat(Integer.toString(append)).length() > max)
+				if ((name + append).length() > max)
 					name = name.substring(0, name.length()-1);
 			}
-			name = name.concat(Integer.toString(append));
+			name = name + append;
 		}
 		return name;
 	}
