@@ -134,6 +134,17 @@ public class Repository {
 	}
 	
 	}
+
+	public void export(Command command) throws RepositoryException {
+		if (!db.contains(command.getParams()[0])) 
+			throw new RepositoryException("Unknown data set "+ command.getParams()[0]);
+		String originalName = db.export(command.getParams()[0],command.getParams()[1]);
+
+		System.out.println("The data set "+command.getParams()[0]+
+					" (original name: "+originalName+
+					" ) has been successfully exported to"+ command.getParams()[1]);
+		
+	}
 	
 
 	

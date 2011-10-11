@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.channels.FileChannel;
 
 /*representation of the physical database.
@@ -121,6 +122,27 @@ public class Database {
 	private File getMetaFile(String name) {
 		return new File(metadb.getAbsolutePath() + "/" + name);
 	}
+	
+	private File getDatasetFile(String name) {
+		return new File(filedb.getAbsolutePath()+"/"+name);
+	}
+	
+	public Metadata getMetadata(String name) throws RepositoryException {
+		Metadata meta = null;
+		 try {	           
+	            FileInputStream fileIn = new FileInputStream(metadb.getAbsolutePath()+"/"+name);
+	            ObjectInputStream in = new ObjectInputStream(fileIn);
+
+	            meta = (Metadata)in.readObject();
+
+	            in.close();
+	            fileIn.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RepositoryException("could not load Metadata "+name);
+	        }
+		return meta;
+	}
 
 	public boolean delete(String name) throws RepositoryException {
 		if (contains(name)) {
@@ -144,6 +166,24 @@ public class Database {
 			}
 		}
 		return dataset.delete();
+	}
+
+	public String export(String sourceName, String destFolder) throws RepositoryException {
+		File sourceFile=getDatasetFile(sourceName);
+		String originalName=getMetadata(sourceName).getOriginalName();
+		File destFile=new File(destFolder+"/"+originalName);
+		
+		if (!(new File(destFolder).exists()))
+			throw new RepositoryException("Destination folder "+destFolder+" does not exist.");
+		if (!(new File(destFolder).isDirectory()))
+			throw new RepositoryException("Destination folder "+destFolder+" is a file and not a folder.");
+		if (destFile.exists())
+			throw new RepositoryException("There is already a file/folder named "+
+									originalName+" in destination folder "+
+									destFolder);
+
+		copyDataset(sourceFile, destFile);
+		return originalName;
 	}
 
 }
