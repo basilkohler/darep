@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Metadata implements Serializable {
-	private static final long serialVersionUID = 201110031237L;
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String originalName;
 	private Date timestamp;
@@ -21,20 +21,52 @@ public class Metadata implements Serializable {
 
 	public Metadata() {
 		timestamp = new Date();
-		description = new String();
-		name = new String();
-		originalName = new String();
+		description = "";
+		name = "";
+		originalName = "";
 		path = null;
 	}
 	
 	public Metadata(String name, String origName, String descr, int nrFiles, int size, String reposPath) {
 		this.timestamp = new Date();
 		this.description = descr;
-		this.name=name;
-		this.originalName=origName;
-		this.numberOfFiles=nrFiles;
-		this.size=size;
-		this.path=new File(reposPath+"/metadata/"+name);
+		this.name = name;
+		this.originalName = origName;
+		this.numberOfFiles = nrFiles;
+		this.size = size;
+		this.path = new File(reposPath+"/metadata/"+name);
+	}
+
+	public static Metadata readFile(File file) throws RepositoryException {
+		try {
+			FileInputStream fileIn = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			
+			try {
+				 Object obj = in.readObject();
+				 if (obj instanceof Metadata) {
+					 return (Metadata)obj;
+				 } else {
+					 throw new RepositoryException("File " + file.getName()
+							 + "is not a Metadata-file");
+				 }
+			} finally {
+				in.close();
+				fileIn.close();
+			}
+			
+		} catch (ClassNotFoundException e) {
+			throw new RepositoryException("Could not read Metadata for "
+					+ file.getName());
+		} catch (IOException e) {
+			throw new RepositoryException("Could not read Metadata for "
+					+ file.getName());
+		}
+	}
+	
+	public boolean delete() {
+		return ((path == null)
+				|| this.path.delete());
 	}
 
 	public void saveAt(String pathStr) throws RepositoryException {
@@ -78,14 +110,6 @@ public class Metadata implements Serializable {
 		return originalName;
 	}
 	
-	public void incrementNumberOfFiles() {
-		this.numberOfFiles++;
-	}
-	
-	public void addFileSize(long sizeToAdd) {
-		this.size += sizeToAdd;
-	}
-	
 	@Override
 	public String toString() {
 		String filePath = null;
@@ -96,6 +120,35 @@ public class Metadata implements Serializable {
 			
 		return "METADATA:\nname: " + name + "\noriginalName: " + originalName + "\ntimestamp: " + timestamp.toString() +
 				"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size + "\npath: " + filePath;
+	}
+
+	public String getTimeStamp() {
+		return "" + timestamp.getTime();
+	}
+
+	public int getNumberOfFiles() {
+		return numberOfFiles;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public long getSize() {
+		return size;
+	}
+
+	public void saveInDir(File dir) throws RepositoryException {
+		path = new File(dir, getName());
+		this.save();
+	}
+
+	public void setFileSize(long fileSize) {
+		this.size = fileSize;
+	}
+
+	public void setNumberOfFiles(int countFiles) {
+		this.numberOfFiles = countFiles;
 	}
 
 

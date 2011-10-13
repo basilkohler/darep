@@ -92,7 +92,7 @@ public class DarepController {
 		controller.processCommand(args);
 	}
 
-	private void processCommand(String[] args) {
+	public void processCommand(String[] args) {
 		try {
 			Command command = parser.parse(args);
 

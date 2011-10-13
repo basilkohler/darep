@@ -1,5 +1,6 @@
 package darep;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -71,6 +72,18 @@ public class Helper {
 		sb.append(" }");
 
 		return sb.toString();
+	}
+	
+	public static boolean deleteDir(File dir) {
+		if (dir.isDirectory()) {
+			for (File subfile: dir.listFiles()) {
+				boolean success = deleteDir(subfile);
+				if (!success) {
+					return false;
+				}
+			}
+		}
+		return dir.delete();
 	}
 	
 }

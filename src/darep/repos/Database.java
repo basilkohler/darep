@@ -4,16 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 
 /*representation of the physical database.
  *a database has two folders one for the datasets, located at 'filedb' 
  *and one for the metadatafiles, located at 'metadb'
  */
 public class Database {
-	File filedb;
-	File metadb;
+	private File filedb;
+	private File metadb;
 
 	/*
 	 * loads(/creates if 'reposPath' doesnt exits) a db in 'reposPath' doesnt
@@ -23,13 +23,20 @@ public class Database {
 	 * 'filedb' and 'metadb')
 	 */
 	public Database(String reposPath) {
-		filedb = new File(reposPath + "/datasets");
-		metadb = new File(reposPath + "/metadata");
+		filedb = new File(reposPath, "datasets");
+		metadb = new File(reposPath, "metadata");
 		if (!filedb.exists())
 			filedb.mkdirs();
 		if (!metadb.exists())
 			metadb.mkdirs();
-
+	}
+	
+	public File getMetaDB() {
+		return metadb;
+	}
+	
+	public File getFileDB() {
+		return filedb;
 	}
 
 	/*
@@ -44,47 +51,24 @@ public class Database {
 	 * @param copyMode true if dataset should be copied to the db, else dataset
 	 * is moved into the db
 	 */
-	public void add(File dataset, Metadata meta, boolean copyMode) throws RepositoryException {
-		String datasetDest = filedb.getAbsolutePath() + "/" + meta.getName();
-		String metadataDest = metadb.getAbsolutePath() + "/" + meta.getName();
-		
-		setDatasetSize(dataset, meta);
-		
-		meta.saveAt(metadataDest);
-		if (copyMode) {
-			copyDataset(dataset, new File(datasetDest));
+	public boolean add(File file, Metadata meta, boolean copyMode) throws RepositoryException {
+		Dataset ds = Dataset.createNewDataset(file, meta, this);
+		if (ds.saveToRepository(copyMode)) {
+			System.out.println("The file/folder " + meta.getOriginalName()
+					+ " has been successfully added to the repository"
+					+ " as data set named " + meta.getName());
+			return true;
 		} else {
-			dataset.renameTo(new File(datasetDest));
+			return false;
 		}
 	}
 	
-	/*
-	 * recursively calculates and sets inplace the size of the dataset and the number of files in it
-	 */
-	private void setDatasetSize(File dataset, Metadata meta) {
-		if(dataset.isFile()) {
-			meta.addFileSize(dataset.length());
-			meta.incrementNumberOfFiles();
-		} else {
-			File[] subDatasets = dataset.listFiles();
-			
-			for(File subDataset:subDatasets) {
-				if(subDataset.isFile()) {
-					meta.addFileSize(subDataset.length());
-					meta.incrementNumberOfFiles();
-				} else {
-					setDatasetSize(subDataset, meta);
-				}
-			}
-		}
-	}
-	
-	private void copyDataset(File dataset, File datasetDest) throws RepositoryException {
+	void copyFile(File dataset, File datasetDest) throws RepositoryException {
 		if (dataset.isDirectory()) {
 				datasetDest.mkdir();
 			File[] content=dataset.listFiles();
 			for (int i=0;i<content.length;i++) {
-				copyDataset(content[i], new File(datasetDest.getAbsolutePath()+"/"+content[i].getName()));
+				copyFile(content[i], new File(datasetDest.getAbsolutePath()+"/"+content[i].getName()));
 			}
 		} else {
 			FileChannel source = null;
@@ -112,78 +96,52 @@ public class Database {
 	 * @ param name name of the file you are searching for
 	 */
 	public boolean contains(String name) {
-		File file = getMetaFile(name);
-		if (file.exists())
-			return true;
-		else
-			return false;
-	}
-
-	private File getMetaFile(String name) {
-		return new File(metadb.getAbsolutePath() + "/" + name);
-	}
-	
-	private File getDatasetFile(String name) {
-		return new File(filedb.getAbsolutePath()+"/"+name);
-	}
-	
-	public Metadata getMetadata(String name) throws RepositoryException {
-		Metadata meta = null;
-		 try {	           
-	            FileInputStream fileIn = new FileInputStream(metadb.getAbsolutePath()+"/"+name);
-	            ObjectInputStream in = new ObjectInputStream(fileIn);
-
-	            meta = (Metadata)in.readObject();
-
-	            in.close();
-	            fileIn.close();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            throw new RepositoryException("could not load Metadata "+name);
-	        }
-		return meta;
+		return (getDataSet(name) != null);
 	}
 
 	public boolean delete(String name) throws RepositoryException {
-		if (contains(name)) {
-			File meta=getMetaFile(name);
-			boolean success1=meta.delete();
-			boolean success2=deleteDataset(new File(filedb.getAbsolutePath()+"/"+name));
-			if(success1 && success2) {
-				return true;
-			} else {
-				throw new RepositoryException("could not delete dataset "+name);
-			}
-		}else
+		Dataset ds = getDataSet(name);
+		if (ds == null) {
 			return false;
-	}
-
-	private boolean deleteDataset(File dataset) {
-		if (dataset.isDirectory()) {
-			File[] content=dataset.listFiles();
-			for (int i=0;i<content.length;i++) {
-				deleteDataset(content[i]);
-			}
 		}
-		return dataset.delete();
+		return ds.delete();
+	}
+	
+	public Dataset[] getAllDatasets() throws RepositoryException {
+		String[] filenames = filedb.list();
+		ArrayList<Dataset> datasets = new ArrayList<Dataset>();
+		for (String name: filenames) {
+			datasets.add(getDataSet(name));
+		}
+		return datasets.toArray(new Dataset[0]);
 	}
 
-	public String export(String sourceName, String destFolder) throws RepositoryException {
-		File sourceFile=getDatasetFile(sourceName);
-		String originalName=getMetadata(sourceName).getOriginalName();
-		File destFile=new File(destFolder+"/"+originalName);
+	public File export(String sourceName, String destFolder) throws RepositoryException {
+		Dataset dataset = getDataSet(sourceName);
+		
+		File sourceFile = dataset.getFile();
+		String originalName = dataset.getMetadata().getOriginalName();
+		File destFile = new File(destFolder, originalName);
 		
 		if (!(new File(destFolder).exists()))
 			throw new RepositoryException("Destination folder \'"+destFolder+"\' does not exist.");
 		if (!(new File(destFolder).isDirectory()))
 			throw new RepositoryException("Destination folder \'"+destFolder+"\' is a file and not a folder.");
 		if (destFile.exists())
-			throw new RepositoryException("There is already a file/folder named "+
-									originalName+" in destination folder "+
-									destFolder);
+			throw new RepositoryException("There is already a file/folder" +
+					" named \"" + originalName + "\"" +
+					" in destination folder \"" + destFolder + "\"");
 
-		copyDataset(sourceFile, destFile);
-		return originalName;
+		copyFile(sourceFile, destFile);
+		return destFile;
+	}
+
+	public Dataset getDataSet(String string) {
+		try {
+			return Dataset.readDataset(string, this);
+		} catch (RepositoryException e) {
+			return null;
+		}
 	}
 
 }
