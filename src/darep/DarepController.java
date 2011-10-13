@@ -111,7 +111,7 @@ public class DarepController {
 
 			switch (command.getAction()) {
 			case add:
-					repository.add(command);
+				repository.add(command);
 				break;
 			case delete:
 				repository.delete(command);
@@ -123,8 +123,8 @@ public class DarepController {
 				repository.export(command);
 				break;
 			case list:
-				System.out.println(command.getAction()
-						+ ": not yet implemented");
+				repository.list(command);
+				break;
 			}
 		} catch (ParseException ex) {
 			System.err.println("ERROR: " + ex.getMessage());
