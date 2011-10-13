@@ -6,5 +6,6 @@ public class RepositoryException extends Exception {
 
 	public RepositoryException(String message) {
 		super("ERROR: "+message);
+		System.exit(1);
 	}
 }

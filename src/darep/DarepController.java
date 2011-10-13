@@ -1,5 +1,7 @@
 package darep;
 
+import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,33 +20,36 @@ import darep.repos.RepositoryException;
 public class DarepController {
 
 	/**
-	 * The {@link CommandSyntax}-Array given to the parser. Defines the allowed syntax
-	 * when calling the program. The Format for a Command is: (Name,#Options
-	 * with Value,Flags)
+	 * The {@link CommandSyntax}-Array given to the parser. Defines the allowed
+	 * syntax when calling the program. The Format for a Command is:
+	 * (Name,#Options with Value,Flags)
 	 */
 	public static final CommandSyntax[] syntax = new CommandSyntax[] {
-		new CommandSyntax(ActionType.add, 1, new String[] { "r","n", "d" }, new String[] { "m" }),
-		new CommandSyntax(ActionType.delete, 1,	new String[] { "r" }, new String[0]),
-		new CommandSyntax(ActionType.replace, 2, new String[] { "r", "d" }, new String[] { "m" }),
-		new CommandSyntax(ActionType.help, 0, new String[0], new String[0]),
-		new CommandSyntax(ActionType.list, 0, new String[] { "r" },	new String[] { "p" }),
-		new CommandSyntax(ActionType.export, 2, new String[] { "r" }, new String[0])
-	};
-	
+			new CommandSyntax(ActionType.add, 1,
+					new String[] { "r", "n", "d" }, new String[] { "m" }),
+			new CommandSyntax(ActionType.delete, 1, new String[] { "r" },
+					new String[0]),
+			new CommandSyntax(ActionType.replace, 2, new String[] { "r", "d" },
+					new String[] { "m" }),
+			new CommandSyntax(ActionType.help, 0, new String[0], new String[0]),
+			new CommandSyntax(ActionType.list, 0, new String[] { "r" },
+					new String[] { "p" }),
+			new CommandSyntax(ActionType.export, 2, new String[] { "r" },
+					new String[0]) };
+
 	/**
-	 * Map with {@link ArgConstraint}s for the Parser. Values are
-	 * added in static initializer since there is no short syntax
-	 * for Maps in Java.
+	 * Map with {@link ArgConstraint}s for the Parser. Values are added in
+	 * static initializer since there is no short syntax for Maps in Java.
 	 */
 	private static Map<String, ArgConstraint> constraints;
-	
+
 	/**
 	 * Adds anonymous child objects of ArgConstraint to the constraints-map.
 	 */
 	private static void createConstraints() {
-		
+
 		constraints = new HashMap<String, ArgConstraint>();
-		
+
 		// name only consists of word chars (digit, letter, _) and -
 		// and is no longer than 40 chars long
 		constraints.put("n", new ArgConstraint() {
@@ -55,12 +60,12 @@ public class DarepController {
 
 			@Override
 			public String getDescription() {
-				return "Argument must only contain" +
-						" digits, uppercase letters, \"_\" or \"-\"" +
-						" and must not be longer than 40 characters";
+				return "Argument must only contain"
+						+ " digits, uppercase letters, \"_\" or \"-\""
+						+ " and must not be longer than 40 characters";
 			}
 		});
-		
+
 		// Description does not contain control characters and is no longer
 		// than 1000 chars
 		constraints.put("d", new ArgConstraint() {
@@ -71,12 +76,12 @@ public class DarepController {
 
 			@Override
 			public String getDescription() {
-				return "Argument must not contain ISO control characters" +
-						" and must not be longer than 1000 characters";
+				return "Argument must not contain ISO control characters"
+						+ " and must not be longer than 1000 characters";
 			}
 		});
 	}
-	
+
 	public static Map<String, ArgConstraint> getConstraints() {
 		if (constraints == null) {
 			createConstraints();
@@ -103,15 +108,20 @@ public class DarepController {
 				System.exit(0);
 			}
 
+			if (!new File(command.getOptionParam("r")).exists()
+					&& !command.getAction().equals(ActionType.add)) {
+				System.err.println("Repository does not exist");
+				System.exit(1);
+			}
 			// check if option -r is set or default repos, and setup repos.
-			if (command.isSet("r"))
+			if (command.isSet("r")) {
 				repository = new Repository(command.getOptionParam("r"));
-			else
+			} else {
 				repository = new Repository();
-
+			}
 			switch (command.getAction()) {
 			case add:
-					repository.add(command);
+				repository.add(command);
 				break;
 			case delete:
 				repository.delete(command);
@@ -130,13 +140,14 @@ public class DarepController {
 			System.err.println("ERROR: " + ex.getMessage());
 			System.exit(1);
 		} catch (RepositoryException e) {
-			//TODO remove later
+			// TODO remove later
 			e.printStackTrace();
 		}
 	}
 
 	public DarepController() {
-		this.parser = new Parser(DarepController.syntax, DarepController.getConstraints(), ActionType.help);
+		this.parser = new Parser(DarepController.syntax,
+				DarepController.getConstraints(), ActionType.help);
 	}
 
 	private void printHelp() {
