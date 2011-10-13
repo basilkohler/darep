@@ -123,7 +123,7 @@ public class DarepController {
 				repository.export(command);
 				break;
 			case list:
-				repository.list(command);
+				System.out.println(repository.getList(command));
 				break;
 			}
 		} catch (ParseException ex) {

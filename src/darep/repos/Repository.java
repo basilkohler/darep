@@ -122,10 +122,13 @@ public class Repository {
 		return name;
 	}
 	
-	public void list(Command command) throws RepositoryException {
+	public String getList(Command command) throws RepositoryException {
+		StringBuilder sb = new StringBuilder();
 		for (Dataset dataset: db.getAllDatasets()) {
-			System.out.println(dataset);
+			sb.append(dataset + "\n");
 		}
+		// TODO Pretty print and foot-line (total usw)
+		return sb.toString();
 	}
 
 	public void replace(Command command) throws RepositoryException {
