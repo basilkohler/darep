@@ -130,6 +130,7 @@ public class DarepController {
 			System.err.println("ERROR: " + ex.getMessage());
 			System.exit(1);
 		} catch (RepositoryException e) {
+			//TODO remove later
 			e.printStackTrace();
 		}
 	}

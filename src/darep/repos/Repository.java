@@ -50,22 +50,22 @@ public class Repository {
 		File dataset=getInputFile(command);
 		
 		if (!dataset.exists()) {
-				throw new RepositoryException(dataset.getAbsolutePath()+" does not exist.");
+				throw new RepositoryException("\'"+dataset.getAbsolutePath()+"\' does not exist.");
 		}
 		
 		Metadata meta = makeNewEntry(command);
 		
 		db.add(dataset, meta, !command.isSet("m"));
 		
-		System.out.println("The file/folder " + meta.getOriginalName()
-				+ " has been successfully added to the repository"
+		System.out.println("The file/folder \'" + meta.getOriginalName()
+				+ "\' has been successfully added to the repository"
 				+ " as data set named " + meta.getName());
 		return true;
 	}
 	
 	public boolean delete(Command command) throws RepositoryException {
 		if(db.delete(command.getParams()[0])) {
-			System.out.println("The data set "+ command.getParams()[0] +"(original name: file/folder name) has been successfully removed from the repository.");
+			System.out.println("The data set "+ command.getParams()[0] +" (original name: file/folder name) has been successfully removed from the repository.");
 			return true;
 		} else {
 				throw new RepositoryException("Unknown data set "+ command.getParams()[0]);
@@ -87,8 +87,8 @@ public class Repository {
 		if (command.isSet("n")) { //name option set?
 			name = command.getOptionParam("n");
 			if (db.contains(name)) { //if name exists, exit
-				throw new RepositoryException("There is already a data set named "
-										+name+" name in the repository.");
+				throw new RepositoryException("There is already a data set named \'"
+										+name+"\' in the repository.");
 			}
 		} else { //no name provided, make a unique name from originalname
 			name = createUniqueName(meta.getOriginalName());
@@ -130,7 +130,7 @@ public class Repository {
 		boolean success1=delete(command);
 		boolean success2=add(command);
 		if (success1 && success2)  {
-			System.out.println("The data set named "+command.getParams()[0]+" has been successfully replaced by the file/folder �file/folder name�.");
+			System.out.println("The data set named "+command.getParams()[0]+" has been successfully replaced by the file/folder name.");
 	}
 	
 	}
@@ -142,7 +142,7 @@ public class Repository {
 
 		System.out.println("The data set "+command.getParams()[0]+
 					" (original name: "+originalName+
-					" ) has been successfully exported to"+ command.getParams()[1]);
+					") has been successfully exported to \'"+ command.getParams()[1] + "\'");
 		
 	}
 	

@@ -174,9 +174,9 @@ public class Database {
 		File destFile=new File(destFolder+"/"+originalName);
 		
 		if (!(new File(destFolder).exists()))
-			throw new RepositoryException("Destination folder "+destFolder+" does not exist.");
+			throw new RepositoryException("Destination folder \'"+destFolder+"\' does not exist.");
 		if (!(new File(destFolder).isDirectory()))
-			throw new RepositoryException("Destination folder "+destFolder+" is a file and not a folder.");
+			throw new RepositoryException("Destination folder \'"+destFolder+"\' is a file and not a folder.");
 		if (destFile.exists())
 			throw new RepositoryException("There is already a file/folder named "+
 									originalName+" in destination folder "+
