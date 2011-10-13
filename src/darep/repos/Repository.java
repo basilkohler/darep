@@ -127,7 +127,7 @@ public class Repository {
 		for (Dataset dataset: db.getAllDatasets()) {
 			sb.append(dataset + "\n");
 		}
-		// TODO Pretty print and foot-line (total usw)
+		// TODO Pretty print and foot-line (total usw)  
 		return sb.toString();
 	}
 
