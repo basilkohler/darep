@@ -139,6 +139,9 @@ public class Repository {
 	}
 
 	public void export(Command command) throws RepositoryException {
+		String absolutExportPath = new File(command.getParams()[1]).getAbsolutePath();
+		if(absolutExportPath.contains(location.getAbsolutePath()))
+			throw new RepositoryException("It is not allowed to export something into the "+location.toString()+" repository folder");
 		if (!db.contains(command.getParams()[0])) 
 			throw new RepositoryException("Unknown data set "+ command.getParams()[0]);
 		String originalName = db.export(command.getParams()[0],command.getParams()[1]);
@@ -149,6 +152,8 @@ public class Repository {
 		
 	}
 	
-
+	protected File getLocation() {
+		return this.location;
+	}
 	
 }

@@ -132,6 +132,7 @@ public class DarepController {
 		} catch (RepositoryException e) {
 			//TODO remove later
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

@@ -90,6 +90,18 @@ public class RepositoryTest {
 			}
 		}
 	}
+	
+	@Test (expected = RepositoryException.class)
+	public void testExportTheRepositoryItself() throws RepositoryException {
+		command = getCommand("add " + testDataSet.getAbsolutePath());
+		try {
+			repo.add(command);
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
+		command = getCommand("export " + testDataSet.getName()+" "+repo.getLocation());
+		repo.export(command);
+	}
 
 	private Command getCommand(String args) {
 		Parser parser = new Parser(DarepController.syntax,
