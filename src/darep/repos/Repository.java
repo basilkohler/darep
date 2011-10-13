@@ -53,6 +53,9 @@ public class Repository {
 				throw new RepositoryException("\'"+dataset.getAbsolutePath()+"\' does not exist.");
 		}
 		
+		if(location.getAbsolutePath().contains(dataset.getAbsolutePath())){
+			throw new RepositoryException("Dataset can not contain the repository itself.");
+		}
 		Metadata meta = makeNewEntry(command);
 		
 		db.add(dataset, meta, !command.isSet("m"));
