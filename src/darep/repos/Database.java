@@ -170,6 +170,10 @@ public class Database {
 
 	public String export(String sourceName, String destFolder) throws RepositoryException {
 		File sourceFile=getDatasetFile(sourceName);
+		
+		if(!sourceFile.exists())
+			throw new RepositoryException("There is no File with name \'" + sourceName +"\' in this Repository");
+		
 		String originalName=getMetadata(sourceName).getOriginalName();
 		File destFile=new File(destFolder+"/"+originalName);
 		

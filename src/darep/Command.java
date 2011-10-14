@@ -108,14 +108,6 @@ public class Command {
 	}
 	
 	/**
-	 * Returns the parameters, null if not set.
-	 * @return
-	 */
-	public String[] getParameters() {
-		return this.parameters;
-	}
-	
-	/**
 	 * Returns the flags, null if not set.
 	 * @return
 	 */

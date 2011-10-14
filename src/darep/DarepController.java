@@ -97,7 +97,7 @@ public class DarepController {
 		controller.processCommand(args);
 	}
 
-	private void processCommand(String[] args) {
+	public void processCommand(String[] args) {
 		try {
 			Command command = parser.parse(args);
 
@@ -107,16 +107,23 @@ public class DarepController {
 				printHelp();
 				System.exit(0);
 			}
-
-			if (!new File(command.getOptionParam("r")).exists()
-					&& !command.getAction().equals(ActionType.add)) {
-				System.err.println("Repository does not exist");
-				System.exit(1);
-			}
+			
 			// check if option -r is set or default repos, and setup repos.
 			if (command.isSet("r")) {
+				//Check if Repository exists
+				if (!new File(command.getOptionParam("r")).exists()
+						&& !command.getAction().equals(ActionType.add)) {
+					
+					throw new RepositoryException("Repository does not Exist");
+				}
 				repository = new Repository(command.getOptionParam("r"));
 			} else {
+				//Check if Repository exists
+				if (!new File(Repository.getDefaultLocation()).exists()
+						&& !command.getAction().equals(ActionType.add)) {
+					
+					throw new RepositoryException("Repository does not Exist");
+				}
 				repository = new Repository();
 			}
 			switch (command.getAction()) {
@@ -142,6 +149,7 @@ public class DarepController {
 		} catch (RepositoryException e) {
 			// TODO remove later
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

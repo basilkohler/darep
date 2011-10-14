@@ -15,6 +15,8 @@ public class Repository {
 			.getProperty("user.home") + "/.data-repository";
 	private File location;
 	private Database db;
+	
+	
 
 	/*
 	 * loads(/creates) the default (hidden) repo in user.home
@@ -49,20 +51,22 @@ public class Repository {
 	 */
 	public boolean add(Command command) throws RepositoryException {
 		File dataset = getInputFile(command);
-
+		
+		
 		if (!dataset.exists()) {
 			throw new RepositoryException("\'" + dataset.getAbsolutePath()
 					+ "\' does not exist.");
 		}
-
+		
 		if (location.getAbsolutePath().contains(dataset.getAbsolutePath())) {
 			throw new RepositoryException(
 					"Dataset can not contain the repository itself.");
 		}
+		
 		Metadata meta = makeNewEntry(command);
-
+		
 		db.add(dataset, meta, !command.isSet("m"));
-
+		
 		System.out.println("The file/folder \'" + meta.getOriginalName()
 				+ "\' has been successfully added to the repository"
 				+ " as data set named " + meta.getName());
@@ -152,21 +156,25 @@ public class Repository {
 	}
 
 	public void export(Command command) throws RepositoryException {
-		// if (!location.exists()) {
-		// throw new RepositoryException(location.getAbsolutePath()
-		// + "does not Exist");
-		// }
-		if (!db.contains(command.getParams()[0]))
-			throw new RepositoryException("Unknown data set "
-					+ command.getParams()[0]);
-		String originalName = db.export(command.getParams()[0],
-				command.getParams()[1]);
 
-		System.out.println("The data set " + command.getParams()[0]
-				+ " (original name: " + originalName
-				+ ") has been successfully exported to \'"
-				+ command.getParams()[1] + "\'");
+		String absolutExportPath = new File(command.getParams()[1]).getAbsolutePath();
+		if(absolutExportPath.contains(location.getAbsolutePath()))
+			throw new RepositoryException("It is not allowed to export something into the "+location.toString()+" repository folder");
 
+		String originalName = db.export(command.getParams()[0],command.getParams()[1]);
+
+		System.out.println("The data set "+command.getParams()[0]+
+					" (original name: "+originalName+
+					") has been successfully exported to \'"+ command.getParams()[1] + "\'");
+		
+
+}
+	protected File getLocation() {
+		return this.location;
 	}
-
+	
+	public static String getDefaultLocation(){
+		return DEFAULT_LOCATION;
+	}
+	
 }
