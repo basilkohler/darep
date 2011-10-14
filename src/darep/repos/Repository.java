@@ -50,27 +50,17 @@ public class Repository {
 	 * @param command the command object which stores the options
 	 */
 	public boolean add(Command command) throws RepositoryException {
-		File dataset = getInputFile(command);
-		
-		
-		if (!dataset.exists()) {
-			throw new RepositoryException("\'" + dataset.getAbsolutePath()
-					+ "\' does not exist.");
+
+		File file = getInputFile(command);
+		if (!file.exists()) {
+			throw new RepositoryException(file.getAbsolutePath()+" does not exist.");
 		}
-		
-		if (location.getAbsolutePath().contains(dataset.getAbsolutePath())) {
-			throw new RepositoryException(
-					"Dataset can not contain the repository itself.");
+		if(location.getAbsolutePath().contains(file.getAbsolutePath())){
+			throw new RepositoryException("Dataset can not contain the repository itself.");
 		}
-		
-		Metadata meta = makeNewEntry(command);
-		
-		db.add(dataset, meta, !command.isSet("m"));
-		
-		System.out.println("The file/folder \'" + meta.getOriginalName()
-				+ "\' has been successfully added to the repository"
-				+ " as data set named " + meta.getName());
-		return true;
+				
+		Metadata meta = createMetaData(command);
+		return db.add(file, meta, !command.hasFlag("m"));
 	}
 
 	public boolean delete(Command command) throws RepositoryException {
@@ -81,8 +71,7 @@ public class Repository {
 							+ " (original name: file/folder name) has been successfully removed from the repository.");
 			return true;
 		} else {
-			throw new RepositoryException("Unknown data set "
-					+ command.getParams()[0]);
+			throw new RepositoryException("Unknown data set "+ command.getParams()[0]);
 		}
 	}
 
@@ -92,7 +81,7 @@ public class Repository {
 	 * 
 	 * @ param command
 	 */
-	private Metadata makeNewEntry(Command command) throws RepositoryException {
+	private Metadata createMetaData(Command command) throws RepositoryException {
 		Metadata meta = new Metadata();
 		meta.setOriginalName(getInputFile(command).getName());
 
@@ -102,10 +91,9 @@ public class Repository {
 		String name;
 		if (command.isSet("n")) { // name option set?
 			name = command.getOptionParam("n");
-			if (db.contains(name)) { // if name exists, exit
-				throw new RepositoryException(
-						"There is already a data set named \'" + name
-								+ "\' in the repository.");
+			if (db.contains(name)) { //if name exists, exit
+				throw new RepositoryException("There is already a data" +
+						" set named " + name + " name in the repository.");
 			}
 		} else { // no name provided, make a unique name from originalname
 			name = createUniqueName(meta.getOriginalName());
@@ -142,39 +130,44 @@ public class Repository {
 		}
 		return name;
 	}
+	
+	public String getList(Command command) throws RepositoryException {
+		StringBuilder sb = new StringBuilder();
+		for (Dataset dataset: db.getAllDatasets()) {
+			sb.append(dataset + "\n");
+		}
+		// TODO Pretty print and foot-line (total usw)  
+		return sb.toString();
+	}
 
 	public void replace(Command command) throws RepositoryException {
 		boolean success1 = delete(command);
 		boolean success2 = add(command);
-		if (success1 && success2) {
-			System.out
-					.println("The data set named "
-							+ command.getParams()[0]
-							+ " has been successfully replaced by the file/folder name.");
-		}
 
+		if (success1 && success2)  {
+			System.out.println("The data set named "
+					+ command.getParams()[0] + " has been successfully" +
+					" replaced by the file/folder.");
+		}
 	}
 
 	public void export(Command command) throws RepositoryException {
-
 		String absolutExportPath = new File(command.getParams()[1]).getAbsolutePath();
 		if(absolutExportPath.contains(location.getAbsolutePath()))
 			throw new RepositoryException("It is not allowed to export something into the "+location.toString()+" repository folder");
+		if (!db.contains(command.getParams()[0])) 
+			throw new RepositoryException("Unknown data set "+ command.getParams()[0]);
+		File exportedFile = db.export(command.getParams()[0],command.getParams()[1]);
 
-		String originalName = db.export(command.getParams()[0],command.getParams()[1]);
-
-		System.out.println("The data set "+command.getParams()[0]+
-					" (original name: "+originalName+
-					") has been successfully exported to \'"+ command.getParams()[1] + "\'");
-		
-
-}
-	protected File getLocation() {
-		return this.location;
+		System.out.println("The data set " + command.getParams()[0] +
+					" (original name: " + exportedFile.getName() + " )" +
+					" has been successfully exported to"
+					+ command.getParams()[1]);
 	}
 	
-	public static String getDefaultLocation(){
-		return DEFAULT_LOCATION;
+	protected File getLocation() {
+		return this.location;
+
 	}
 	
 }

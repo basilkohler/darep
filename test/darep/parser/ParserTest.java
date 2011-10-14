@@ -1,6 +1,7 @@
 package darep.parser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,8 +10,6 @@ import org.junit.Test;
 import darep.Command;
 import darep.Command.ActionType;
 import darep.DarepController;
-import darep.parser.ParseException;
-import darep.parser.Parser;
 
 /**
  * tests the Parser.parse() function with given args.

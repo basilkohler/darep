@@ -140,8 +140,8 @@ public class DarepController {
 				repository.export(command);
 				break;
 			case list:
-				System.out.println(command.getAction()
-						+ ": not yet implemented");
+				System.out.println(repository.getList(command));
+				break;
 			}
 		} catch (ParseException ex) {
 			System.err.println("ERROR: " + ex.getMessage());

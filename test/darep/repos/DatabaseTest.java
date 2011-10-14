@@ -1,6 +1,8 @@
 package darep.repos;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +11,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import darep.Helper;
+
 public class DatabaseTest {
 	Database db;
 	File testDir;
 	File testRepo;
 	File testDataSet;
 	Metadata meta;
+	
+	File filedb;
+	File metadb;
 
 	@Before
 	public void setUp() throws Exception {
@@ -24,6 +31,10 @@ public class DatabaseTest {
 		testDataSet.createNewFile();
 		testRepo = new File(testDir.getAbsolutePath(), "/testRepo");
 		testRepo.mkdir();
+		
+		filedb = new File(testRepo, "datasets");
+		metadb = new File(testRepo, "metadata");
+		
 		meta = new Metadata("TESTDATASET", "testDataSet", "", 0, 0,
 				testRepo.getAbsolutePath());
 		db = new Database(testRepo.getAbsolutePath());
@@ -31,34 +42,35 @@ public class DatabaseTest {
 
 	@After
 	public void tearDown() throws Exception {
-		deleteFile(testDir);
+		Helper.deleteDir(testDir);
 	}
 
 	@Test
 	public void testAddCopyFile() throws RepositoryException {
-		File expectedDataset = new File(testRepo + "/datasets/TESTDATASET");
-		File expectedMeta = new File(testRepo + "/metadata/TESTDATASET");
-
+		
 		db.add(testDataSet, meta, true);
+		
+		File expectedDataset = new File(filedb, "TESTDATASET");
+		File expectedMeta = new File(metadb, "TESTDATASET");
 	
-		assertEquals(true, expectedDataset.exists());
-		assertEquals(true, expectedMeta.exists());
-		assertEquals(true, testDataSet.exists());
+		assertTrue(expectedDataset.exists());
+		assertTrue(expectedMeta.exists());
+		assertTrue(testDataSet.exists());
 	}
 	
 	@Test
 	public void testAddCopyFolder() throws IOException, RepositoryException {
-		File expectedDataset = new File(testRepo + "/datasets/TESTDATADIR");
-		File expectedMeta = new File(testRepo + "/metadata/TESTDATADIR");
+		File expectedDataset = new File(filedb, "TESTDATADIR");
+		File expectedMeta = new File(metadb, "TESTDATADIR");
 		File sampleFolder = createSampleFolder();
 		meta = new Metadata("TESTDATADIR", sampleFolder.getName(), "", 0, 0,
 				testRepo.getAbsolutePath());
 
 		db.add(sampleFolder, meta, true);
 	
-		assertEquals(true, expectedDataset.exists());
-		assertEquals(true, expectedMeta.exists());
-		assertEquals(true, testDataSet.exists());
+		assertTrue(expectedDataset.exists());
+		assertTrue(expectedMeta.exists());
+		assertTrue(testDataSet.exists());
 		checkFolderContents(expectedDataset);
 	}
 	
@@ -96,9 +108,9 @@ public class DatabaseTest {
 
 		db.add(testDataSet, meta, false);
 		
-		assertEquals(true, expectedDataset.exists());
-		assertEquals(true, expectedMeta.exists());
-		assertEquals(false, testDataSet.exists());
+		assertTrue(expectedDataset.exists());
+		assertTrue(expectedMeta.exists());
+		assertFalse(testDataSet.exists());
 	}
 
 	@Test
@@ -111,38 +123,28 @@ public class DatabaseTest {
 			db.add(testDataSet, meta, true);
 		
 			for (int j = 0; j <= i; j++) {
-				expectedDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
-				expectedMeta = new File(testRepo + "/metadata/TESTDATASET" + j);
-				assertEquals(true, expectedDataset.exists());
-				assertEquals(true, expectedMeta.exists());
+				expectedDataset = new File(filedb, "TESTDATASET" + j);
+				expectedMeta = new File(metadb, "TESTDATASET" + j);
+				assertTrue(expectedDataset.exists());
+				assertTrue(expectedMeta.exists());
 			}
 		}
 	}
 
 	@Test
 	public void testDelete() throws IOException, RepositoryException {
+		db.add(testDataSet, meta, true);
+		
 		File existingDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File existingMetadata = new File(testRepo + "/metadata/TESTDATASET");
-		
-		existingDataset.createNewFile();
-		existingMetadata.createNewFile();
 
-		assertEquals(true, existingDataset.exists());
-		assertEquals(true, existingMetadata.exists());
+		assertTrue(existingDataset.exists());
+		assertTrue(existingMetadata.exists());
 
 		db.delete("TESTDATASET");
 	
-		assertEquals(false, existingDataset.exists());
-		assertEquals(false, existingMetadata.exists());
+		assertFalse(existingDataset.exists());
+		assertFalse(existingMetadata.exists());
 	}
 
-	private void deleteFile(File file) {
-		if (file.isDirectory()) {
-			File[] content = file.listFiles();
-			for (int i = 0; i < content.length; i++) {
-				deleteFile(content[i]);
-			}
-		}
-		file.delete();
-	}
 }
