@@ -30,11 +30,11 @@ public class Database {
 		if (!metadb.exists())
 			metadb.mkdirs();
 	}
-	
+
 	public File getMetaDB() {
 		return metadb;
 	}
-	
+
 	public File getFileDB() {
 		return filedb;
 	}
@@ -51,7 +51,8 @@ public class Database {
 	 * @param copyMode true if dataset should be copied to the db, else dataset
 	 * is moved into the db
 	 */
-	public boolean add(File file, Metadata meta, boolean copyMode) throws RepositoryException {
+	public boolean add(File file, Metadata meta, boolean copyMode)
+			throws RepositoryException {
 		Dataset ds = Dataset.createNewDataset(file, meta, this);
 		if (ds.saveToRepository(copyMode)) {
 			System.out.println("The file/folder " + meta.getOriginalName()
@@ -62,13 +63,14 @@ public class Database {
 			return false;
 		}
 	}
-	
+
 	void copyFile(File dataset, File datasetDest) throws RepositoryException {
 		if (dataset.isDirectory()) {
-				datasetDest.mkdir();
-			File[] content=dataset.listFiles();
-			for (int i=0;i<content.length;i++) {
-				copyFile(content[i], new File(datasetDest.getAbsolutePath()+"/"+content[i].getName()));
+			datasetDest.mkdir();
+			File[] content = dataset.listFiles();
+			for (int i = 0; i < content.length; i++) {
+				copyFile(content[i], new File(datasetDest.getAbsolutePath()
+						+ "/" + content[i].getName()));
 			}
 		} else {
 			FileChannel source = null;
@@ -106,48 +108,38 @@ public class Database {
 		}
 		return ds.delete();
 	}
-	
+
 	public Dataset[] getAllDatasets() throws RepositoryException {
 		String[] filenames = filedb.list();
 		ArrayList<Dataset> datasets = new ArrayList<Dataset>();
-		for (String name: filenames) {
+		for (String name : filenames) {
 			datasets.add(getDataSet(name));
 		}
 		return datasets.toArray(new Dataset[0]);
 	}
 
-
-
-
-
-
-
-
-	public File export(String sourceName, String destFolder) throws RepositoryException {
+	public File export(String sourceName, String destFolder)
+			throws RepositoryException {
 		Dataset dataset = getDataSet(sourceName);
 
-		
 		File sourceFile = dataset.getFile();
-		if(!sourceFile.exists())
-			throw new RepositoryException("There is no File with name \'" + sourceName +"\' in this Repository");
-
-
-
-
+		if (!sourceFile.exists())
+			throw new RepositoryException("There is no File with name \'"
+					+ sourceName + "\' in this Repository");
 
 		String originalName = dataset.getMetadata().getOriginalName();
 		File destFile = new File(destFolder, originalName);
 
 		if (!(new File(destFolder).exists()))
-			throw new RepositoryException("Destination folder \'"+destFolder+"\' does not exist.");
+			throw new RepositoryException("Destination folder \'" + destFolder
+					+ "\' does not exist.");
 		if (!(new File(destFolder).isDirectory()))
-			throw new RepositoryException("Destination folder \'"+destFolder+"\' is a file and not a folder.");
+			throw new RepositoryException("Destination folder \'" + destFolder
+					+ "\' is a file and not a folder.");
 		if (destFile.exists())
-			throw new RepositoryException("There is already a file/folder" +
-					" named \"" + originalName + "\"" +
-					" in destination folder \"" + destFolder + "\"");
-
-
+			throw new RepositoryException("There is already a file/folder"
+					+ " named \"" + originalName + "\""
+					+ " in destination folder \"" + destFolder + "\"");
 
 		copyFile(sourceFile, destFile);
 		return destFile;
@@ -162,8 +154,5 @@ public class Database {
 		}
 
 	}
-
-
-
 
 }
