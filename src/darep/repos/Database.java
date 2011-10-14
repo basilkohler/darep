@@ -121,6 +121,7 @@ public class Database {
 
 
 
+
 	public File export(String sourceName, String destFolder) throws RepositoryException {
 		Dataset dataset = getDataSet(sourceName);
 
@@ -128,6 +129,7 @@ public class Database {
 		File sourceFile = dataset.getFile();
 		if(!sourceFile.exists())
 			throw new RepositoryException("There is no File with name \'" + sourceName +"\' in this Repository");
+
 
 
 
@@ -145,12 +147,9 @@ public class Database {
 					" in destination folder \"" + destFolder + "\"");
 
 
-
 		copyFile(sourceFile, destFile);
 		return destFile;
 	}
-
-
 
 	public Dataset getDataSet(String string) {
 		try {
@@ -158,8 +157,10 @@ public class Database {
 		} catch (RepositoryException e) {
 			return null;
 		}
+
 	}
-	
-	
+
+
+
 
 }
