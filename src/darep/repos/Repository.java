@@ -169,5 +169,10 @@ public class Repository {
 		return this.location;
 
 	}
+
+	public static String getDefaultLocation() {
+		return DEFAULT_LOCATION;
+	}
+	
 	
 }

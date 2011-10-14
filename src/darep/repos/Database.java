@@ -117,8 +117,10 @@ public class Database {
 	}
 
 
+
 	public File export(String sourceName, String destFolder) throws RepositoryException {
 		Dataset dataset = getDataSet(sourceName);
+
 		
 		File sourceFile = dataset.getFile();
 		if(!sourceFile.exists())
@@ -136,9 +138,11 @@ public class Database {
 					" named \"" + originalName + "\"" +
 					" in destination folder \"" + destFolder + "\"");
 
+
 		copyFile(sourceFile, destFile);
 		return destFile;
 	}
+
 
 	public Dataset getDataSet(String string) {
 		try {
@@ -147,5 +151,7 @@ public class Database {
 			return null;
 		}
 	}
+	
+	
 
 }
