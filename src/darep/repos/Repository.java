@@ -50,7 +50,10 @@ public class Repository {
 	 * @param command the command object which stores the options
 	 */
 	public boolean add(Command command) throws RepositoryException {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7a236cc9a7181049f82c0fcdeaa814e189760b33
 		File file = getInputFile(command);
 		if (!file.exists()) {
 			throw new RepositoryException(file.getAbsolutePath()+" does not exist.");
@@ -143,7 +146,10 @@ public class Repository {
 	public void replace(Command command) throws RepositoryException {
 		boolean success1 = delete(command);
 		boolean success2 = add(command);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7a236cc9a7181049f82c0fcdeaa814e189760b33
 		if (success1 && success2)  {
 			System.out.println("The data set named "
 					+ command.getParams()[0] + " has been successfully" +
@@ -168,7 +174,7 @@ public class Repository {
 	protected File getLocation() {
 		return this.location;
 	}
-
+<<<<<<< HEAD
 
 
 
@@ -179,5 +185,11 @@ public class Repository {
 
 
 
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 7a236cc9a7181049f82c0fcdeaa814e189760b33
+=======
+>>>>>>> parent of dbf0770... merge
 }

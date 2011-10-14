@@ -116,10 +116,15 @@ public class Database {
 		return datasets.toArray(new Dataset[0]);
 	}
 
+<<<<<<< HEAD
+
+
+
+
+
 
 	public File export(String sourceName, String destFolder) throws RepositoryException {
 		Dataset dataset = getDataSet(sourceName);
-
 
 		
 		File sourceFile = dataset.getFile();
@@ -129,6 +134,14 @@ public class Database {
 
 
 
+=======
+	public File export(String sourceName, String destFolder) throws RepositoryException {
+		Dataset dataset = getDataSet(sourceName);
+		
+		File sourceFile = dataset.getFile();
+		String originalName = dataset.getMetadata().getOriginalName();
+		File destFile = new File(destFolder, originalName);
+>>>>>>> 7a236cc9a7181049f82c0fcdeaa814e189760b33
 		
 		String originalName = dataset.getMetadata().getOriginalName();
 		File destFile = new File(destFolder, originalName);
@@ -142,11 +155,26 @@ public class Database {
 					" named \"" + originalName + "\"" +
 					" in destination folder \"" + destFolder + "\"");
 
-
+<<<<<<< HEAD
 
 		copyFile(sourceFile, destFile);
 		return destFile;
+<<<<<<< HEAD
 
+=======
+		copyFile(sourceFile, destFile);
+		return destFile;
+	}
+
+	public Dataset getDataSet(String string) {
+		try {
+			return Dataset.readDataset(string, this);
+		} catch (RepositoryException e) {
+			return null;
+		}
+>>>>>>> 7a236cc9a7181049f82c0fcdeaa814e189760b33
+=======
+>>>>>>> parent of dbf0770... merge
 	}
 
 	public Dataset getDataSet(String string) {
