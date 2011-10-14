@@ -104,6 +104,7 @@ public class RepositoryTest {
 	}
 
 
+
 /*
  * Die Exception wird eigentlich geworfen doch mit System.exit(1) wird der Test irrgentwie nicht beendet.
  * Wenn mann System.exit raus nimmt gibt es zwar aus das die RepositoryExeption geworfen wird aber trozdem ein Fail
@@ -116,6 +117,7 @@ public class RepositoryTest {
 		String[] arg = { "export", "-r", "NONEXISTINGREPO",
 				testDataSet.getAbsolutePath(), "." };
 		controller.processCommand(arg);
+
 
 
 	}

@@ -167,12 +167,11 @@ public class Repository {
 	
 	protected File getLocation() {
 		return this.location;
-
 	}
 
 	public static String getDefaultLocation() {
 		return DEFAULT_LOCATION;
 	}
 	
-	
+
 }
