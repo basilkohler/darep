@@ -4,12 +4,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.sun.tools.hat.internal.parser.Reader;
 
 import darep.Helper;
 
@@ -29,6 +36,7 @@ public class DatabaseTest {
 		testDir.mkdir();
 		testDataSet = new File(testDir.getAbsolutePath(), "/testDataSet");
 		testDataSet.createNewFile();
+		fillWithTestContent(testDataSet);
 		testRepo = new File(testDir.getAbsolutePath(), "/testRepo");
 		testRepo.mkdir();
 		
@@ -46,7 +54,7 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testAddCopyFile() throws RepositoryException {
+	public void testAddCopyFile() throws RepositoryException, IOException {
 		
 		db.add(testDataSet, meta, true);
 		
@@ -56,8 +64,27 @@ public class DatabaseTest {
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
 		assertTrue(testDataSet.exists());
+		assertTrue(compareContents(expectedDataset,testDataSet));
 	}
 	
+	private boolean compareContents(File expectedDataset, File testDataSet) throws IOException {
+		FileReader frA = new FileReader(expectedDataset);
+		FileReader frB = new FileReader(testDataSet);
+        BufferedReader readerA = new BufferedReader(frA);
+        BufferedReader readerB = new BufferedReader(frB);
+        int intA = -1;
+        int intB = -1;
+
+        while ((intA = readerA.read()) > 0) {
+        	if (intA != readerB.read())
+        		return false;
+        }
+    	if (intA != readerB.read())
+    		return false;
+    	else
+    		return true;
+	}
+
 	@Test
 	public void testAddCopyFolder() throws IOException, RepositoryException {
 		File expectedDataset = new File(filedb, "TESTDATADIR");
@@ -99,6 +126,14 @@ public class DatabaseTest {
 			}
 		}
 		return new File(testDir.getAbsolutePath()+"/testDataDir");
+	}
+	
+	private void fillWithTestContent(File testDataSet) throws IOException {
+		  BufferedWriter out = new BufferedWriter(new FileWriter(testDataSet));
+		    out.write("lorem ipsum");
+		    out.newLine();
+		    out.write("http://www.youtube.com/watch?v=gy5g33S0Gzo&feature=player_embedded#!");
+		    out.close();
 	}
 
 	@Test
