@@ -119,6 +119,12 @@ public class RepositoryTest {
 		command = getCommand("export " + testDataSet.getName()+" "+repo.getLocation());
 		repo.export(command);
 	}
+	@Test (expected = RepositoryException.class)
+	public void testAddRepositoryItself() throws RepositoryException {
+		//TODO "wrong" exception gets thrown, it just says: cannot copy file
+		command = getCommand("add " + repo.getLocation().getAbsolutePath());
+		repo.add(command);
+	}
 
 
 
