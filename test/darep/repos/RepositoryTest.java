@@ -91,23 +91,18 @@ public class RepositoryTest {
 		}
 	}
 	
-	/*
-	 * Die Exception wird eigentlich geworfen doch mit System.exit(1) wird der Test irrgentwie nicht beendet.
-	 * Wenn mann System.exit raus nimmt gibt es zwar aus das die RepositoryExeption geworfen wird aber trozdem ein Fail
-	 * 
-	 */
-		@Test(expected = RepositoryException.class)
-		public void testRepositoryNotFoundAndCommandIsNotAnd()
-				throws RepositoryException {
-			DarepController controller = new DarepController();
-			String[] arg = { "export", "-r", "NONEXISTINGREPO",
-					testDataSet.getAbsolutePath(), "." };
+	@Test(expected = RepositoryException.class)
+	public void testRepositoryNotFoundAndCommandIsNotAnd()
+			throws RepositoryException {
+		DarepController controller = new DarepController();
+		String[] arg = { "export", "-r", "NONEXISTINGREPO",
+				testDataSet.getAbsolutePath(), "." };
+		try {
 			controller.processCommand(arg);
-
-
-
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-//		*/
+	}
 	@Test (expected = RepositoryException.class)
 	public void testExportTheRepositoryItself() throws RepositoryException {
 		command = getCommand("add " + testDataSet.getAbsolutePath());

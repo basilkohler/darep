@@ -94,63 +94,61 @@ public class DarepController {
 
 	public static void main(String[] args) {
 		DarepController controller = new DarepController();
-		controller.processCommand(args);
+		try {
+			controller.processCommand(args);
+		} catch (ParseException e) {
+			System.exit(1);
+			e.printStackTrace();
+		} catch (RepositoryException e) {
+			System.exit(1);
+			e.printStackTrace();
+		}
+			
 	}
 
-	public void processCommand(String[] args) {
-		try {
-			Command command = parser.parse(args);
+	public void processCommand(String[] args) throws ParseException, RepositoryException {
+		Command command = parser.parse(args);
 
-			// check if command=help => dont need to load the repo, just print
-			// help
-			if (command.getAction() == ActionType.help) {
-				printHelp();
-				System.exit(0);
-			}
-			
-			// check if option -r is set or default repos, and setup repos.
-			if (command.isSet("r")) {
-				//Check if Repository exists
-				if (!new File(command.getOptionParam("r")).exists()
-						&& !command.getAction().equals(ActionType.add)) {
-					
-					throw new RepositoryException("Repository does not Exist");
-				}
-				repository = new Repository(command.getOptionParam("r"));
-			} else {
-				//Check if Repository exists
-				if (!new File(Repository.getDefaultLocation()).exists()
-						&& !command.getAction().equals(ActionType.add)) {
-					
-					throw new RepositoryException("Repository does not Exist");
-				}
-				repository = new Repository();
-			}
-			switch (command.getAction()) {
-			case add:
-				repository.add(command);
-				break;
-			case delete:
-				repository.delete(command);
-				break;
-			case replace:
-				repository.replace(command);
-				break;
-			case export:
-				repository.export(command);
-				break;
-			case list:
-				System.out.println(repository.getList(command));
-				break;
-			}
-		} catch (ParseException ex) {
-			System.err.println("ERROR: " + ex.getMessage());
-			System.exit(1);
-		} catch (RepositoryException e) {
-			// TODO remove later
-			e.printStackTrace();
-	//		System.exit(1);
+		// check if command=help => dont need to load the repo, just print help
+		if (command.getAction() == ActionType.help) {
+			printHelp();
+			return;
 		}
+		
+		// check if option -r is set or default repos, and setup repos.
+		if (command.isSet("r")) {
+			//Check if Repository exists
+			if (!new File(command.getOptionParam("r")).exists()
+					&& !command.getAction().equals(ActionType.add)) {
+				throw new RepositoryException("Repository does not Exist");
+			}
+			repository = new Repository(command.getOptionParam("r"));
+		} else {
+			//Check if Repository exists
+			if (!new File(Repository.getDefaultLocation()).exists()
+					&& !command.getAction().equals(ActionType.add)) {
+				throw new RepositoryException("Repository does not Exist");
+			}
+			repository = new Repository();
+		}
+		switch (command.getAction()) {
+		case add:
+			repository.add(command);
+			break;
+		case delete:
+			repository.delete(command);
+			break;
+		case replace:
+			repository.replace(command);
+			break;
+		case export:
+			repository.export(command);
+			break;
+		case list:
+			System.out.println(repository.getList(command));
+			break;
+		}
+
 	}
 
 	public DarepController() {
