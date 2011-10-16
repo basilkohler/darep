@@ -20,8 +20,7 @@ public class Repository {
 	 * loads(/creates) the default (hidden) repo in user.home
 	 */
 	public Repository() {
-		location = new File(DEFAULT_LOCATION);
-		initRepository(DEFAULT_LOCATION);
+		this(DEFAULT_LOCATION);
 	}
 
 	/*
