@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,8 +14,6 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.sun.tools.hat.internal.parser.Reader;
 
 import darep.Helper;
 
