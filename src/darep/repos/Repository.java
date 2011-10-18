@@ -4,6 +4,7 @@ import java.io.File;
 
 import darep.Command;
 import darep.Command.ActionType;
+import darep.Helper;
 
 /*the repository provides methods to access the Database.class
  * and represents the physical folder located at 'location', which contains the db
@@ -11,6 +12,9 @@ import darep.Command.ActionType;
  * 
  */
 public class Repository {
+	
+	public static final int prettyPrintColWidth = 20;
+	
 	private static final String DEFAULT_LOCATION = System
 			.getProperty("user.home") + "/.data-repository";
 	private File location;
@@ -132,11 +136,55 @@ public class Repository {
 	}
 
 	public String getList(Command command) throws RepositoryException {
+		
+		if (command.hasFlag("p")) {
+			return getPrettyList();
+		} else {
+			return getTabList();
+		}
+		
+	}
+	
+	private String getPrettyList() throws RepositoryException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getHeaderline(prettyPrintColWidth));
+		for (Dataset dataset: db.getAllDatasets()) {
+			sb.append(dataset.getPrettyString(prettyPrintColWidth));
+		}
+		return sb.toString();
+		// TODO foot-line (total size usw.)
+	}
+
+	private String getTabList() throws RepositoryException {
 		StringBuilder sb = new StringBuilder();
 		for (Dataset dataset : db.getAllDatasets()) {
 			sb.append(dataset + "\n");
 		}
-		// TODO Pretty print and foot-line (total usw)
+		return sb.toString();
+	}
+
+	private String getHeaderline(int colWidth) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("|");
+		sb.append(Helper.stringToLength("Name", colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength("Orig. Name", colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength("Timestamp", colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength("# Files", colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength("Size", colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength("Description", colWidth));
+		sb.append("|\n");
+		
+		int numDashes = (6 * colWidth) + 7;
+		for (int i = 0; i < numDashes; i++) {
+			sb.append("-");
+		}
+		sb.append("\n");
+		
 		return sb.toString();
 	}
 

@@ -85,5 +85,19 @@ public class Helper {
 		}
 		return dir.delete();
 	}
+
+	public static String stringToLength(String string, int length) {
+		if (string.length() > length) {
+			return string.substring(0, length);
+		} else if (string.length() < length) {
+			StringBuilder sb = new StringBuilder(string);
+			while (sb.length() < length) {
+				sb.append(" ");
+			}
+			return sb.toString();
+		} else {
+			return string;
+		}
+	}
 	
 }

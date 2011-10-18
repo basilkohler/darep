@@ -167,4 +167,22 @@ public class Dataset {
 				+ metadata.getTimeStamp() + "\t" + metadata.getNumberOfFiles()
 				+ "\t" + metadata.getSize() + "\t" + metadata.getDescription());
 	}
+
+	public String getPrettyString(int colWidth) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("|");
+		sb.append(Helper.stringToLength(metadata.getName(), colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength(metadata.getOriginalName(), colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength(metadata.getTimeStamp(), colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength(""+metadata.getNumberOfFiles(), colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength(""+metadata.getSize(), colWidth));
+		sb.append("|");
+		sb.append(Helper.stringToLength(metadata.getDescription(), colWidth));
+		sb.append("|\n");
+		return sb.toString();
+	}
 }
