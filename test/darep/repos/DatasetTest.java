@@ -55,7 +55,7 @@ public class DatasetTest {
 	public void testCreateDataset() {
 		Dataset ds = Dataset.createNewDataset(testFileNotInRepo, metadata, database);
 		Assert.assertEquals(1, ds.getMetadata().getNumberOfFiles());
-		Assert.assertEquals(testFileNotInRepoName.length(), ds.getMetadata().getSize());
+		Assert.assertEquals(testFileNotInRepo.length(), ds.getMetadata().getSize());
 	}
 	
 	private String[] getArgs(String str) {
