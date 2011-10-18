@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,17 +18,28 @@ public class DatasetTest {
 	private DarepController darep = new DarepController();
 	private Database database;
 	private File testdir = new File("testdir");
-	private File testFile;
+	private File testFileInRepo;
+	private File testFileNotInRepo;
+	private Metadata metadata;
 	private String repoName = "testrepo";
 	
-	private final String testFileName = "testfile.txt";
+	private final String testFileName = "TESTFILE.TXT";
+	private final String testFileNotInRepoName = "TESTFILE2.TXT";
 
 	@Before
 	public void setUp() throws Exception {
 		createTestFiles();
-		darep.processCommand(getArgs("add " + testFile.getPath()));
+		createMetaData();
+		darep.processCommand(getArgs("add " + testFileInRepo.getPath()));
+		
+		database = new Database(repoName);
 	}
 	
+	private void createMetaData() {
+		metadata = new Metadata(testFileNotInRepoName, testFileNotInRepoName,
+					"teh_d3scr!pto0r", 0, 0, repoName);
+	}
+
 	@After
 	public void tearDown() throws Exception {
 		Helper.deleteDir(testdir);
@@ -34,9 +47,15 @@ public class DatasetTest {
 	}
 
 	@Test
-	public void testReadGetDataset() throws RepositoryException {
-		database = new Database(repoName);
-		database.getDataSet("TESTFILE.TXT");
+	public void testReadDataset() throws RepositoryException {
+		Dataset.readDataset("TESTFILE.TXT", database);
+	}
+	
+	@Test
+	public void testCreateDataset() {
+		Dataset ds = Dataset.createNewDataset(testFileNotInRepo, metadata, database);
+		Assert.assertEquals(1, ds.getMetadata().getNumberOfFiles());
+		Assert.assertEquals(testFileNotInRepoName.length(), ds.getMetadata().getSize());
 	}
 	
 	private String[] getArgs(String str) {
@@ -45,12 +64,23 @@ public class DatasetTest {
 	
 	private void createTestFiles() {
 		testdir.mkdirs();
-		testFile = new File(testdir, testFileName);
+		testFileInRepo = new File(testdir, testFileName);
+		testFileNotInRepo = new File(testdir, testFileNotInRepoName);
 		try {
-			testFile.createNewFile();
-			FileWriter writer = new FileWriter(testFile);
+			testFileInRepo.createNewFile();
+			FileWriter writer = new FileWriter(testFileInRepo);
 			try {
 				writer.write("FU METADATA");
+			} finally {
+				writer.close();
+			}
+			
+			testFileNotInRepo.createNewFile();
+			writer = new FileWriter(testFileInRepo);
+			try {
+				for (int i = 0; i < 100; i++) {
+					writer.write("lal" + i + "\n");
+				}
 			} finally {
 				writer.close();
 			}

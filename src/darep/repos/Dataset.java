@@ -51,36 +51,40 @@ public class Dataset {
 		metadata.setFileSize(ds.calculateFileSize());
 		metadata.setNumberOfFiles(ds.countFiles());
 		
+		System.out.println(file.getName() + file.exists() + file.length());
+		
 		return ds;
 	}
 	
 	private int countFiles() {
-		return countFiles(file, 0);
+		return countFiles(file);
 	}
 
-	private int countFiles(File file, int currNum) {
+	private int countFiles(File file) {
 		if (file.isDirectory()) {
+			int currNum = 0;
 			for (File subFile: file.listFiles()) {
-				currNum += countFiles(subFile, currNum);
+				currNum += countFiles(subFile);
 			}
 			return currNum;
 		} else {
-			return (currNum + 1);
+			return 1;
 		}
 	}
 	
 	private long calculateFileSize() {
-		return calculateFileSize(file, 0);
+		return calculateFileSize(file);
 	}
 
-	private long calculateFileSize(File file, long currSize) {
+	private long calculateFileSize(File file) {
 		if (file.isDirectory()) {
+			long currSize = 0L;
 			for (File subFile: file.listFiles()) {
-				currSize += calculateFileSize(subFile, currSize);
+				currSize += calculateFileSize(subFile);
 			}
 			return currSize;
 		} else {
-			return (currSize + file.length());
+			return file.length();
 		}
 	}
 
