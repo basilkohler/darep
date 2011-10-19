@@ -165,7 +165,7 @@ public class Dataset {
 	@Override
 	public String toString() {
 		return (metadata.getName() + "\t" + metadata.getOriginalName() + "\t"
-				+ metadata.getTimeStamp() + "\t" + metadata.getNumberOfFiles()
+				+ new Date(metadata.getTimeStamp()) + "\t" + metadata.getNumberOfFiles()
 				+ "\t" + metadata.getSize() + "\t" + metadata.getDescription());
 	}
 
