@@ -90,10 +90,11 @@ public class Helper {
 		if (string.length() > length) {
 			return string.substring(0, length);
 		} else if (string.length() < length) {
-			StringBuilder sb = new StringBuilder(string);
-			while (sb.length() < length) {
+			StringBuilder sb = new StringBuilder();
+			while (sb.length() + string.length() < length) {
 				sb.append(" ");
 			}
+			sb.append(string);
 			return sb.toString();
 		} else {
 			return string;
