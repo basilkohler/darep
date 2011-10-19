@@ -122,8 +122,8 @@ public class Metadata implements Serializable {
 				"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size + "\npath: " + filePath;
 	}
 
-	public String getTimeStamp() {
-		return "" + timestamp.getTime();
+	public long getTimeStamp() {
+		return timestamp.getTime();
 	}
 
 	public int getNumberOfFiles() {

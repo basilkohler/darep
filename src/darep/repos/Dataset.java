@@ -1,6 +1,7 @@
 package darep.repos;
 
 import java.io.File;
+import java.util.Date;
 
 import darep.Helper;
 
@@ -175,7 +176,7 @@ public class Dataset {
 		sb.append("|");
 		sb.append(Helper.stringToLength(metadata.getOriginalName(), colWidth));
 		sb.append("|");
-		sb.append(Helper.stringToLength(metadata.getTimeStamp(), colWidth));
+		sb.append(Helper.stringToLength(new Date(metadata.getTimeStamp()).toString(), colWidth));
 		sb.append("|");
 		sb.append(Helper.stringToLength(""+metadata.getNumberOfFiles(), colWidth));
 		sb.append("|");
