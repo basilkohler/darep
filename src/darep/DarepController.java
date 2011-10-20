@@ -96,11 +96,13 @@ public class DarepController {
 		try {
 			controller.processCommand(args);
 		} catch (ParseException e) {
-			System.exit(1);
+			System.out.println(e.getMessage());
 			e.printStackTrace();
+			System.exit(1);
 		} catch (RepositoryException e) {
-			System.exit(1);
+			System.out.println(e.getMessage());
 			e.printStackTrace();
+			System.exit(1);
 		}
 			
 	}
