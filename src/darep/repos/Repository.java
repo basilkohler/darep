@@ -146,13 +146,23 @@ public class Repository {
 	}
 	
 	private String getPrettyList() throws RepositoryException {
+		
+		int totalFiles = 0;
+		long totalSize = 0;
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append(getHeaderline(prettyPrintColWidth));
+		
 		for (Dataset dataset: db.getAllDatasets()) {
 			sb.append(dataset.getPrettyString(prettyPrintColWidth));
+			totalFiles += dataset.getMetadata().getNumberOfFiles();
+			totalSize += dataset.getMetadata().getSize();
 		}
+		
+		sb.append("(" + totalFiles + " data sets, ");
+		sb.append(totalSize + " bytes in total)");
+		
 		return sb.toString();
-		// TODO foot-line (total size usw.)
 	}
 
 	private String getTabList() throws RepositoryException {
