@@ -66,6 +66,7 @@ public class Metadata implements Serializable {
 	
 	public boolean delete() {
 		return ((path == null)
+				|| !this.path.exists()
 				|| this.path.delete());
 	}
 

@@ -51,6 +51,9 @@ public class Helper {
 	}
 	
 	public static boolean deleteDir(File dir) {
+		if (!dir.exists()) {
+			return true;
+		}
 		if (dir.isDirectory()) {
 			for (File subfile: dir.listFiles()) {
 				boolean success = deleteDir(subfile);

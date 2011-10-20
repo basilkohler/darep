@@ -45,7 +45,7 @@ public class Dataset {
 	 */
 	public static Dataset createNewDataset(File file, Metadata metadata, Database db) {
 		Dataset ds = new Dataset();
-		ds.file = file;
+		ds.file = file.getAbsoluteFile();
 		ds.metadata = metadata;
 		ds.db = db;
 		
@@ -99,18 +99,17 @@ public class Dataset {
 		File dbdir = db.getMetaDB();
 		try {
 			metadata.saveInDir(dbdir);
-			if (saveFilesToRepoisory(copyMode)) {
-				return true;
-			} else {
-				metadata.delete();
-				return false;
+			if (!saveFilesToRepository(copyMode)) {
+				throw new RepositoryException("Could not save File");
 			}
+			return true;
 		} catch (RepositoryException e) {
+			this.delete();
 			return false;
 		}
 	}
 	
-	private boolean saveFilesToRepoisory(boolean copyMode) {
+	private boolean saveFilesToRepository(boolean copyMode) {
 		String name = metadata.getName();
 		File fileDB = db.getFileDB();
 		
