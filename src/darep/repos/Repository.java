@@ -23,7 +23,7 @@ public class Repository {
 	/*
 	 * loads(/creates) the default (hidden) repo in user.home
 	 */
-	public Repository() {
+	public Repository() throws RepositoryException {
 		this(DEFAULT_LOCATION);
 	}
 
@@ -32,14 +32,17 @@ public class Repository {
 	 * 
 	 * @param path where to find/create repo
 	 */
-	public Repository(String path) {
+	public Repository(String path) throws RepositoryException {
 		location = new File(path);
 		initRepository(path);
 	}
 
-	private void initRepository(String path) {
+	private void initRepository(String path) throws RepositoryException {
 		if (!location.exists()) {
-			location.mkdirs();
+			if (!location.mkdirs()) {
+				throw new RepositoryException("Tried to create Repository " +
+						location.getAbsolutePath() + " but failed." );
+			}
 			System.out.println("created new repository " + path);
 		}
 		db = new Database(location.getAbsolutePath());
@@ -57,7 +60,7 @@ public class Repository {
 			throw new RepositoryException(file.getAbsolutePath()
 					+ " does not exist.");
 		}
-		if (location.getAbsolutePath().contains(file.getAbsolutePath())) {
+		if (file.getAbsolutePath().startsWith(location.getAbsolutePath())) {
 			throw new RepositoryException(
 					"Dataset can not contain the repository itself.");
 		}
