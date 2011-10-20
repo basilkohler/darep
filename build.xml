@@ -53,6 +53,7 @@
 	
 	<target name="dist" depends="jar, test">
 		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
+		<chmod file="${dist}/data-repository" perm="u+x" />
 		<copy tofile="${dist}/README" file="${README}" />
 	</target>
 	
