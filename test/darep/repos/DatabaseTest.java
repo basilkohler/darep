@@ -61,25 +61,28 @@ public class DatabaseTest {
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
 		assertTrue(testDataSet.exists());
-		assertTrue(compareContents(expectedDataset,testDataSet));
+		compareContents(expectedDataset,testDataSet);
 	}
 	
-	private boolean compareContents(File expectedDataset, File testDataSet) throws IOException {
+	private void compareContents(File expectedDataset, File testDataSet) throws IOException {
 		FileReader frA = new FileReader(expectedDataset);
 		FileReader frB = new FileReader(testDataSet);
         BufferedReader readerA = new BufferedReader(frA);
         BufferedReader readerB = new BufferedReader(frB);
         int intA = -1;
-        int intB = -1;
 
-        while ((intA = readerA.read()) > 0) {
-        	if (intA != readerB.read())
-        		return false;
+        try {
+	        while ((intA = readerA.read()) > 0) {
+	        	assertEquals(intA, readerB.read());
+	        }
+	        
+	        assertEquals(intA, readerB.read());
+        } finally {
+        	readerA.close();
+        	readerB.close();
+        	frA.close();
+        	frB.close();
         }
-    	if (intA != readerB.read())
-    		return false;
-    	else
-    		return true;
 	}
 
 	@Test
