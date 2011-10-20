@@ -1,8 +1,6 @@
 package darep;
 
 import java.io.File;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * Contains some useful static methods that don't specifically belong
@@ -50,28 +48,6 @@ public class Helper {
 		// if all values of cmp-array are true and arrays have the same length,
 		// return true
 		return (true && sameLength);
-	}
-
-	/**
-	 * Returns a pretty String with key-value pairs form a map.
-	 * @param map
-	 * @return
-	 */
-	public static String mapToString(Map<?, ?> map) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-
-		for (Entry<?,?> entry: map.entrySet()) {
-			sb.append(entry.getKey().toString());
-			sb.append(": ");
-			sb.append(entry.getValue().toString());
-			sb.append(", ");
-		}
-
-		sb.append(" }");
-
-		return sb.toString();
 	}
 	
 	public static boolean deleteDir(File dir) {

@@ -135,7 +135,7 @@ public class Command {
 		sb.append("\n");
 		
 		sb.append("options:\t");
-		sb.append(Helper.mapToString(options));
+		sb.append(options.toString());
 
 		return sb.toString();
 	}
