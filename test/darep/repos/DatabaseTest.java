@@ -61,7 +61,7 @@ public class DatabaseTest {
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
 		assertTrue(testDataSet.exists());
-		compareContents(expectedDataset,testDataSet);
+		compareContents(expectedDataset, testDataSet);
 	}
 	
 	private void compareContents(File expectedDataset, File testDataSet) throws IOException {
@@ -69,20 +69,28 @@ public class DatabaseTest {
 		FileReader frB = new FileReader(testDataSet);
         BufferedReader readerA = new BufferedReader(frA);
         BufferedReader readerB = new BufferedReader(frB);
-        int intA = -1;
 
         try {
-	        while ((intA = readerA.read()) > 0) {
-	        	assertEquals(intA, readerB.read());
-	        }
+			String expectedContent = getReaderContent(readerA);
+			String testContent = getReaderContent(readerB);
 	        
-	        assertEquals(intA, readerB.read());
+	        assertEquals(expectedContent, testContent);
         } finally {
         	readerA.close();
         	readerB.close();
         	frA.close();
         	frB.close();
         }
+	}
+
+	private String getReaderContent(BufferedReader reader) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		String str = reader.readLine();
+		while (str != null) {
+			sb.append(str + "\n");
+			str = reader.readLine();
+		}
+		return sb.toString();
 	}
 
 	@Test

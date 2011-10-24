@@ -52,8 +52,6 @@ public class Dataset {
 		metadata.setFileSize(ds.calculateFileSize());
 		metadata.setNumberOfFiles(ds.countFiles());
 		
-		System.out.println(file.getName() + file.exists() + file.length());
-		
 		return ds;
 	}
 	
