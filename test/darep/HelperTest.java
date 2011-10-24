@@ -35,5 +35,8 @@ public class HelperTest {
 		assertFalse(Helper.arrayIsPermutation(test1, notPermutation));
 		assertFalse(Helper.arrayIsPermutation(test1, empty));
 	}
+	
+	// TODO test Helper.deleteDir()
+	// TODO test Helper.stringToLength()
 
 }
