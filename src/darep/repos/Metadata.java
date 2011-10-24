@@ -76,6 +76,12 @@ public class Metadata implements Serializable {
 	}
 	
 	public void save() throws RepositoryException {
+		if (path == null)
+			throw new RepositoryException("attempt to save metadata without path");
+		if (name.length() < 1)
+			throw new RepositoryException("attempt to save metadata without name");
+		if (originalName.length() < 1)
+			throw new RepositoryException("attempt to save metadata without originalname");
 		try {
 			FileOutputStream fileOut = new FileOutputStream(path);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);

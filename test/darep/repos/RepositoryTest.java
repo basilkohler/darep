@@ -24,7 +24,7 @@ public class RepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testDir = new File("jUnitDatabaseTestDir");
+		testDir = new File("jUnitRepositoryTestDir");
 		testDir.mkdir();
 		testDataSet = new File(testDir.getAbsolutePath() + "/testDataSet");
 		testDataSet.createNewFile();
