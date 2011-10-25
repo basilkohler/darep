@@ -52,7 +52,6 @@ public class HelperTest {
 		assertFalse(Helper.arrayIsPermutation(test1, empty));
 	}
 	
-	// TODO test Helper.deleteDir()
 	@Test
 	public void testDeleteDir() {
 		assertEquals(Helper.deleteDir(null), true);
