@@ -66,6 +66,10 @@ public class Helper {
 	}
 
 	public static String stringToLength(String string, int length) {
+		if(string == null)
+			return null;
+		if(length < 0)
+			return null;
 		if (string.length() > length) {
 			return string.substring(0, length);
 		} else if (string.length() < length) {

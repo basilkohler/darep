@@ -37,6 +37,15 @@ public class HelperTest {
 	}
 	
 	// TODO test Helper.deleteDir()
-	// TODO test Helper.stringToLength()
+	@Test
+	public void testStringToLength() {
+		assertEquals(Helper.stringToLength("0123456789", 10), "0123456789");
+		assertEquals(Helper.stringToLength("0123456789", 5), "01234");
+		assertEquals(Helper.stringToLength("", 10).length(), 10);
+		assertEquals(Helper.stringToLength("abc",5), "  abc");
+		assertEquals(Helper.stringToLength("", 3), "   ");
+		assertEquals(Helper.stringToLength(null, 10), null);
+		assertEquals(Helper.stringToLength("bla", -10), null);
+	}
 
 }
