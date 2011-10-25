@@ -2,10 +2,26 @@ package darep;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class HelperTest {
 
+	File testEnv;
+	@Before
+	public void setUp() {
+		testEnv = new File("testEnv");
+		testEnv.mkdir();
+	}
+	@After
+	public void tearDown() {
+		testEnv.delete();
+	}
 	@Test
 	public void testArrayContains() {
 		String[] test1 = new String[] {"hallo", "omg", "wtf", "sehr langer string"};
@@ -37,6 +53,20 @@ public class HelperTest {
 	}
 	
 	// TODO test Helper.deleteDir()
+	@Test
+	public void testDeleteDir() {
+		assertEquals(Helper.deleteDir(null), true);
+		assertEquals(Helper.deleteDir(new File(testEnv, "nodir")), true);
+		String dirName = "testdir";
+		File dir = new File(testEnv, dirName);
+		dir.mkdir();
+		Helper.deleteDir(dir);
+		assertEquals(Helper.deleteDir(dir), true);
+		String[] files = testEnv.list();
+		for(String f : files) {
+			assertFalse(f.equals(dirName));
+		}
+	}
 	@Test
 	public void testStringToLength() {
 		assertEquals(Helper.stringToLength("0123456789", 10), "0123456789");

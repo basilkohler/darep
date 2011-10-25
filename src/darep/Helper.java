@@ -51,6 +51,8 @@ public class Helper {
 	}
 	
 	public static boolean deleteDir(File dir) {
+		if(dir == null)
+			return true;
 		if (!dir.exists()) {
 			return true;
 		}
