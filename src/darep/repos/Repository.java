@@ -227,8 +227,8 @@ public class Repository {
 
 		System.out
 				.println("The data set " + command.getParams()[0]
-						+ " (original name: " + exportedFile.getName() + " )"
-						+ " has been successfully exported to"
+						+ " (original name: " + exportedFile.getName() + ")"
+						+ " has been successfully exported to "
 						+ command.getParams()[1]);
 	}
 
