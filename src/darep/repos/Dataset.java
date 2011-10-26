@@ -102,7 +102,7 @@ public class Dataset {
 			}
 			return true;
 		} catch (RepositoryException e) {
-			this.delete();
+			//this.delete();
 			return false;
 		}
 	}
