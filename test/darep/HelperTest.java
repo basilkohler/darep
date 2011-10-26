@@ -52,6 +52,7 @@ public class HelperTest {
 		assertFalse(Helper.arrayIsPermutation(test1, empty));
 	}
 	
+	// TODO actually test recursive delete of directories
 	@Test
 	public void testDeleteDir() {
 		assertEquals(Helper.deleteDir(null), true);
@@ -66,6 +67,7 @@ public class HelperTest {
 			assertFalse(f.equals(dirName));
 		}
 	}
+	
 	@Test
 	public void testStringToLength() {
 		assertEquals(Helper.stringToLength("0123456789", 10), "0123456789");
