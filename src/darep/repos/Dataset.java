@@ -1,6 +1,7 @@
 package darep.repos;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 import darep.Helper;
@@ -42,10 +43,21 @@ public class Dataset {
 	 * @param file
 	 * @param meta
 	 * @param db
+	 * @throws RepositoryException 
+	 * @throws IOException 
 	 */
-	public static Dataset createNewDataset(File file, Metadata metadata, Database db) {
+	public static Dataset createNewDataset(File file, Metadata metadata, Database db) throws RepositoryException {
 		Dataset ds = new Dataset();
-		ds.file = file.getAbsoluteFile();
+		
+		File canonicalFile;
+		try {
+			canonicalFile = file.getCanonicalFile();
+		} catch (IOException e) {
+			throw new RepositoryException("Could not get canonical File for " +
+					file.getAbsolutePath());
+		}
+		
+		ds.file = canonicalFile;
 		ds.metadata = metadata;
 		ds.db = db;
 		
@@ -104,10 +116,12 @@ public class Dataset {
 		} catch (RepositoryException e) {
 			//this.delete();
 			return false;
+		} catch (IOException e) {
+			return false;
 		}
 	}
 	
-	private boolean saveFilesToRepository(boolean copyMode) {
+	private boolean saveFilesToRepository(boolean copyMode) throws IOException {
 		String name = metadata.getName();
 		File fileDB = db.getFileDB();
 		

@@ -65,11 +65,22 @@ public class Database {
 	}
 
 	void copyFile(File dataset, File datasetDest) throws RepositoryException {
+		
+		File canonicalDatasetDest, canonicalDataset;
+		try {
+			canonicalDatasetDest = datasetDest.getCanonicalFile();
+			canonicalDataset = dataset.getCanonicalFile();
+		} catch (IOException e) {
+			throw new RepositoryException("Could not get canonical Filepath " +
+					"for " + dataset.getAbsolutePath() + " or " +
+					datasetDest.getAbsolutePath());
+		}
+		
 		if (dataset.isDirectory()) {
 			datasetDest.mkdir();
 			File[] content = dataset.listFiles();
 			for (int i = 0; i < content.length; i++) {
-				copyFile(content[i], new File(datasetDest.getAbsolutePath()
+				copyFile(content[i], new File(canonicalDatasetDest.getPath()
 						+ "/" + content[i].getName()));
 			}
 		} else {
@@ -86,8 +97,8 @@ public class Database {
 				}
 			} catch (IOException e) {
 				throw new RepositoryException("could not copy file "
-						+ dataset.getAbsolutePath() + " to "
-						+ datasetDest.getAbsolutePath());
+						+ canonicalDataset + " to "
+						+ canonicalDatasetDest);
 			}
 		}
 	}

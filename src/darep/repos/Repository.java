@@ -1,6 +1,7 @@
 package darep.repos;
 
 import java.io.File;
+import java.io.IOException;
 
 import darep.Command;
 import darep.Command.ActionType;
@@ -54,19 +55,24 @@ public class Repository {
 	 * @param command the command object which stores the options
 	 */
 	public boolean add(Command command) throws RepositoryException {
+		
+		try {
 
-		File file = getInputFile(command);
-		if (!file.exists()) {
-			throw new RepositoryException(file.getAbsolutePath()
-					+ " does not exist.");
+			File file = getInputFile(command);
+			if (!file.exists()) {
+				throw new RepositoryException(file.getCanonicalPath()
+						+ " does not exist.");
+			}
+			if (file.getCanonicalPath().startsWith(location.getCanonicalPath())) {
+				throw new RepositoryException(
+						"Dataset can not contain the repository itself.");
+			}
+	
+			Metadata meta = createMetaData(command);
+			return db.add(file, meta, !command.hasFlag("m"));
+		} catch (IOException e) {
+			throw new RepositoryException("There was an IOError while adding");
 		}
-		if (file.getAbsolutePath().startsWith(location.getAbsolutePath())) {
-			throw new RepositoryException(
-					"Dataset can not contain the repository itself.");
-		}
-
-		Metadata meta = createMetaData(command);
-		return db.add(file, meta, !command.hasFlag("m"));
 	}
 
 	public boolean delete(Command command) throws RepositoryException {

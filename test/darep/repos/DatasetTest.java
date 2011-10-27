@@ -52,7 +52,7 @@ public class DatasetTest {
 	}
 	
 	@Test
-	public void testCreateDataset() {
+	public void testCreateDataset() throws RepositoryException {
 		Dataset ds = Dataset.createNewDataset(testFileNotInRepo, metadata, database);
 		Assert.assertEquals(1, ds.getMetadata().getNumberOfFiles());
 		Assert.assertEquals(testFileNotInRepo.length(), ds.getMetadata().getSize());
