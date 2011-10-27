@@ -20,7 +20,7 @@ public class HelperTest {
 	}
 	@After
 	public void tearDown() {
-		testEnv.delete();
+		Helper.deleteDir(testEnv);
 	}
 	@Test
 	public void testArrayContains() {
@@ -55,16 +55,41 @@ public class HelperTest {
 	// TODO actually test recursive delete of directories
 	@Test
 	public void testDeleteDir() {
-		assertEquals(Helper.deleteDir(null), true);
-		assertEquals(Helper.deleteDir(new File(testEnv, "nodir")), true);
+		String[] files = null;
+		
+		// border cases
+		assertTrue(Helper.deleteDir(null));
+		
+		// delete directory with sub Directories
+		String subDirName = "subdir";
+		String subSubDirName = "subsubdir";
+		File subDir = new File(testEnv,subDirName);
+		subDir.mkdir();
+		File subSubDir = new File(subDir, subSubDirName);
+		subSubDir.mkdir();
+		assertTrue(Helper.deleteDir(subDir));
+		files = testEnv.list();
+		for(String f : files) {
+			assertFalse(f.equals(subDirName));
+		}
+		
+		// delete deleted Directory
 		String dirName = "testdir";
 		File dir = new File(testEnv, dirName);
 		dir.mkdir();
-		Helper.deleteDir(dir);
-		assertEquals(Helper.deleteDir(dir), true);
-		String[] files = testEnv.list();
+		Helper.deleteDir(dir);		
+		assertTrue(Helper.deleteDir(dir));
+		files = testEnv.list();
 		for(String f : files) {
 			assertFalse(f.equals(dirName));
+		}
+		
+		// delete a file
+		File file = new File(testEnv,"file");
+		assertTrue(Helper.deleteDir(file));
+		files = testEnv.list();
+		for(String f : files) {
+			assertFalse(f.equals("file"));
 		}
 	}
 	
