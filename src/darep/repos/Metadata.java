@@ -123,7 +123,7 @@ public class Metadata implements Serializable {
 		if(path != null)
 			filePath = path.getAbsolutePath();
 		else
-			filePath = new String();
+			filePath = "";
 			
 		return "METADATA:\nname: " + name + "\noriginalName: " + originalName + "\ntimestamp: " + timestamp.toString() +
 				"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size + "\npath: " + filePath;

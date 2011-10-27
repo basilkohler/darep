@@ -23,8 +23,8 @@ public class DatasetTest {
 	private Metadata metadata;
 	private String repoName = "testrepo";
 	
-	private final String testFileName = "TESTFILE.TXT";
-	private final String testFileNotInRepoName = "TESTFILE2.TXT";
+	private final static String testFileName = "TESTFILE.TXT";
+	private final static String testFileNotInRepoName = "TESTFILE2.TXT";
 
 	@Before
 	public void setUp() throws Exception {
