@@ -18,6 +18,10 @@ public class Repository {
 	
 	private static final String DEFAULT_LOCATION = System
 			.getProperty("user.home") + "/.data-repository";
+	
+	/**
+	 * The CANONICAL File which contains the Repository
+	 */
 	private File location;
 	private Database db;
 
@@ -34,7 +38,12 @@ public class Repository {
 	 * @param path where to find/create repo
 	 */
 	public Repository(String path) throws RepositoryException {
-		location = new File(path);
+		try {
+			location = new File(path).getCanonicalFile();
+		} catch (IOException e) {
+			throw new RepositoryException("Could not get canonical File for " +
+					path);
+		}
 		initRepository(path);
 	}
 
@@ -42,11 +51,11 @@ public class Repository {
 		if (!location.exists()) {
 			if (!location.mkdirs()) {
 				throw new RepositoryException("Tried to create Repository " +
-						location.getAbsolutePath() + " but failed." );
+						location.getPath() + " but failed." );
 			}
 			System.out.println("created new repository " + path);
 		}
-		db = new Database(location.getAbsolutePath());
+		db = new Database(location.getPath());
 	}
 
 	/*
@@ -219,9 +228,15 @@ public class Repository {
 	}
 
 	public void export(Command command) throws RepositoryException {
-		String absolutExportPath = new File(command.getParams()[1])
-				.getAbsolutePath();
-		if (absolutExportPath.contains(location.getAbsolutePath()))
+		String canonicalExportPath;
+		try {
+			canonicalExportPath = new File(command.getParams()[1])
+				.getCanonicalPath();
+		} catch (IOException e) {
+			throw new RepositoryException("Could not get Canonical Path for " +
+					command.getParams()[1]);
+		}
+		if (canonicalExportPath.contains(location.getPath()))
 			throw new RepositoryException(
 					"It is not allowed to export something into the "
 							+ location.toString() + " repository folder");
