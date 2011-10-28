@@ -168,11 +168,13 @@ public class Repository {
 		int totalFiles = 0;
 		long totalSize = 0;
 		
-		StringBuilder sb = new StringBuilder();
-		sb.append(getHeaderline(prettyPrintColWidth));
+		Dataset[] datasets = db.getAllDatasets();
 		
-		for (Dataset dataset: db.getAllDatasets()) {
-			sb.append(dataset.getPrettyString(prettyPrintColWidth));
+		StringBuilder sb = new StringBuilder();
+		sb.append(getHeaderline());
+		
+		for (Dataset dataset: datasets) {
+			sb.append(dataset.getPrettyString());
 			totalFiles += dataset.getMetadata().getNumberOfFiles();
 			totalSize += dataset.getMetadata().getSize();
 		}
@@ -185,29 +187,38 @@ public class Repository {
 
 	private String getTabList() throws RepositoryException {
 		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Name\t");
+		sb.append("Orig. Name\t");
+		sb.append("Timestamp\t");
+		sb.append("# Files\t");
+		sb.append("Size\t");
+		sb.append("Description\t");
+		sb.append("\n");
+		
 		for (Dataset dataset : db.getAllDatasets()) {
 			sb.append(dataset + "\n");
 		}
 		return sb.toString();
 	}
 
-	private String getHeaderline(int colWidth) {
+	private String getHeaderline() {		
 		StringBuilder sb = new StringBuilder();
 		sb.append("|");
-		sb.append(Helper.stringToLength("Name", colWidth));
+		sb.append(Helper.stringToLength("Name", Metadata.getMaxNameLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength("Orig. Name", colWidth));
+		sb.append(Helper.stringToLength("Orig. Name", Metadata.getMaxOrigNameLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength("Timestamp", colWidth));
+		sb.append(Helper.stringToLength("Timestamp", Metadata.getMaxTimestampLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength("# Files", colWidth));
+		sb.append(Helper.stringToLength("# Files", Metadata.getMaxNumFilesLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength("Size", colWidth));
+		sb.append(Helper.stringToLength("Size", Metadata.getMaxSizeLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength("Description", colWidth));
+		sb.append(Helper.stringToLength("Description", Metadata.getMaxDescriptionLength()));
 		sb.append("|\n");
 		
-		int numDashes = (6 * colWidth) + 7;
+		int numDashes = (Metadata.getTotalMaxWidth()) + 7;
 		for (int i = 0; i < numDashes; i++) {
 			sb.append("-");
 		}

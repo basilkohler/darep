@@ -180,21 +180,22 @@ public class Dataset {
 				+ "\t" + metadata.getSize() + "\t" + metadata.getDescription());
 	}
 
-	public String getPrettyString(int colWidth) {
+	public String getPrettyString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("|");
-		sb.append(Helper.stringToLength(metadata.getName(), colWidth));
+		sb.append(Helper.stringToLength(metadata.getName(), Metadata.getMaxNameLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength(metadata.getOriginalName(), colWidth));
+		sb.append(Helper.stringToLength(metadata.getOriginalName(), Metadata.getMaxOrigNameLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength(new Date(metadata.getTimeStamp()).toString(), colWidth));
+		sb.append(Helper.stringToLength(new Date(metadata.getTimeStamp()).toString(), Metadata.getMaxTimestampLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength(""+metadata.getNumberOfFiles(), colWidth));
+		sb.append(Helper.stringToLength(""+metadata.getNumberOfFiles(), Metadata.getMaxNumFilesLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength(""+metadata.getSize(), colWidth));
+		sb.append(Helper.stringToLength(""+metadata.getSize(), Metadata.getMaxSizeLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength(metadata.getDescription(), colWidth));
+		sb.append(Helper.stringToLength(metadata.getDescription(), Metadata.getMaxDescriptionLength()));
 		sb.append("|\n");
 		return sb.toString();
 	}
+	
 }
