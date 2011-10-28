@@ -52,7 +52,6 @@ public class HelperTest {
 		assertFalse(Helper.arrayIsPermutation(test1, empty));
 	}
 	
-	// TODO actually test recursive delete of directories
 	@Test
 	public void testDeleteDir() {
 		String[] files = null;
