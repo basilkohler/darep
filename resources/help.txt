@@ -1,0 +1,29 @@
+usage:
+	add 	[-r <repository path>] [-n <name>] [-d <description>] [-m] <file/folder>
+		<file/folder> Absolute or relative path to the file or folder defining the data set to be added.
+		-r 	<repository path> Absolute or relative path to the repository.
+		-n	<name> The unique name of the data set. The name contains only uppercase ASCII letters, digits, ’ ’, and ’-’. Its is not longer than 40 characters.
+		-d 	<description> A description of the data set. Its is not longer than 1000 characters. It does not contain any ISO control character like TAB, CR, or LF.
+		-m 	The data set is moved into the repository. Otherwise it is copied.
+
+	replace [-r <repository path>]  [-d <description>] [-m] <data set name> <file/folder>
+		<data set name> Name of the data set to be replaced.
+		<file/folder> Absolute or relative path to the file or folder defining the data set to be added.
+		-r <repository path> Absolute or relative path to the repository.
+		-d <description> A description of the data set. Its is not longer than 1000 characters. It does not contain any ISO control character like TAB, CR, or LF.
+		-m The data set is moved into the repository. Otherwise it is copied.
+				
+	delete 	[-r <repository path>] <data set name>
+		<data set name> Name of the data set to be deleted.
+		-r <repository path> Absolute or relative path to the repository.
+
+	export 	[-r <repository path>] <data set name> <destination folder>
+		<data set name> Name of the data set to be exported. 
+		<destination folder> Path to the destination folder.
+		-r <repository path> Absolute or relative path to the repository.
+
+	data-repository list [-r <repository path>] [-p]
+		-r <repository path> Absolute or relative path to the repository. 
+		-p Pretty output instead of TAB-separated output.
+	
+	[help]

@@ -163,7 +163,7 @@ public class DarepController {
 	
 	private void printHelp() {
 		try {
-			System.out.println(Helper.fileToString("resources/shorthelp.txt"));
+			System.out.println(Helper.fileToString("resources/help.txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
