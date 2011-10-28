@@ -1,6 +1,8 @@
 package darep;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,15 +98,17 @@ public class DarepController {
 		try {
 			controller.processCommand(args);
 		} catch (ParseException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			System.exit(1);
+			processException(e);
 		} catch (RepositoryException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			System.exit(1);
+			processException(e);
 		}
 			
+	}
+
+	private static void processException(Exception e) {
+		System.err.println(e.getMessage());
+		e.printStackTrace();
+		System.exit(1);
 	}
 
 	public void processCommand(String[] args) throws ParseException, RepositoryException {
@@ -158,6 +162,13 @@ public class DarepController {
 	}
 
 	private void printHelp() {
-		System.out.println("sorry i cant help you yet, see specifications.pdf");
+		File help = new File("helpfile.txt");
+		try {
+			FileInputStream in = new FileInputStream(help);
+			System.out.println(in.toString());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
