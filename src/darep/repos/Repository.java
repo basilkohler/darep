@@ -105,7 +105,11 @@ public class Repository {
 	 */
 	private Metadata createMetaData(Command command) throws RepositoryException {
 		Metadata meta = new Metadata();
-		meta.setOriginalName(getInputFile(command).getName());
+		try {
+			meta.setOriginalName(getInputFile(command).getName());
+		} catch (IOException e) {
+			throw new RepositoryException("IOException: " + e.getMessage());
+		}
 
 		if (command.isSet("d"))
 			meta.setDescription(command.getOptionParam("d"));
@@ -125,13 +129,16 @@ public class Repository {
 		return meta;
 	}
 
-	private File getInputFile(Command command) {
+	private File getInputFile(Command command) throws IOException {
 		// is the input file stored in the second or first parameter?
+		File file;
 		if (command.getAction() == ActionType.replace) {
-			return new File(command.getParams()[1]);
+			file = new File(command.getParams()[1]);
 		} else {
-			return new File(command.getParams()[0]);
+			file = new File(command.getParams()[0]);
 		}
+		
+		return file.getCanonicalFile();
 	}
 
 	private String createUniqueName(String name) {
