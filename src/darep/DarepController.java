@@ -107,7 +107,7 @@ public class DarepController {
 
 	private static void quitWithException(Exception e) {
 		System.err.println(e.getMessage());
-		e.printStackTrace();
+		//e.printStackTrace();
 		System.exit(1);
 	}
 
