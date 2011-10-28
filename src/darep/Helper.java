@@ -1,6 +1,10 @@
 package darep;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Contains some useful static methods that don't specifically belong
@@ -84,6 +88,20 @@ public class Helper {
 		} else {
 			return string;
 		}
+	}
+	
+	public static String fileToString(String path) throws FileNotFoundException, IOException{
+		File file = new File(path);
+		StringBuffer sb = new StringBuffer();
+		BufferedReader reader = null;
+		reader = new BufferedReader(new FileReader(file));
+		String s;
+		while ((s = reader.readLine()) != null) {
+			// \n or \r\n depending on OS
+			sb.append(s).append(System.getProperty("line.separator"));
+		}
+		
+		return sb.toString();
 	}
 	
 }

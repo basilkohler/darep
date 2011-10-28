@@ -1,8 +1,11 @@
 package darep;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,14 +101,14 @@ public class DarepController {
 		try {
 			controller.processCommand(args);
 		} catch (ParseException e) {
-			processException(e);
+			quitWithException(e);
 		} catch (RepositoryException e) {
-			processException(e);
+			quitWithException(e);
 		}
 			
 	}
 
-	private static void processException(Exception e) {
+	private static void quitWithException(Exception e) {
 		System.err.println(e.getMessage());
 		e.printStackTrace();
 		System.exit(1);
@@ -160,15 +163,15 @@ public class DarepController {
 		this.parser = new Parser(DarepController.syntax,
 				DarepController.getConstraints(), ActionType.help);
 	}
-
+	
 	private void printHelp() {
-		File help = new File("helpfile.txt");
 		try {
-			FileInputStream in = new FileInputStream(help);
-			System.out.println(in.toString());
+			System.out.println(Helper.fileToString("resources/shorthelp.txt"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 }
