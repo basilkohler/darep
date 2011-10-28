@@ -4,6 +4,7 @@
 	<property name="build" location="bin" />
 	<property name="dist" location="dist" />
 	<property name="wrapperScript" location="${src}/data-repository" />
+	<property name="wrapperScriptWindows" location="${src}/data-repository.cmd" />
 	<property name="README" location="README" />
 	<property name="distZip" location="data-repository.zip" />
 	<path id="junitLib">
@@ -13,7 +14,7 @@
 	<target name="clean">
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
-		<delete dir="${distZip}" />
+		<delete file="${distZip}" />
 	</target>
 	
 	<target name="init" depends="clean" description="Init">
@@ -54,6 +55,7 @@
 	<target name="dist" depends="jar, test">
 		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
 		<chmod file="${dist}/data-repository" perm="u+x" />
+		<copy tofile="${dist}/data-repository.cmd" file="${wrapperScriptWindows}" />
 		<copy tofile="${dist}/README" file="${README}" />
 	</target>
 	
