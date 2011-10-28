@@ -114,6 +114,7 @@ public class Dataset {
 			}
 			return true;
 		} catch (RepositoryException e) {
+			// TODO make this work again
 			//this.delete();
 			return false;
 		} catch (IOException e) {
