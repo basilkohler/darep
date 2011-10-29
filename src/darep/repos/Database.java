@@ -51,17 +51,14 @@ public class Database {
 	 * @param copyMode true if dataset should be copied to the db, else dataset
 	 * is moved into the db
 	 */
-	public boolean add(File file, Metadata meta, boolean copyMode)
+	public void add(File file, Metadata meta, boolean copyMode)
 			throws RepositoryException {
 		Dataset ds = Dataset.createNewDataset(file, meta, this);
-		if (ds.saveToRepository(copyMode)) {
-			System.out.println("The file/folder " + meta.getOriginalName()
+		ds.saveToRepository(copyMode);
+		System.out.println("The file/folder " + meta.getOriginalName()
 					+ " has been successfully added to the repository"
 					+ " as data set named " + meta.getName());
-			return true;
-		} else {
-			return false;
-		}
+		
 	}
 
 	void copyFile(File dataset, File datasetDest) throws RepositoryException {

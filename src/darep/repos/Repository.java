@@ -63,7 +63,7 @@ public class Repository {
 	 * 
 	 * @param command the command object which stores the options
 	 */
-	public boolean add(Command command) throws RepositoryException {
+	public void add(Command command) throws RepositoryException {
 		
 		try {
 
@@ -78,7 +78,7 @@ public class Repository {
 			}
 	
 			Metadata meta = createMetaData(command);
-			return db.add(file, meta, !command.hasFlag("m"));
+			db.add(file, meta, !command.hasFlag("m"));
 		} catch (IOException e) {
 			throw new RepositoryException("There was an IOError while adding");
 		}
@@ -235,14 +235,12 @@ public class Repository {
 	}
 
 	public void replace(Command command) throws RepositoryException {
-		boolean success1 = delete(command);
-		boolean success2 = add(command);
+		delete(command);
+		add(command);
 
-		if (success1 && success2) {
-			System.out.println("The data set named " + command.getParams()[0]
-					+ " has been successfully"
-					+ " replaced by the file/folder.");
-		}
+		System.out.println("The data set named " + command.getParams()[0]
+				+ " has been successfully"
+				+ " replaced by the file/folder.");
 	}
 
 	public void export(Command command) throws RepositoryException {

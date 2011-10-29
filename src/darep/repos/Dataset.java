@@ -105,20 +105,15 @@ public class Dataset {
 	 * @param copyMode
 	 * @return
 	 */
-	public boolean saveToRepository(boolean copyMode) {
+	public void saveToRepository(boolean copyMode) throws RepositoryException{
 		File dbdir = db.getMetaDB();
 		try {
 			metadata.saveInDir(dbdir);
 			if (!saveFilesToRepository(copyMode)) {
 				throw new RepositoryException("Could not save File");
 			}
-			return true;
-		} catch (RepositoryException e) {
-			// TODO make this work again
-			//this.delete();
-			return false;
 		} catch (IOException e) {
-			return false;
+			throw new RepositoryException("Could not write to the Reposiroy.");
 		}
 	}
 	
