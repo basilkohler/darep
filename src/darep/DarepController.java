@@ -169,9 +169,9 @@ public class DarepController {
 		try {
 			System.out.println(Helper.fileToString(path));
 		} catch (FileNotFoundException e) {
-			throw new RepositoryException("ERROR: could not find the helpfile (should be in the .jar Archive): " + path);
+			throw new RepositoryException("could not find the helpfile (should be in the .jar Archive): " + path);
 		} catch (IOException e) {
-			throw new RepositoryException("ERROR: could not write the helpfile (should be in the .jar Archive): " + path);
+			throw new RepositoryException("could not write the helpfile (should be in the .jar Archive): " + path);
 		}
 	}
 
