@@ -19,7 +19,10 @@ import darep.repos.RepositoryException;
  * 
  */
 public class DarepController {
-
+	
+	public static final String RESOURCES = "resources";
+	public static final String HELPFILE = "help.txt";
+	
 	/**
 	 * The {@link CommandSyntax}-Array given to the parser. Defines the allowed
 	 * syntax when calling the program. The Format for a Command is:
@@ -107,7 +110,7 @@ public class DarepController {
 
 	private static void quitWithException(Exception e) {
 		System.err.println(e.getMessage());
-		//e.printStackTrace();
+		e.printStackTrace();
 		System.exit(1);
 	}
 
@@ -161,13 +164,14 @@ public class DarepController {
 				DarepController.getConstraints(), ActionType.help);
 	}
 	
-	private void printHelp() {
+	private void printHelp() throws RepositoryException{
+		String path = RESOURCES+"/"+HELPFILE;
 		try {
-			System.out.println(Helper.fileToString("resources/help.txt"));
+			System.out.println(Helper.fileToString(path));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			throw new RepositoryException("ERROR: could not find the helpfile (should be in the .jar Archive): " + path);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RepositoryException("ERROR: could not write the helpfile (should be in the .jar Archive): " + path);
 		}
 	}
 
