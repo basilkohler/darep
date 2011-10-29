@@ -86,11 +86,11 @@ public class MetadataTest {
 		assertTrue(metaFile.exists());
 		Metadata fromDisk=Metadata.readFile(metaFile);
 		assertNotNull(fromDisk);
-		assertTrue(testMeta.getDescription().equals(fromDisk.getDescription()));
-		assertTrue(testMeta.getName().equals(fromDisk.getName()));
-		assertTrue(testMeta.getNumberOfFiles()==fromDisk.getNumberOfFiles());
-		assertTrue(testMeta.getSize()==fromDisk.getSize());
-		assertTrue(testMeta.getOriginalName().equals(fromDisk.getOriginalName()));
+		assertEquals(testMeta.getDescription(), fromDisk.getDescription());
+		assertEquals(testMeta.getName(), fromDisk.getName());
+		assertEquals(testMeta.getNumberOfFiles(), fromDisk.getNumberOfFiles());
+		assertEquals(testMeta.getSize(), fromDisk.getSize());
+		assertEquals(testMeta.getOriginalName(), fromDisk.getOriginalName());
 	}
 
 	@Test
