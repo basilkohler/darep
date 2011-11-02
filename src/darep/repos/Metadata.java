@@ -75,9 +75,12 @@ public class Metadata implements Serializable {
 		this.setNumberOfFiles(nrFiles);
 		this.setFileSize(size);
 		this.path = new File(reposPath+"/metadata/"+name);
+		
+		setMaxLengthValues(this);
 	}
 	
 	private static void setMaxLengthValues(Metadata m) {
+		
 		if (maxTimestampLength < m.timestamp.toString().length()) {
 			maxTimestampLength = m.timestamp.toString().length();
 		}
@@ -100,7 +103,6 @@ public class Metadata implements Serializable {
 
 	private void setTimestamp(Date date) {
 		this.timestamp = date;
-		setMaxLengthValues(this);
 	}
 
 	public static Metadata readFile(File file) throws RepositoryException {
@@ -167,17 +169,14 @@ public class Metadata implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-		setMaxLengthValues(this);
 	}
 
 	public void setOriginalName(String originalName) {
 		this.originalName = originalName;
-		setMaxLengthValues(this);
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
-		setMaxLengthValues(this);
 	}
 
 	public String getName() {
@@ -223,12 +222,10 @@ public class Metadata implements Serializable {
 
 	public void setFileSize(long fileSize) {
 		this.size = fileSize;
-		setMaxLengthValues(this);
 	}
 
 	public void setNumberOfFiles(int countFiles) {
 		this.numberOfFiles = countFiles;
-		setMaxLengthValues(this);
 	}
 
 }
