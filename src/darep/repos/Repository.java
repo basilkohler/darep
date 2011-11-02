@@ -197,9 +197,9 @@ public class Repository {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("Name\t");
-		sb.append("Orig. Name\t");
+		sb.append("Original Name\t");
 		sb.append("Timestamp\t");
-		sb.append("# Files\t");
+		sb.append("Number of Files\t");
 		sb.append("Size\t");
 		sb.append("Description\t");
 		sb.append("\n");
