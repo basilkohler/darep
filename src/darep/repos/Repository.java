@@ -215,11 +215,11 @@ public class Repository {
 		sb.append("|");
 		sb.append(Helper.stringToLength("Name", Metadata.getMaxNameLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength("Orig. Name", Metadata.getMaxOrigNameLength()));
+		sb.append(Helper.stringToLength("Original Name", Metadata.getMaxOrigNameLength()));
 		sb.append("|");
 		sb.append(Helper.stringToLength("Timestamp", Metadata.getMaxTimestampLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength("# Files", Metadata.getMaxNumFilesLength()));
+		sb.append(Helper.stringToLength("Number of Files", Metadata.getMaxNumFilesLength()));
 		sb.append("|");
 		sb.append(Helper.stringToLength("Size", Metadata.getMaxSizeLength()));
 		sb.append("|");
