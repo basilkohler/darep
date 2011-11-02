@@ -42,7 +42,7 @@ public class Repository {
 			location = new File(path).getCanonicalFile();
 		} catch (IOException e) {
 			throw new RepositoryException("Could not get canonical File for " +
-					path,e);
+					path + ". Error: " + e.getMessage());
 		}
 		initRepository(path);
 	}
@@ -80,7 +80,8 @@ public class Repository {
 			Metadata meta = createMetaData(command);
 			db.add(file, meta, !command.hasFlag("m"));
 		} catch (IOException e) {
-			throw new RepositoryException("There was an IOError while adding",e);
+			throw new RepositoryException("There was an IOError while adding: " +
+					e.getMessage());
 		}
 	}
 
@@ -250,7 +251,7 @@ public class Repository {
 				.getCanonicalPath();
 		} catch (IOException e) {
 			throw new RepositoryException("Could not get Canonical Path for " +
-					command.getParams()[1],e);
+					command.getParams()[1] + ". Error: " + e.getMessage());
 		}
 		if (canonicalExportPath.contains(location.getPath()))
 			throw new RepositoryException(
