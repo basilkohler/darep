@@ -74,18 +74,15 @@ public class Metadata implements Serializable {
 		this.setOriginalName(origName);
 		this.setNumberOfFiles(nrFiles);
 		this.setFileSize(size);
-		this.path = new File(reposPath+"/metadata/"+name);
-		
-		setMaxLengthValues(this);
+		this.path = new File(reposPath + "/metadata/" + name);
 	}
 	
-	private static void setMaxLengthValues(Metadata m) {
-		
-		if (maxTimestampLength < m.timestamp.toString().length()) {
-			maxTimestampLength = m.timestamp.toString().length();
-		}
+	private static void updateMaxLengthValues(Metadata m) {
 		if (maxNameLength < m.name.length()) {
 			maxNameLength = m.name.length();
+		}
+		if (maxTimestampLength < m.timestamp.toString().length()) {
+			maxTimestampLength = m.timestamp.toString().length();
 		}
 		if (maxOrigNameLength < m.originalName.length()) {
 			maxOrigNameLength = m.originalName.length();
@@ -103,6 +100,9 @@ public class Metadata implements Serializable {
 
 	private void setTimestamp(Date date) {
 		this.timestamp = date;
+		if (maxTimestampLength < date.toString().length()) {
+			maxTimestampLength = date.toString().length();
+		}
 	}
 
 	public static Metadata readFile(File file) throws RepositoryException {
@@ -114,7 +114,7 @@ public class Metadata implements Serializable {
 				 Object obj = in.readObject();
 				 if (obj instanceof Metadata) {
 					 Metadata m = (Metadata) obj;
-					 setMaxLengthValues(m);
+					 updateMaxLengthValues(m);
 					 return m;
 				 } else {
 					 throw new RepositoryException("File " + file.getName()
@@ -169,14 +169,23 @@ public class Metadata implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+		if (maxNameLength < name.length()) {
+			maxNameLength = name.length();
+		}
 	}
 
 	public void setOriginalName(String originalName) {
 		this.originalName = originalName;
+		if (maxOrigNameLength < originalName.length()) {
+			maxOrigNameLength = originalName.length();
+		}
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+		if (maxDescriptionLength < description.length()) {
+			maxDescriptionLength = description.length();
+		}
 	}
 
 	public String getName() {
@@ -222,10 +231,16 @@ public class Metadata implements Serializable {
 
 	public void setFileSize(long fileSize) {
 		this.size = fileSize;
+		if (maxSizeLength < String.valueOf(fileSize).length()) {
+			maxSizeLength = String.valueOf(fileSize).length();
+		}
 	}
 
 	public void setNumberOfFiles(int countFiles) {
 		this.numberOfFiles = countFiles;
+		if (maxNumFilesLength < String.valueOf(numberOfFiles).length()) {
+			maxNumFilesLength = String.valueOf(numberOfFiles).length();
+		}
 	}
 
 }
