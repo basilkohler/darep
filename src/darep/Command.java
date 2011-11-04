@@ -99,6 +99,10 @@ public class Command {
 		return options.get(key);
 	}
 	
+	public void setOptionParam(String key, String value) {
+		options.put(key, value);
+	}
+	
 	/**
 	 * Returns the options, null if not set.
 	 * @return

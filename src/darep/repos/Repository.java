@@ -240,6 +240,7 @@ public class Repository {
 
 	public void replace(Command command) throws RepositoryException {
 		delete(command);
+		command.setOptionParam("n", command.getParams()[1]);
 		add(command);
 
 		System.out.println("The data set named " + command.getParams()[0]
