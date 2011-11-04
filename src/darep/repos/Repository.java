@@ -175,6 +175,7 @@ public class Repository {
 		int totalFiles = 0;
 		long totalSize = 0;
 		
+		// Metadata.maxXXXLength is now set because all datasets are loaded
 		Dataset[] datasets = db.getAllDatasets();
 		
 		StringBuilder sb = new StringBuilder();
