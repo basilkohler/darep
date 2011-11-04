@@ -105,44 +105,29 @@ public class Dataset {
 	 * @param copyMode
 	 * @return
 	 */
-	public void saveToRepository(boolean copyMode) throws RepositoryException{
+	public void saveToRepository(boolean copyMode) throws RepositoryException {
 		File dbdir = db.getMetaDB();
-		try {
-			metadata.saveInDir(dbdir);
-			if (!saveFilesToRepository(copyMode)) {
-				throw new RepositoryException("Could not save File");
-			}
-		} catch (IOException e) {
-			throw new RepositoryException("Could not write to the Reposiroy.");
-		}
+		metadata.saveInDir(dbdir);
+		saveFilesToRepository(copyMode);
 	}
 	
-	private boolean saveFilesToRepository(boolean copyMode) throws IOException {
+	private void saveFilesToRepository(boolean copyMode) throws RepositoryException {
 		String name = metadata.getName();
-		File fileDB = db.getFileDB();
+		File dbFolder = db.getFileDB();
 		
 		if (!file.getParentFile().equals(db.getFileDB())) {
-			File fileInDB = new File(fileDB, name);
+			File fileInDB = new File(dbFolder, name);
 			if (copyMode) {
-				try {
-					db.copyFile(file, fileInDB);
-					this.file = fileInDB;
-					return true;
-				} catch(RepositoryException e) {
-					return false;
-				}
-				
+				db.copyFile(file, fileInDB);
+				this.file = fileInDB;
 			} else {
 				if (file.renameTo(fileInDB)) {
 					this.file = fileInDB;
-					return true;
 				} else {
-					return false;
+					throw new RepositoryException("Could not move File");
 				}
 			}
 		}
-		
-		return false;
 	}
 	
 	/**
