@@ -7,6 +7,7 @@ public class RepositoryException extends Exception {
 	public RepositoryException(String message) {
 		super("ERROR: " + message);
 	}
+	
 	public RepositoryException(String message, Throwable cause) {
 		this(message);
 		this.initCause(cause);
