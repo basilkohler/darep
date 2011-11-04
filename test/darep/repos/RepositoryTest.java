@@ -91,7 +91,7 @@ public class RepositoryTest {
 	}
 	
 	@Test(expected = RepositoryException.class)
-	public void testRepositoryNotFoundAndCommandIsNotAnd()
+	public void testRepositoryNotFoundAndCommandIsNotAdd()
 			throws RepositoryException {
 		DarepController controller = new DarepController();
 		String[] arg = { "export", "-r", "NONEXISTINGREPO",
@@ -102,6 +102,7 @@ public class RepositoryTest {
 			e.printStackTrace();
 		}
 	}
+	
 	@Test (expected = RepositoryException.class)
 	public void testExportTheRepositoryItself() throws RepositoryException {
 		command = getCommand("add " + testDataSet.getAbsolutePath());
@@ -113,16 +114,14 @@ public class RepositoryTest {
 		command = getCommand("export " + testDataSet.getName()+" "+repo.getLocation());
 		repo.export(command);
 	}
+	
 	@Test (expected = RepositoryException.class)
 	public void testAddRepositoryItself() throws RepositoryException {
 		//TODO "wrong" exception gets thrown, it just says: cannot copy file
 		command = getCommand("add " + repo.getLocation().getAbsolutePath());
 		repo.add(command);
 	}
-
-
-
-
+	
 	private Command getCommand(String args) {
 		Parser parser = new Parser(DarepController.syntax,
 				DarepController.getConstraints(), ActionType.help);
