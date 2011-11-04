@@ -122,6 +122,21 @@ public class RepositoryTest {
 		repo.add(command);
 	}
 	
+	@Test (expected = RepositoryException.class)
+	public void testAddParentOfRepository() throws RepositoryException {
+		// Parent folder of Repo
+		command = getCommand("add " + repo.getLocation().getParentFile().getAbsolutePath());
+		
+		try {
+			repo.add(command);
+		} catch (RepositoryException e) {
+			assertEquals(e.getMessage(), "ERROR: Dataset can not contain " +
+					"the repository itself.");
+			throw e;
+		}
+		
+	}
+	
 	private Command getCommand(String args) {
 		Parser parser = new Parser(DarepController.syntax,
 				DarepController.getConstraints(), ActionType.help);

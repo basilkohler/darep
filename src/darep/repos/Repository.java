@@ -22,7 +22,7 @@ public class Repository {
 	/**
 	 * The CANONICAL File which contains the Repository
 	 */
-	private File location;
+	private final File location;
 	private Database db;
 
 	/*
@@ -72,7 +72,11 @@ public class Repository {
 				throw new RepositoryException(file.getCanonicalPath()
 						+ " does not exist.");
 			}
-			if (file.getCanonicalPath().startsWith(location.getCanonicalPath())) {
+			
+			String canonicalFilePath = file.getCanonicalPath();
+			String repoPath = location.getPath();
+			if (canonicalFilePath.startsWith(repoPath)
+					|| repoPath.startsWith(canonicalFilePath)) {
 				throw new RepositoryException(
 						"Dataset can not contain the repository itself.");
 			}
