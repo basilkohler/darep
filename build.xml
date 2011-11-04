@@ -1,4 +1,4 @@
-<project name="Darep" default="zipdist" basedir=".">
+<project name="darep" default="zipdist" basedir=".">
 	<property name="src" location="src" />
 	<property name="srcTest" location="test" />
 	<property name="build" location="bin" />
