@@ -18,6 +18,7 @@ public class RepositoryTest {
 	File testDir;
 	File testRepo;
 	File testDataSet;
+	File testDataSet2;
 	Command command;
 	Repository repo;
 
@@ -25,8 +26,10 @@ public class RepositoryTest {
 	public void setUp() throws Exception {
 		testDir = new File("jUnitRepositoryTestDir");
 		testDir.mkdir();
-		testDataSet = new File(testDir.getAbsolutePath(), "testDataSet");
+		testDataSet = new File(testDir, "testDataSet");
 		testDataSet.createNewFile();
+		testDataSet2 = new File(testDir, "testDataSet2");
+		testDataSet2.createNewFile();
 		testRepo = new File(testDir.getAbsolutePath(), "testRepo");
 		repo = new Repository(testRepo.getAbsolutePath());
 
@@ -57,7 +60,7 @@ public class RepositoryTest {
 	public void testAddNonexistingFile() throws RepositoryException {
 		command = getCommand("add NONEXISTINGFILE");
 		repo.add(command);
-		fail("nonexistant input file. no exeption occured");
+		fail("nonexistant input file. no exception occured");
 	}
 
 	@Test(expected = RepositoryException.class)
@@ -135,6 +138,18 @@ public class RepositoryTest {
 			throw e;
 		}
 		
+	}
+	
+	@Test
+	public void testReplace() throws RepositoryException {
+		String name = "TEH_NAME";
+		command = getCommand("add -n " + name +
+				" " + testDataSet.getAbsolutePath());
+		repo.add(command);
+		command = getCommand("replace " + name +
+				" " + testDataSet2.getAbsolutePath());
+		repo.replace(command);
+		assertNotNull(repo.getDataset(name));
 	}
 	
 	private Command getCommand(String args) {
