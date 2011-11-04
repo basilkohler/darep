@@ -86,10 +86,9 @@ public class Repository {
 
 	public boolean delete(Command command) throws RepositoryException {
 		if (db.delete(command.getParams()[0])) {
-			System.out
-					.println("The data set "
-							+ command.getParams()[0]
-							+ " (original name: file/folder name) has been successfully removed from the repository.");
+			System.out.println("The data set " + command.getParams()[0] +
+							" (original name: file/folder name) has been" +
+							" successfully removed from the repository.");
 			return true;
 		} else {
 			throw new RepositoryException("Unknown data set "

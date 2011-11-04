@@ -1,7 +1,6 @@
 package darep.repos;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
@@ -26,9 +25,9 @@ public class RepositoryTest {
 	public void setUp() throws Exception {
 		testDir = new File("jUnitRepositoryTestDir");
 		testDir.mkdir();
-		testDataSet = new File(testDir.getAbsolutePath() + "/testDataSet");
+		testDataSet = new File(testDir.getAbsolutePath(), "testDataSet");
 		testDataSet.createNewFile();
-		testRepo = new File(testDir.getAbsolutePath() + "/testRepo");
+		testRepo = new File(testDir.getAbsolutePath(), "testRepo");
 		repo = new Repository(testRepo.getAbsolutePath());
 
 	}
@@ -43,15 +42,15 @@ public class RepositoryTest {
 		command = getCommand("add " + testDataSet.getAbsolutePath());
 		File newDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
-		assertEquals(false, newDataset.exists());
-		assertEquals(false, newMetadata.exists());
+		assertFalse(newDataset.exists());
+		assertFalse(newMetadata.exists());
 		try {
 			repo.add(command);
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}
-		assertEquals(true, newDataset.exists());
-		assertEquals(true, newMetadata.exists());
+		assertTrue(newDataset.exists());
+		assertTrue(newMetadata.exists());
 	}
 
 	@Test(expected = RepositoryException.class)
@@ -76,8 +75,8 @@ public class RepositoryTest {
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
 		command = getCommand("add " + testDataSet.getAbsolutePath());
 		repo.add(command);
-		assertEquals(true, newDataset.exists());
-		assertEquals(true, newMetadata.exists());
+		assertTrue(newDataset.exists());
+		assertTrue(newMetadata.exists());
 		for (int i = 1; i < 4; i++) {
 
 			repo.add(command);
@@ -85,8 +84,8 @@ public class RepositoryTest {
 			for (int j = 1; j <= i; j++) {
 				newDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
 				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + j);
-				assertEquals(true, newDataset.exists());
-				assertEquals(true, newMetadata.exists());
+				assertTrue(newDataset.exists());
+				assertTrue(newMetadata.exists());
 			}
 		}
 	}
@@ -127,7 +126,6 @@ public class RepositoryTest {
 	private Command getCommand(String args) {
 		Parser parser = new Parser(DarepController.syntax,
 				DarepController.getConstraints(), ActionType.help);
-		;
 		try {
 			command = parser.parse(args.split(" "));
 		} catch (ParseException e) {
