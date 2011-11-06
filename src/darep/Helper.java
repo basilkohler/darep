@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Contains some useful static methods that don't specifically belong
@@ -90,13 +92,12 @@ public class Helper {
 		}
 	}
 	
-	public static String fileToString(String path) throws FileNotFoundException, IOException{
-		File file = new File(path);
-		StringBuffer sb = new StringBuffer();
+	public static String fileToString(InputStream stream) throws FileNotFoundException, IOException{
 		BufferedReader reader = null;
-		
+		StringBuffer sb = new StringBuffer();
+
 		try {
-			reader = new BufferedReader(new FileReader(file));
+			reader = new BufferedReader(new InputStreamReader(stream));
 			String s;
 			while ((s = reader.readLine()) != null) {
 				// \n or \r\n depending on OS

@@ -1,8 +1,13 @@
 package darep;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,15 +170,21 @@ public class DarepController {
 	}
 	
 	private void printHelp() throws RepositoryException{
-		String path = RESOURCES+"/"+HELPFILE;
+
+		String path = RESOURCES+"/"+HELPFILE; 
 		try {
-			System.out.println(Helper.fileToString(path));
+			InputStream is = this.getClass().getClassLoader().getResourceAsStream(HELPFILE);
+			
+			if(is == null) {
+				is = new FileInputStream(new File(path));
+			}
+			System.out.println(Helper.fileToString(is));
 		} catch (FileNotFoundException e) {
-			throw new RepositoryException("could not find the helpfile " +
-					"(should be in the .jar Archive): " + path, e);
+			throw new RepositoryException("could not find the helpfile: " + path, e);
 		} catch (IOException e) {
-			throw new RepositoryException("could not write the helpfile " +
-					"(should be in the .jar Archive): " + path, e);
+			throw new RepositoryException("could not print the helpfile:" + HELPFILE, e);
+		} catch (NullPointerException e) {
+			throw new RepositoryException("could not load helpfile " + HELPFILE +" from .jar Archive", e);
 		}
 	}
 
