@@ -7,6 +7,7 @@
 	<property name="wrapperScriptWindows" location="${src}/data-repository.cmd" />
 	<property name="README" location="README" />
 	<property name="distZip" location="data-repository.zip" />
+	<property name="resources" location="resources" />
 	<path id="junitLib">
 		<pathelement location="lib/junit-4.10.jar" />
 	</path>
@@ -29,6 +30,7 @@
 	
 	<target name="jar" depends="compile" description="Generate JAR">
 		<jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
+			<fileset dir="${resources}"/>
 			<manifest>
 				<attribute name="Main-Class" value="darep.DarepController"/>
 			</manifest>
