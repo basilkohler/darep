@@ -94,13 +94,17 @@ public class Helper {
 		File file = new File(path);
 		StringBuffer sb = new StringBuffer();
 		BufferedReader reader = null;
-		reader = new BufferedReader(new FileReader(file));
-		String s;
-		while ((s = reader.readLine()) != null) {
-			// \n or \r\n depending on OS
-			sb.append(s).append(System.getProperty("line.separator"));
-		}
 		
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String s;
+			while ((s = reader.readLine()) != null) {
+				// \n or \r\n depending on OS
+				sb.append(s).append(System.getProperty("line.separator"));
+			}
+		} finally {
+			reader.close();
+		}
 		return sb.toString();
 	}
 	
