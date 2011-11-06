@@ -178,7 +178,7 @@ public class DarepController {
 			if(is == null) {
 				is = new FileInputStream(new File(path));
 			}
-			System.out.println(Helper.fileToString(is));
+			System.out.println(Helper.streamToString(is));
 		} catch (FileNotFoundException e) {
 			throw new RepositoryException("could not find the helpfile: " + path, e);
 		} catch (IOException e) {
