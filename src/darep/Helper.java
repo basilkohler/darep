@@ -92,7 +92,7 @@ public class Helper {
 		}
 	}
 	
-	public static String fileToString(InputStream stream) throws FileNotFoundException, IOException{
+	public static String streamToString(InputStream stream) throws FileNotFoundException, IOException{
 		BufferedReader reader = null;
 		StringBuffer sb = new StringBuffer();
 
