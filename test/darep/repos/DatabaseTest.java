@@ -16,9 +16,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import darep.Helper;
+import darep.repos.fileStorage.FileStorage;
 
 public class DatabaseTest {
-	Database db;
+	FileStorage db;
 	File testDir;
 	File testRepo;
 	File testDataSet;
@@ -42,12 +43,12 @@ public class DatabaseTest {
 		
 		meta = new Metadata("TESTDATASET", "testDataSet", "", 0, 0,
 				testRepo.getAbsolutePath());
-		db = new Database(testRepo.getAbsolutePath());
+		db = new FileStorage(testRepo.getAbsolutePath());
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Helper.deleteDir(testDir);
+		Helper.deleteRecursive(testDir);
 	}
 
 	@Test

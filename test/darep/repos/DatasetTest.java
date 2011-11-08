@@ -12,11 +12,13 @@ import org.junit.Test;
 
 import darep.DarepController;
 import darep.Helper;
+import darep.repos.fileStorage.FileDataSet;
+import darep.repos.fileStorage.FileStorage;
 
 public class DatasetTest {
 	
 	private DarepController darep = new DarepController();
-	private Database database;
+	private FileStorage database;
 	private File testdir = new File("testdir");
 	private File testFileInRepo;
 	private File testFileNotInRepo;
@@ -32,7 +34,7 @@ public class DatasetTest {
 		createMetaData();
 		darep.processCommand(getArgs("add " + testFileInRepo.getPath()));
 		
-		database = new Database(repoName);
+		database = new FileStorage(repoName);
 	}
 	
 	private void createMetaData() {
@@ -42,18 +44,18 @@ public class DatasetTest {
 
 	@After
 	public void tearDown() throws Exception {
-		Helper.deleteDir(testdir);
-		Helper.deleteDir(new File(repoName));
+		Helper.deleteRecursive(testdir);
+		Helper.deleteRecursive(new File(repoName));
 	}
 
 	@Test
 	public void testReadDataset() throws RepositoryException {
-		Dataset.readDataset("TESTFILE.TXT", database);
+		FileDataSet.readDataset("TESTFILE.TXT", database);
 	}
 	
 	@Test
 	public void testCreateDataset() throws RepositoryException {
-		Dataset ds = Dataset.createNewDataset(testFileNotInRepo, metadata, database);
+		FileDataSet ds = FileDataSet.createNewDataset(testFileNotInRepo, metadata, database);
 		Assert.assertEquals(1, ds.getMetadata().getNumberOfFiles());
 		Assert.assertEquals(testFileNotInRepo.length(), ds.getMetadata().getSize());
 	}

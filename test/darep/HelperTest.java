@@ -20,7 +20,7 @@ public class HelperTest {
 	}
 	@After
 	public void tearDown() {
-		Helper.deleteDir(testEnv);
+		Helper.deleteRecursive(testEnv);
 	}
 	@Test
 	public void testArrayContains() {
@@ -57,7 +57,7 @@ public class HelperTest {
 		String[] files = null;
 		
 		// border cases
-		assertTrue(Helper.deleteDir(null));
+		assertTrue(Helper.deleteRecursive(null));
 		
 		// delete directory with sub Directories
 		String subDirName = "subdir";
@@ -66,7 +66,7 @@ public class HelperTest {
 		subDir.mkdir();
 		File subSubDir = new File(subDir, subSubDirName);
 		subSubDir.mkdir();
-		assertTrue(Helper.deleteDir(subDir));
+		assertTrue(Helper.deleteRecursive(subDir));
 		files = testEnv.list();
 		for(String f : files) {
 			assertFalse(f.equals(subDirName));
@@ -76,8 +76,8 @@ public class HelperTest {
 		String dirName = "testdir";
 		File dir = new File(testEnv, dirName);
 		dir.mkdir();
-		Helper.deleteDir(dir);		
-		assertTrue(Helper.deleteDir(dir));
+		Helper.deleteRecursive(dir);		
+		assertTrue(Helper.deleteRecursive(dir));
 		files = testEnv.list();
 		for(String f : files) {
 			assertFalse(f.equals(dirName));
@@ -85,7 +85,7 @@ public class HelperTest {
 		
 		// delete a file
 		File file = new File(testEnv,"file");
-		assertTrue(Helper.deleteDir(file));
+		assertTrue(Helper.deleteRecursive(file));
 		files = testEnv.list();
 		for(String f : files) {
 			assertFalse(f.equals("file"));

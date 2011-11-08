@@ -105,68 +105,6 @@ public class Metadata implements Serializable {
 		}
 	}
 
-	public static Metadata readFile(File file) throws RepositoryException {
-		try {
-			FileInputStream fileIn = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(fileIn);
-			
-			try {
-				 Object obj = in.readObject();
-				 if (obj instanceof Metadata) {
-					 Metadata m = (Metadata) obj;
-					 updateMaxLengthValues(m);
-					 return m;
-				 } else {
-					 throw new RepositoryException("File " + file.getName()
-							 + "is not a Metadata-file");
-				 }
-			} finally {
-				in.close();
-				fileIn.close();
-			}
-			
-		} catch (ClassNotFoundException e) {
-			throw new RepositoryException("Could not read Metadata for "
-					+ file.getName());
-		} catch (IOException e) {
-			throw new RepositoryException("Could not read Metadata for "
-					+ file.getName());
-		}
-	}
-	
-	public boolean delete() {
-		return ((path == null)
-				|| !this.path.exists()
-				|| this.path.delete());
-	}
-
-	public void saveAt(String pathStr) throws RepositoryException {
-		path = new File(pathStr);
-		save();
-	}
-	
-	public void save() throws RepositoryException {
-		if (path == null)
-			throw new RepositoryException("attempt to save metadata without path");
-		if (name.isEmpty())
-			throw new RepositoryException("attempt to save metadata without name");
-		if (originalName.isEmpty())
-			throw new RepositoryException("attempt to save metadata without originalname");
-		try {
-			FileOutputStream fileOut = new FileOutputStream(path);
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			try {
-				out.writeObject(this);
-			} finally {
-				out.close();
-				fileOut.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RepositoryException("could not save metadata");
-		}
-	}
-
 	public void setName(String name) {
 		this.name = name;
 		if (maxNameLength < name.length()) {
@@ -222,11 +160,6 @@ public class Metadata implements Serializable {
 
 	public long getSize() {
 		return size;
-	}
-
-	public void saveInDir(File dir) throws RepositoryException {
-		path = new File(dir, getName());
-		this.save();
 	}
 
 	public void setFileSize(long fileSize) {

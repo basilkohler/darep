@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import darep.Command;
 import darep.Command.ActionType;
+import darep.repos.fileStorage.FileDataSet;
+import darep.repos.fileStorage.FileStorage;
 import darep.Helper;
 
 /*the repository provides methods to access the Database.class
@@ -23,7 +25,7 @@ public class Repository {
 	 * The CANONICAL File which contains the Repository
 	 */
 	private final File location;
-	private Database db;
+	private Storage db;
 
 	/*
 	 * loads(/creates) the default (hidden) repo in user.home
@@ -55,7 +57,7 @@ public class Repository {
 			}
 			System.out.println("created new repository " + path);
 		}
-		db = new Database(location.getPath());
+		db = new FileStorage(location.getPath());
 	}
 
 	/*
@@ -173,7 +175,7 @@ public class Repository {
 		
 	}
 	
-	public Dataset getDataset(String name) {
+	public FileDataSet getDataset(String name) {
 		return db.getDataSet(name);
 	}
 	
@@ -183,12 +185,12 @@ public class Repository {
 		long totalSize = 0;
 		
 		// Metadata.maxXXXLength is now set because all datasets are loaded
-		Dataset[] datasets = db.getAllDatasets();
+		FileDataSet[] datasets = db.getAllDatasets();
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(getHeaderline());
 		
-		for (Dataset dataset: datasets) {
+		for (FileDataSet dataset: datasets) {
 			sb.append(dataset.getPrettyString());
 			totalFiles += dataset.getMetadata().getNumberOfFiles();
 			totalSize += dataset.getMetadata().getSize();
@@ -211,7 +213,7 @@ public class Repository {
 		sb.append("Description\t");
 		sb.append("\n");
 		
-		for (Dataset dataset : db.getAllDatasets()) {
+		for (FileDataSet dataset : db.getAllDatasets()) {
 			sb.append(dataset + "\n");
 		}
 		return sb.toString();
