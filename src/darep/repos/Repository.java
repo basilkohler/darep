@@ -5,9 +5,8 @@ import java.io.IOException;
 
 import darep.Command;
 import darep.Command.ActionType;
-import darep.repos.fileStorage.FileDataSet;
-import darep.repos.fileStorage.FileStorage;
 import darep.Helper;
+import darep.repos.fileStorage.FileStorage;
 
 /*the repository provides methods to access the Database.class
  * and represents the physical folder located at 'location', which contains the db
@@ -84,21 +83,33 @@ public class Repository {
 			}
 	
 			Metadata meta = createMetaData(command);
-			db.add(file, meta, !command.hasFlag("m"));
+			
+			RepositoryDataSet ds = new RepositoryDataSet();
+			ds.setMetadata(meta);
+			ds.setFile(file);
+			ds.setCopyMode(!command.hasFlag("m"));
+			
+			try {
+				db.store(ds);
+			} catch (StorageException e) {
+				throw new RepositoryException("Could not store Dataset " +
+						meta.getName(), e);
+			}
+			
 		} catch (IOException e) {
 			throw new RepositoryException("There was an IOError while adding", e);
 		}
 	}
 
-	public boolean delete(Command command) throws RepositoryException {
-		if (db.delete(command.getParams()[0])) {
+	public void delete(Command command) throws RepositoryException {
+		try {
+			db.delete(command.getParams()[0]);
 			System.out.println("The data set " + command.getParams()[0] +
 							" (original name: file/folder name) has been" +
 							" successfully removed from the repository.");
-			return true;
-		} else {
-			throw new RepositoryException("Unknown data set "
-					+ command.getParams()[0]);
+		} catch (StorageException e) {
+			throw new RepositoryException("Could not delete Dataset " +
+					command.getParams()[0], e);
 		}
 	}
 
@@ -109,6 +120,14 @@ public class Repository {
 	 * @ param command
 	 */
 	private Metadata createMetaData(Command command) throws RepositoryException {
+		
+		File file;
+		try {
+			file = getInputFile(command);
+		} catch (IOException e) {
+			throw new RepositoryException("Could not get File", e); // TODO print filename?
+		}
+		
 		Metadata meta = new Metadata();
 		try {
 			meta.setOriginalName(getInputFile(command).getName());
@@ -116,23 +135,49 @@ public class Repository {
 			throw new RepositoryException("could not set meta data Name", e);
 		}
 
-		if (command.isSet("d"))
+		if (command.isSet("d")) {
 			meta.setDescription(command.getOptionParam("d"));
+		}
 
 		String name;
-		if (command.isSet("n")) { // name option set?
+		if (command.isSet("n")) {
 			name = command.getOptionParam("n");
-			if (db.contains(name)) { // if name exists, exit
-				throw new RepositoryException("There is already a data"
-						+ " set named " + name + " name in the repository.");
-			}
-		} else { // no name provided, make a unique name from originalname
-			name = createUniqueName(meta.getOriginalName());
+		} else {
+			name = createUniqueName(file.getName());
 		}
 		meta.setName(name);
+		
+		meta.setNumberOfFiles(countFiles(file));
+		
+		meta.setFileSize(calculateFileSize(file));
 
 		return meta;
 	}
+	
+	private long calculateFileSize(File file) {
+		if (file.isDirectory()) {
+			long currSize = 0L;
+			for (File subFile: file.listFiles()) {
+				currSize += calculateFileSize(subFile);
+			}
+			return currSize;
+		} else {
+			return file.length();
+		}
+	}
+
+	private int countFiles(File file) {
+		if (file.isDirectory()) {
+			int currNum = 0;
+			for (File subFile: file.listFiles()) {
+				currNum += countFiles(subFile);
+			}
+			return currNum;
+		} else {
+			return 1;
+		}
+	}
+
 
 	private File getInputFile(Command command) throws IOException {
 		// is the input file stored in the second or first parameter?
@@ -146,23 +191,28 @@ public class Repository {
 		return file.getCanonicalFile();
 	}
 
-	private String createUniqueName(String name) {
-		name = name.toUpperCase();
-		int max = 40;
-		if (name.length() > max)
-			name = name.substring(0, max);
-		if (db.contains(name)) { // if name exists append number
-			int append = 1;
-			if (name.length() == max)
-				name = name.substring(0, max - 1);
-			while (db.contains(name + append)) {
-				append++;
-				if ((name + append).length() > max)
-					name = name.substring(0, name.length() - 1);
+	private String createUniqueName(String name) throws RepositoryException {
+		try {
+			name = name.toUpperCase();
+			int max = 40;
+			if (name.length() > max)
+				name = name.substring(0, max);
+			if (db.contains(name)) { // if name exists append number
+				int append = 1;
+				if (name.length() == max)
+					name = name.substring(0, max - 1);
+				while (db.contains(name + append)) {
+					append++;
+					if ((name + append).length() > max)
+						name = name.substring(0, name.length() - 1);
+				}
+				name = name + append;
 			}
-			name = name + append;
+			return name;
+		} catch (StorageException e) {
+			// Exception: IOError in db.contains()
+			throw new RepositoryException("Could not create Unique name", e);
 		}
-		return name;
 	}
 
 	public String getList(Command command) throws RepositoryException {
@@ -175,8 +225,12 @@ public class Repository {
 		
 	}
 	
-	public FileDataSet getDataset(String name) {
-		return db.getDataSet(name);
+	public DataSet getDataset(String name) throws RepositoryException {
+		try {
+			return db.getDataSet(name);
+		} catch (StorageException e) {
+			throw new RepositoryException("Could not get Dataset " + name, e);
+		}
 	}
 	
 	private String getPrettyList() throws RepositoryException {
@@ -185,13 +239,18 @@ public class Repository {
 		long totalSize = 0;
 		
 		// Metadata.maxXXXLength is now set because all datasets are loaded
-		FileDataSet[] datasets = db.getAllDatasets();
+		DataSet[] datasets;
+		try {
+			datasets = db.getAllDataSets();
+		} catch (StorageException e) {
+			throw new RepositoryException("Could not fetch Datasets", e);
+		}
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(getHeaderline());
 		
-		for (FileDataSet dataset: datasets) {
-			sb.append(dataset.getPrettyString());
+		for (DataSet dataset: datasets) {
+//			sb.append(dataset.getPrettyString()); // TODO prettyStrings (renderer?)
 			totalFiles += dataset.getMetadata().getNumberOfFiles();
 			totalSize += dataset.getMetadata().getSize();
 		}
@@ -213,7 +272,14 @@ public class Repository {
 		sb.append("Description\t");
 		sb.append("\n");
 		
-		for (FileDataSet dataset : db.getAllDatasets()) {
+		DataSet[] datasets;
+		try {
+			datasets = db.getAllDataSets();
+		} catch (StorageException e) {
+			throw new RepositoryException("Could not fetch Datasets", e);
+		}
+		
+		for (DataSet dataset : datasets) {
 			sb.append(dataset + "\n");
 		}
 		return sb.toString();
@@ -256,29 +322,33 @@ public class Repository {
 	}
 
 	public void export(Command command) throws RepositoryException {
-		String canonicalExportPath;
 		try {
-			canonicalExportPath = new File(command.getParams()[1])
+			String canonicalExportPath = new File(command.getParams()[1])
 				.getCanonicalPath();
+			if (canonicalExportPath.contains(location.getPath()))
+				throw new RepositoryException(
+						"It is not allowed to export something into the "
+								+ location.toString() + " repository folder");
+			
+			DataSet ds = db.getDataSet(command.getParams()[0]);
+			if (ds == null) {
+				throw new RepositoryException("Unknown data set "
+						+ command.getParams()[0]);
+			}
+			
+			File destination = new File(command.getParams()[1]).getCanonicalFile();
+			ds.copyFileTo(destination);
+			
+			System.out.println("The data set " + command.getParams()[0]
+							+ " (original name: " + ds.getMetadata().getName() + ")"
+							+ " has been successfully exported to "
+							+ command.getParams()[1]);
 		} catch (IOException e) {
 			throw new RepositoryException("Could not get Canonical Path for " +
 					command.getParams()[1], e);
+		} catch (StorageException e) {
+			throw new RepositoryException("Error in Database", e);
 		}
-		if (canonicalExportPath.contains(location.getPath()))
-			throw new RepositoryException(
-					"It is not allowed to export something into the "
-							+ location.toString() + " repository folder");
-		if (!db.contains(command.getParams()[0]))
-			throw new RepositoryException("Unknown data set "
-					+ command.getParams()[0]);
-		File exportedFile = db.export(command.getParams()[0],
-				command.getParams()[1]);
-
-		System.out
-				.println("The data set " + command.getParams()[0]
-						+ " (original name: " + exportedFile.getName() + ")"
-						+ " has been successfully exported to "
-						+ command.getParams()[1]);
 	}
 
 	protected File getLocation() {

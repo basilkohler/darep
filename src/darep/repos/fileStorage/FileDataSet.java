@@ -12,7 +12,7 @@ import darep.repos.StorageException;
 /**
  * Represents a Dataset consisting of BOTH the file itself and the Metadata.
  */
-public class FileDataSet implements DataSet {
+class FileDataSet implements DataSet {
 	private File file;
 	private Metadata metadata;
 	
@@ -45,37 +45,12 @@ public class FileDataSet implements DataSet {
 //		return ds;
 //	}
 	
-//	private int countFiles() {
-//		return countFiles(file);
-//	}
-
-//	private int countFiles(File file) {
-//		if (file.isDirectory()) {
-//			int currNum = 0;
-//			for (File subFile: file.listFiles()) {
-//				currNum += countFiles(subFile);
-//			}
-//			return currNum;
-//		} else {
-//			return 1;
-//		}
-//	}
 	
 //	private long calculateFileSize() {
 //		return calculateFileSize(file);
 //	}
 
-//	private long calculateFileSize(File file) {
-//		if (file.isDirectory()) {
-//			long currSize = 0L;
-//			for (File subFile: file.listFiles()) {
-//				currSize += calculateFileSize(subFile);
-//			}
-//			return currSize;
-//		} else {
-//			return file.length();
-//		}
-//	}
+
 	
 	/**
 	 * Returns the {@link Metadata} object belonging to this Dataset

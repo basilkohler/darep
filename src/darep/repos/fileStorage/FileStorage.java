@@ -2,7 +2,6 @@ package darep.repos.fileStorage;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 
 import darep.repos.DataSet;
 import darep.repos.Metadata;
-import darep.repos.RepositoryException;
 import darep.repos.Storage;
 import darep.repos.StorageException;
 
@@ -49,9 +47,15 @@ public class FileStorage implements Storage {
 
 	@Override
 	public void store(DataSet ds) throws StorageException {
+		
+		String name = ds.getMetadata().getName();
+		if (getDataSet(name) != null) {
+			throw new StorageException("Dataset " + name + "already exists");
+		}
+		
 		try {
 			saveMetadata(ds.getMetadata());
-			ds.copyFileTo(new File(filedb, ds.getMetadata().getName()));
+			ds.copyFileTo(new File(filedb, name));
 		} catch (IOException e) {
 			throw new StorageException("Could not store Dataset", e);
 		}

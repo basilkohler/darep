@@ -1,23 +1,18 @@
 package darep.repos;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Metadata implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	private String originalName;
 	private Date timestamp;
 	private String description;
 	private int numberOfFiles;
 	private long size;
-	private File path;
 	
 	private static int maxNameLength = "Name".length();
 	private static int maxOrigNameLength = "Original Name".length();
@@ -64,7 +59,6 @@ public class Metadata implements Serializable {
 		description = "";
 		name = "";
 		originalName = "";
-		path = null;
 	}
 	
 	public Metadata(String name, String origName, String descr, int nrFiles, int size, String reposPath) {
@@ -74,7 +68,6 @@ public class Metadata implements Serializable {
 		this.setOriginalName(origName);
 		this.setNumberOfFiles(nrFiles);
 		this.setFileSize(size);
-		this.path = new File(reposPath + "/metadata/" + name);
 	}
 	
 	private static void updateMaxLengthValues(Metadata m) {
@@ -98,7 +91,7 @@ public class Metadata implements Serializable {
 		}
 	}
 
-	private void setTimestamp(Date date) {
+	public void setTimestamp(Date date) {
 		this.timestamp = date;
 		if (maxTimestampLength < date.toString().length()) {
 			maxTimestampLength = date.toString().length();
@@ -136,14 +129,8 @@ public class Metadata implements Serializable {
 	
 	@Override
 	public String toString() {
-		String filePath = null;
-		if(path != null)
-			filePath = path.getAbsolutePath();
-		else
-			filePath = "";
-			
 		return "METADATA:\nname: " + name + "\noriginalName: " + originalName + "\ntimestamp: " + timestamp.toString() +
-				"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size + "\npath: " + filePath;
+				"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size;
 	}
 
 	public long getTimeStamp() {

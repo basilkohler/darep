@@ -7,7 +7,5 @@ public interface DataSet {
 	public Metadata getMetadata();
 	
 	public void copyFileTo(File path) throws StorageException;
-	
-	public String getPrettyString();
 
 }
