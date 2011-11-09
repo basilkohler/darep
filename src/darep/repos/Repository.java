@@ -89,8 +89,14 @@ public class Repository {
 			ds.setFile(file);
 			ds.setCopyMode(!command.hasFlag("m"));
 			
+			String fileFolder = ds.getType().toString();
+			String msg = "The "+fileFolder+" '"+meta.getOriginalName()+"' has" +
+					" been successfully added to the repository as data set" +
+					" named " + meta.getName();
+			
 			try {
 				db.store(ds);
+				System.out.println(msg);
 			} catch (StorageException e) {
 				throw new RepositoryException("Could not store Dataset " +
 						meta.getName(), e);

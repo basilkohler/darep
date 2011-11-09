@@ -44,4 +44,13 @@ class RepositoryDataSet implements DataSet {
 		}
 	}
 
+	@Override
+	public Type getType() {
+		if (file.exists()) {
+			return file.isDirectory() ? DataSet.Type.folder : DataSet.Type.file;
+		} else {
+			return null;
+		}
+	}
+
 }

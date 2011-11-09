@@ -54,7 +54,7 @@
 		</junit>
 	</target>
 	
-	<target name="dist" depends="jar, test">
+	<target name="dist" depends="jar">
 		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
 		<chmod file="${dist}/data-repository" perm="u+x" />
 		<copy tofile="${dist}/data-repository.cmd" file="${wrapperScriptWindows}" />
