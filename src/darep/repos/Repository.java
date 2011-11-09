@@ -110,10 +110,13 @@ public class Repository {
 
 	public void delete(Command command) throws RepositoryException {
 		try {
+			String dsName = command.getParams()[0];
+			DataSet ds = db.getDataSet(dsName);
 			db.delete(command.getParams()[0]);
 			System.out.println("The data set " + command.getParams()[0] +
-							" (original name: file/folder name) has been" +
-							" successfully removed from the repository.");
+							" (original name: " + ds.getMetadata().getOriginalName() +
+							") has been successfully removed from the " +
+							"repository.");
 		} catch (StorageException e) {
 			throw new RepositoryException("Could not delete Dataset " +
 					command.getParams()[0], e);
@@ -320,6 +323,7 @@ public class Repository {
 		
 		// very very ugly hack
 		// TODO rethink the whole replace-method
+		// TODO fail replace non-existant data-sets
 		OutputStream out = new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
