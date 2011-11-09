@@ -124,21 +124,25 @@ public class DarepController {
 		}
 		
 		// check if option -r is set or default repos, and setup repos.
+		File repo;
+		String repoName;
 		if (command.isSet("r")) {
-			//Check if Repository exists
-			if (!new File(command.getOptionParam("r")).exists()
-					&& !command.getAction().equals(ActionType.add)) {
-				throw new RepositoryException("Repository does not Exist");
-			}
-			repository = new Repository(command.getOptionParam("r"));
+			repoName = command.getOptionParam("r");
+			repo = new File(repoName);
 		} else {
-			//Check if Repository exists
-			if (!new File(Repository.getDefaultLocation()).exists()
-					&& !command.getAction().equals(ActionType.add)) {
-				throw new RepositoryException("Repository does not Exist");
-			}
-			repository = new Repository();
+			repoName = Repository.getDefaultLocation();
+			repo = new File(Repository.getDefaultLocation());
 		}
+		
+		//Check if Repository exists
+		if (!repo.exists() &&
+				!command.getAction().equals(ActionType.add)) {
+			throw new RepositoryException("Repository " + repo.getPath() +
+										" does not Exist");
+		}
+		
+		repository = new Repository(repoName);
+			
 		switch (command.getAction()) {
 		case add:
 			repository.add(command);

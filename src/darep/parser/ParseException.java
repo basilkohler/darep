@@ -10,7 +10,7 @@ public class ParseException extends DarepException {
 	private static final long serialVersionUID = 1L;
 
 	public ParseException(String string) {
-		super("ERROR: " + string);
+		super(string);
 	}
 	
 }
