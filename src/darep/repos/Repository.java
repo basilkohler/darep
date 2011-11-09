@@ -197,6 +197,7 @@ public class Repository {
 		return file.getCanonicalFile();
 	}
 
+	// TODO check uniqueName with DarepController constraint for name
 	private String createUniqueName(String name) throws RepositoryException {
 		name = name.toUpperCase();
 		name = name.replaceAll("[^\\w-]", "");
@@ -236,7 +237,8 @@ public class Repository {
 	}
 	
 	private String getPrettyList() throws RepositoryException {
-		
+		// TODO pretty list column width
+		// TODO sort list by date
 		int totalFiles = 0;
 		long totalSize = 0;
 		
@@ -264,6 +266,7 @@ public class Repository {
 	}
 
 	private String getTabList() throws RepositoryException {
+		// TODO timestamp format (CET not needed)
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("Name\t");
@@ -325,12 +328,12 @@ public class Repository {
 
 	public void export(Command command) throws RepositoryException {
 		try {
-			String canonicalExportPath = new File(command.getParams()[1])
-				.getCanonicalPath();
-			if (canonicalExportPath.contains(location.getPath()))
+			String exportPath = command.getParams()[1];
+			File canonicalExportFile = new File(exportPath).getCanonicalFile();
+			if (canonicalExportFile.getPath().contains(location.getPath()))
 				throw new RepositoryException(
 						"It is not allowed to export something into the "
-								+ location.toString() + " repository folder");
+								+ location.toString() + " repository folder.");
 			
 			DataSet ds = db.getDataSet(command.getParams()[0]);
 			if (ds == null) {
@@ -338,7 +341,22 @@ public class Repository {
 						+ command.getParams()[0]);
 			}
 			
-			File destination = new File(command.getParams()[1]).getCanonicalFile();
+			if (!canonicalExportFile.exists()) {
+				throw new RepositoryException("Destination folder '" +
+						exportPath + "' does not exist");
+			} else if (canonicalExportFile.isFile()) {
+				throw new RepositoryException("Destination folder '" +
+						exportPath + "' is a file not a folder.");
+			}
+			
+			
+			File destination = new File(canonicalExportFile,
+										ds.getMetadata().getOriginalName());
+			if (destination.exists()) {
+				throw new RepositoryException("There is already a file " +
+						"named '" + ds.getMetadata().getOriginalName() + "' " +
+						"in destination folder '" + exportPath + "'.");
+			}
 			ds.copyFileTo(destination);
 			
 			System.out.println("The data set " + command.getParams()[0]

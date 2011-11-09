@@ -9,7 +9,7 @@ public class StorageException extends Exception {
 	}
 	
 	public StorageException(String message, Throwable cause) {
-		this(message);
+		this(message + ": " + cause.getMessage());
 		this.initCause(cause);
 	}
 	

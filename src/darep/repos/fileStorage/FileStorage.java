@@ -50,7 +50,7 @@ public class FileStorage implements Storage {
 		
 		String name = ds.getMetadata().getName();
 		if (getDataSet(name) != null) {
-			throw new StorageException("Dataset " + name + "already exists");
+			throw new StorageException("Dataset " + name + " already exists");
 		}
 		
 		try {

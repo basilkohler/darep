@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -53,7 +54,7 @@ public class HelperTest {
 	}
 	
 	@Test
-	public void testDeleteDir() {
+	public void testRecursiveDelete() {
 		String[] files = null;
 		
 		// border cases
@@ -91,6 +92,23 @@ public class HelperTest {
 			assertFalse(f.equals("file"));
 		}
 	}
+	
+//	@Test
+//	void copyRecursive() throws IOException {
+//		String subDirName = "subdir";
+//		String subSubDirName = "subsubdir";
+//		File subDir = new File(testEnv,subDirName);
+//		subDir.mkdir();
+//		File subSubDir = new File(subDir, subSubDirName);
+//		subSubDir.mkdir();
+//		
+//		File copyDir = new File("copyDir");
+//		copyDir.mkdir();
+//		
+//		Helper.copyRecursive(subDir, copyDir);
+//		String[] files = copyDir.list();
+//		TODO implement testCopyRecursive();
+//	}
 	
 	@Test
 	public void testStringToLength() {

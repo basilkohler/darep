@@ -76,6 +76,7 @@ public class Helper {
 	}
 
 	public static String stringToLength(String string, int length) {
+		// TODO Helper.stringToLength left and right aligned
 		if(string == null)
 			return null;
 		if(length < 0)
@@ -120,8 +121,8 @@ public class Helper {
 			canonicalTo.mkdir();
 			File[] content = canonicalFrom.listFiles();
 			for (int i = 0; i < content.length; i++) {
-				copyRecursive(content[i], new File(canonicalTo.getPath()
-						+ "/" + content[i].getName()));
+				copyRecursive(content[i],
+						new File(canonicalTo.getPath(), content[i].getName()));
 			}
 		} else {
 			FileChannel source = null;

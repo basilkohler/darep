@@ -9,7 +9,7 @@ public class RepositoryException extends Exception {
 	}
 	
 	public RepositoryException(String message, Throwable cause) {
-		this(message);
+		this(message + " Cause: " + cause.getMessage());
 		this.initCause(cause);
 	}
 }
