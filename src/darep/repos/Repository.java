@@ -199,6 +199,7 @@ public class Repository {
 
 	private String createUniqueName(String name) throws RepositoryException {
 		name = name.toUpperCase();
+		name = name.replaceAll("[^\\w-]", "");
 		int max = 40;
 		if (name.length() > max)
 			name = name.substring(0, max);
