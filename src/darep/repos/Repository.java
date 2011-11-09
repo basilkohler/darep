@@ -2,6 +2,8 @@ package darep.repos;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 import darep.Command;
 import darep.Command.ActionType;
@@ -315,11 +317,25 @@ public class Repository {
 	}
 
 	public void replace(Command command) throws RepositoryException {
+		
+		// very very ugly hack
+		// TODO rethink the whole replace-method
+		OutputStream out = new OutputStream() {
+			@Override
+			public void write(int b) throws IOException {
+				return;
+			}
+		};
+		PrintStream defaultOut = System.out;
+		System.setOut(new PrintStream(out));
+		
 		delete(command);
 		
 		command.setOptionParam("n", command.getParams()[0]);
 		add(command);
-
+		
+		System.setOut(defaultOut);
+		
 		System.out.println("The data set named " + command.getParams()[0]
 				+ " has been successfully"
 				+ " replaced by the file/folder.");
