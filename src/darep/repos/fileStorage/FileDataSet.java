@@ -68,23 +68,6 @@ class FileDataSet implements DataSet {
 				+ "\t" + metadata.getSize() + "\t" + metadata.getDescription());
 	}
 
-	public String getPrettyString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("|");
-		sb.append(Helper.stringToLength(metadata.getName(), Metadata.getMaxNameLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength(metadata.getOriginalName(), Metadata.getMaxOrigNameLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength(new Date(metadata.getTimeStamp()).toString(), Metadata.getMaxTimestampLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength(""+metadata.getNumberOfFiles(), Metadata.getMaxNumFilesLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength(""+metadata.getSize(), Metadata.getMaxSizeLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength(metadata.getDescription(), Metadata.getMaxDescriptionLength()));
-		sb.append("|\n");
-		return sb.toString();
-	}
 
 	@Override
 	public void copyFileTo(File path) throws StorageException {

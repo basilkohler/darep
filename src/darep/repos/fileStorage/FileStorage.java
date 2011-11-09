@@ -29,7 +29,7 @@ public class FileStorage implements Storage {
 	 * 'filedb' and 'metadb')
 	 */
 	public FileStorage(String reposPath) {
-		filedb = new File(reposPath, "datasets");
+		filedb = new File(reposPath, "data");
 		metadb = new File(reposPath, "metadata");
 		if (!filedb.exists())
 			filedb.mkdirs();
@@ -67,7 +67,7 @@ public class FileStorage implements Storage {
 		FileOutputStream fileOut = new FileOutputStream(new File(metadb, m.getName()));
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		try {
-			out.writeObject(this);
+			out.writeObject(m);
 		} finally {
 			out.close();
 			fileOut.close();
@@ -82,8 +82,10 @@ public class FileStorage implements Storage {
 	 * @ param name name of the file you are searching for
 	 */
 	@Override
-	public boolean contains(String name) throws StorageException {
-		return (getDataSet(name) != null);
+	public boolean contains(String name) {
+		File metaFile = new File(metadb, name);
+		File dataFile = new File(filedb, name);
+		return (metaFile.exists() && dataFile.exists());
 	}
 
 	// TODO failsafe machen
@@ -136,6 +138,11 @@ public class FileStorage implements Storage {
 
 	@Override
 	public DataSet getDataSet(String name) throws StorageException {
+		
+		if (!contains(name)) {
+			return null;
+		}
+		
 		FileDataSet ds = new FileDataSet();
 		
 		Metadata meta;

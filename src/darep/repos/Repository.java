@@ -192,27 +192,22 @@ public class Repository {
 	}
 
 	private String createUniqueName(String name) throws RepositoryException {
-		try {
-			name = name.toUpperCase();
-			int max = 40;
-			if (name.length() > max)
-				name = name.substring(0, max);
-			if (db.contains(name)) { // if name exists append number
-				int append = 1;
-				if (name.length() == max)
-					name = name.substring(0, max - 1);
-				while (db.contains(name + append)) {
-					append++;
-					if ((name + append).length() > max)
-						name = name.substring(0, name.length() - 1);
-				}
-				name = name + append;
+		name = name.toUpperCase();
+		int max = 40;
+		if (name.length() > max)
+			name = name.substring(0, max);
+		if (db.contains(name)) { // if name exists append number
+			int append = 1;
+			if (name.length() == max)
+				name = name.substring(0, max - 1);
+			while (db.contains(name + append)) {
+				append++;
+				if ((name + append).length() > max)
+					name = name.substring(0, name.length() - 1);
 			}
-			return name;
-		} catch (StorageException e) {
-			// Exception: IOError in db.contains()
-			throw new RepositoryException("Could not create Unique name", e);
+			name = name + append;
 		}
+		return name;
 	}
 
 	public String getList(Command command) throws RepositoryException {
@@ -250,7 +245,7 @@ public class Repository {
 		sb.append(getHeaderline());
 		
 		for (DataSet dataset: datasets) {
-//			sb.append(dataset.getPrettyString()); // TODO prettyStrings (renderer?)
+			sb.append(dataset.getMetadata().getPrettyString()); // TODO prettyStrings (renderer?)
 			totalFiles += dataset.getMetadata().getNumberOfFiles();
 			totalSize += dataset.getMetadata().getSize();
 		}

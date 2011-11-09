@@ -3,6 +3,8 @@ package darep.repos;
 import java.io.Serializable;
 import java.util.Date;
 
+import darep.Helper;
+
 public class Metadata implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -161,6 +163,24 @@ public class Metadata implements Serializable {
 		if (maxNumFilesLength < String.valueOf(numberOfFiles).length()) {
 			maxNumFilesLength = String.valueOf(numberOfFiles).length();
 		}
+	}
+	
+	public String getPrettyString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("|");
+		sb.append(Helper.stringToLength(getName(), Metadata.getMaxNameLength()));
+		sb.append("|");
+		sb.append(Helper.stringToLength(getOriginalName(), Metadata.getMaxOrigNameLength()));
+		sb.append("|");
+		sb.append(Helper.stringToLength(new Date(getTimeStamp()).toString(), Metadata.getMaxTimestampLength()));
+		sb.append("|");
+		sb.append(Helper.stringToLength(""+getNumberOfFiles(), Metadata.getMaxNumFilesLength()));
+		sb.append("|");
+		sb.append(Helper.stringToLength(""+getSize(), Metadata.getMaxSizeLength()));
+		sb.append("|");
+		sb.append(Helper.stringToLength(getDescription(), Metadata.getMaxDescriptionLength()));
+		sb.append("|\n");
+		return sb.toString();
 	}
 
 }

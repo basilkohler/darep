@@ -43,7 +43,7 @@ public class RepositoryTest {
 	@Test
 	public void testAdd() {
 		command = getCommand("add " + testDataSet.getAbsolutePath());
-		File newDataset = new File(testRepo + "/datasets/TESTDATASET");
+		File newDataset = new File(testRepo + "/data/TESTDATASET");
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
 		assertFalse(newDataset.exists());
 		assertFalse(newMetadata.exists());
@@ -74,7 +74,7 @@ public class RepositoryTest {
 
 	@Test
 	public void testAddMultiple() throws RepositoryException {
-		File newDataset = new File(testRepo + "/datasets/TESTDATASET");
+		File newDataset = new File(testRepo + "/data/TESTDATASET");
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
 		command = getCommand("add " + testDataSet.getAbsolutePath());
 		repo.add(command);
@@ -85,7 +85,7 @@ public class RepositoryTest {
 			repo.add(command);
 
 			for (int j = 1; j <= i; j++) {
-				newDataset = new File(testRepo + "/datasets/TESTDATASET" + j);
+				newDataset = new File(testRepo + "/data/TESTDATASET" + j);
 				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + j);
 				assertTrue(newDataset.exists());
 				assertTrue(newMetadata.exists());

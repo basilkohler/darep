@@ -113,8 +113,8 @@ public class Helper {
 	
 	public static void copyRecursive(File from, File to) throws IOException {
 	
-		File canonicalFrom = to.getCanonicalFile();
-		File canonicalTo = from.getCanonicalFile();
+		File canonicalFrom = from.getCanonicalFile();
+		File canonicalTo = to.getCanonicalFile();
 		
 		if (canonicalFrom.isDirectory()) {
 			canonicalTo.mkdir();

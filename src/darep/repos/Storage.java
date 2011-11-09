@@ -12,7 +12,7 @@ public interface Storage {
 	
 	public DataSet[] getAllDataSets() throws StorageException;
 	
-	public boolean contains(String name) throws StorageException;
+	public boolean contains(String name);
 	
 	public void store(DataSet ds) throws StorageException;
 	
