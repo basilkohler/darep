@@ -1,15 +1,20 @@
 package darep.repos;
 
-public class RepositoryException extends Exception {
+import darep.DarepException;
+
+public class RepositoryException extends DarepException {
 
 	private static final long serialVersionUID = 1L;
 
 	public RepositoryException(String message) {
-		super("ERROR: " + message);
+		super(message);
 	}
 	
 	public RepositoryException(String message, Throwable cause) {
-		this(message + " Cause: " + cause.getMessage());
-		this.initCause(cause);
+		super(message, cause);
+	}
+	
+	public RepositoryException(Throwable cause) {
+		super(cause);
 	}
 }

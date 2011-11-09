@@ -102,16 +102,14 @@ public class DarepController {
 		DarepController controller = new DarepController();
 		try {
 			controller.processCommand(args);
-		} catch (ParseException e) {
-			quitWithException(e);
-		} catch (RepositoryException e) {
+		} catch (DarepException e) {
 			quitWithException(e);
 		}
-			
 	}
 
 	private static void quitWithException(Exception e) {
-		System.err.println(e.getMessage());
+		System.err.println("ERROR: " + e.getMessage());
+		// TODO make build set debug mode or something
 		e.printStackTrace();
 		System.exit(1);
 	}

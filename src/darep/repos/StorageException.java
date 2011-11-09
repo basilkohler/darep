@@ -1,16 +1,21 @@
 package darep.repos;
 
-public class StorageException extends Exception {
+import darep.DarepException;
 
-	private static final long serialVersionUID = 1L;
+public class StorageException extends DarepException {
 
 	public StorageException(String message) {
-		super("ERROR: " + message);
+		super(message);
 	}
 	
 	public StorageException(String message, Throwable cause) {
-		this(message + ": " + cause.getMessage());
-		this.initCause(cause);
+		super(message, cause);
 	}
+	
+	public StorageException(Throwable cause) {
+		super(cause);
+	}
+
+	private static final long serialVersionUID = 1L;
 	
 }

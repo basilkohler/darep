@@ -98,8 +98,7 @@ public class Repository {
 				db.store(ds);
 				System.out.println(msg);
 			} catch (StorageException e) {
-				throw new RepositoryException("Could not store Dataset " +
-						meta.getName(), e);
+				throw new RepositoryException(e);
 			}
 			
 		} catch (IOException e) {
