@@ -26,6 +26,11 @@ public class FileStorageTest {
 	File testDir;
 	File testRepo;
 	File testData;
+	static final String testDataFileName = "testDataSet";
+	static final String testMetaFileName = "TESTDATASET";
+	static final String testRepoFileName = "testRepo";
+	static final String testDataSets = "datasets";
+	static final String testMetadata = "metadata";
 	FileDataSet testDataSet;
 	Metadata meta;
 	
@@ -36,23 +41,20 @@ public class FileStorageTest {
 	public void setUp() throws Exception {
 		testDir = new File("jUnitDatabaseTestDir");
 		testDir.mkdir();
-		testData = new File(testDir.getAbsolutePath(), "/testDataSet");
+		testData = new File(testDir.getAbsolutePath(), "/" + testDataFileName);
 		testData.createNewFile();
 		fillWithTestContent(testData);
 		
-		testDataSet = new FileDataSet();
-		
-		testRepo = new File(testDir.getAbsolutePath(), "/testRepo");
+		testRepo = new File(testDir.getAbsolutePath(), "/" + testRepoFileName);
 		testRepo.mkdir();
 		
-		filedb = new File(testRepo, "datasets");
-		metadb = new File(testRepo, "metadata");
+		filedb = new File(testRepo, testDataSets);
+		metadb = new File(testRepo, testMetadata);
 		
-		meta = new Metadata("TESTDATASET", "testDataSet", "", 0, 0,
+		meta = new Metadata(testMetaFileName, testDataFileName, "", 0, 0,
 				testRepo.getAbsolutePath());
 		
-		testDataSet.setFile(testData);
-		testDataSet.setMetaData(meta);
+		testDataSet = new FileDataSet(testData, meta);
 		
 		db = new FileStorage(testRepo.getAbsolutePath());
 	}
@@ -67,9 +69,9 @@ public class FileStorageTest {
 		
 		db.store(testDataSet);
 		
-		File expectedDataset = new File(filedb, "TESTDATASET");
-		File expectedMeta = new File(metadb, "TESTDATASET");
-	
+		File expectedDataset = new File(filedb, testMetaFileName);
+		File expectedMeta = new File(metadb, testMetaFileName);
+		
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
 		assertTrue(testData.exists());
@@ -173,13 +175,13 @@ public class FileStorageTest {
 		File expectedDataset = null;
 		File expectedMeta = null;
 		for (int i = 0; i < 4; i++) {
-			meta.setName("TESTDATASET" + i);
+			meta.setName(testMetaFileName + i);
 			
 			db.store(testDataSet);
 		
 			for (int j = 0; j <= i; j++) {
-				expectedDataset = new File(filedb, "TESTDATASET" + j);
-				expectedMeta = new File(metadb, "TESTDATASET" + j);
+				expectedDataset = new File(filedb, testMetaFileName + j);
+				expectedMeta = new File(metadb, testMetaFileName + j);
 				assertTrue(expectedDataset.exists());
 				assertTrue(expectedMeta.exists());
 			}
@@ -190,13 +192,13 @@ public class FileStorageTest {
 	public void testDelete() throws IOException, RepositoryException, StorageException {
 		db.store(testDataSet);
 		
-		File existingDataset = new File(testRepo + "/datasets/TESTDATASET");
-		File existingMetadata = new File(testRepo + "/metadata/TESTDATASET");
+		File existingDataset = new File(testRepo + "/" + testDataSets + "/" + testDataFileName);
+		File existingMetadata = new File(testRepo + "/" + testMetadata + "/" +testDataFileName);
 
 		assertTrue(existingDataset.exists());
 		assertTrue(existingMetadata.exists());
 
-		db.delete("TESTDATASET");
+		db.delete(testMetaFileName);
 	
 		assertFalse(existingDataset.exists());
 		assertFalse(existingMetadata.exists());
