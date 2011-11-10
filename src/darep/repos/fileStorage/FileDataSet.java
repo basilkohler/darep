@@ -49,7 +49,11 @@ class FileDataSet implements DataSet {
 //		return calculateFileSize(file);
 //	}
 
-
+	public FileDataSet() { }
+	public FileDataSet(File file, Metadata meta) {
+		this.file = file;
+		this.metadata = meta;
+	}
 	
 	/**
 	 * Returns the {@link Metadata} object belonging to this Dataset
