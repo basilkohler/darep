@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import darep.Helper;
 import darep.repos.DataSet;
 import darep.repos.Metadata;
 import darep.repos.Storage;
@@ -18,6 +19,7 @@ import darep.repos.StorageException;
  *and one for the metadatafiles, located at 'metadb'
  */
 public class FileStorage implements Storage {
+	
 	private File filedb;
 	private File metadb;
 
@@ -89,14 +91,18 @@ public class FileStorage implements Storage {
 		return (metaFile.exists() && dataFile.exists());
 	}
 
-	// TODO failsafe machen
 	@Override
 	public void delete(String name) throws StorageException {
 		File data = new File(filedb, name);
-		data.delete();
+		boolean successData = Helper.deleteRecursive(data);
 		
 		File metadata = new File(metadb, name);
-		metadata.delete();
+		boolean successMeta = metadata.delete();
+		
+		if (!successData || !successMeta) {
+			throw new StorageException("There was an error while deleting " +
+					"data set '" + name + "'");
+		}
 	}
 
 	@Override
@@ -187,6 +193,12 @@ public class FileStorage implements Storage {
 
 	@Override
 	public void setRepositoryPath(File repoPath) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void repair() {
 		// TODO Auto-generated method stub
 		
 	}

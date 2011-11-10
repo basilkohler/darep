@@ -122,8 +122,11 @@ public class Repository {
 							") has been successfully removed from the " +
 							"repository.");
 		} catch (StorageException e) {
+			db.repair();
 			throw new RepositoryException("Could not delete Dataset " +
-					command.getParams()[0], e);
+					command.getParams()[0] + ", there may have been an error " +
+					"in the repository. Tried to repair it. " +
+					"Try to delete the data set again.", e);
 		}
 	}
 

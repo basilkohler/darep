@@ -18,4 +18,6 @@ public interface Storage {
 	
 	public void delete(String name) throws StorageException;
 	
+	public void repair();
+	
 }
