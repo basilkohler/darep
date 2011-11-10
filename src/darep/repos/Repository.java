@@ -2,8 +2,6 @@ package darep.repos;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 
 import darep.Command;
 import darep.Command.ActionType;
@@ -68,9 +66,26 @@ public class Repository {
 	 */
 	public void add(Command command) throws RepositoryException {
 		
+		DataSet ds = createDataSet(command);
+		Metadata meta = ds.getMetadata();
+		
+		String fileFolder = ds.getType().toString();
+		String msg = "The "+fileFolder+" '"+meta.getOriginalName()+"' has" +
+				" been successfully added to the repository as data set" +
+				" named " + meta.getName();
+		
 		try {
+			db.store(ds);
+			System.out.println(msg);
+		} catch (StorageException e) {
+			throw new RepositoryException(e);
+		}
+	}
 
-			File file = getInputFile(command);
+	private RepositoryDataSet createDataSet(Command command) throws RepositoryException {
+		File file;
+		try {
+			file = getInputFile(command);
 			if (!file.exists()) {
 				throw new RepositoryException(file.getCanonicalPath()
 						+ " does not exist.");
@@ -83,29 +98,18 @@ public class Repository {
 				throw new RepositoryException(
 						"Dataset can not contain the repository itself.");
 			}
-	
-			Metadata meta = createMetaData(command);
-			
-			RepositoryDataSet ds = new RepositoryDataSet();
-			ds.setMetadata(meta);
-			ds.setFile(file);
-			ds.setCopyMode(!command.hasFlag("m"));
-			
-			String fileFolder = ds.getType().toString();
-			String msg = "The "+fileFolder+" '"+meta.getOriginalName()+"' has" +
-					" been successfully added to the repository as data set" +
-					" named " + meta.getName();
-			
-			try {
-				db.store(ds);
-				System.out.println(msg);
-			} catch (StorageException e) {
-				throw new RepositoryException(e);
-			}
-			
 		} catch (IOException e) {
-			throw new RepositoryException("There was an IOError while adding", e);
+			throw new RepositoryException(e);
 		}
+		
+		Metadata meta = createMetaData(command);
+		
+		RepositoryDataSet ds = new RepositoryDataSet();
+		ds.setMetadata(meta);
+		ds.setFile(file);
+		ds.setCopyMode(!command.hasFlag("m"));
+		
+		return ds;
 	}
 
 	public void delete(Command command) throws RepositoryException {
@@ -188,7 +192,6 @@ public class Repository {
 		}
 	}
 
-
 	private File getInputFile(Command command) throws IOException {
 		// is the input file stored in the second or first parameter?
 		File file;
@@ -260,7 +263,7 @@ public class Repository {
 		for (DataSet dataset: datasets) {
 			sb.append(dataset.getMetadata().getPrettyString()); // TODO prettyStrings (renderer?)
 			totalFiles += dataset.getMetadata().getNumberOfFiles();
-			totalSize += dataset.getMetadata().getSize();
+			totalSize += dataset.getMetadata().getFileSize();
 		}
 		
 		sb.append("(" + totalFiles + " data sets, ");
@@ -321,24 +324,22 @@ public class Repository {
 
 	public void replace(Command command) throws RepositoryException {
 		
-		// very very ugly hack
-		// TODO rethink the whole replace-method
-		// TODO fail replace non-existant data-sets
-		OutputStream out = new OutputStream() {
-			@Override
-			public void write(int b) throws IOException {
-				return;
-			}
-		};
-		PrintStream defaultOut = System.out;
-		System.setOut(new PrintStream(out));
+		String name = command.getParams()[0];
 		
-		delete(command);
+		RepositoryDataSet newDs = createDataSet(command);
+		Metadata newMeta = newDs.getMetadata();
 		
-		command.setOptionParam("n", command.getParams()[0]);
-		add(command);
-		
-		System.setOut(defaultOut);
+		try {
+			DataSet oldDs = db.getDataSet(name);
+			Metadata oldMeta = oldDs.getMetadata();
+			oldMeta.update(newMeta);
+			newDs.setMetadata(oldMeta);
+			
+			db.delete(name);
+			db.store(newDs);
+		} catch (StorageException e) {
+			throw new RepositoryException(e);
+		}
 		
 		System.out.println("The data set named " + command.getParams()[0]
 				+ " has been successfully"

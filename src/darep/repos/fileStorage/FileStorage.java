@@ -191,10 +191,4 @@ public class FileStorage implements Storage {
 		
 	}
 
-	@Override
-	public void replace(String name, DataSet ds) throws StorageException {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

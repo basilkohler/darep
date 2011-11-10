@@ -2,7 +2,6 @@ package darep.repos.fileStorage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
 import darep.Helper;
 import darep.repos.DataSet;
@@ -64,8 +63,8 @@ class FileDataSet implements DataSet {
 	@Override
 	public String toString() {
 		return (metadata.getName() + "\t" + metadata.getOriginalName() + "\t"
-				+ new Date(metadata.getTimeStamp()) + "\t" + metadata.getNumberOfFiles()
-				+ "\t" + metadata.getSize() + "\t" + metadata.getDescription());
+				+ metadata.getTimeStamp() + "\t" + metadata.getNumberOfFiles()
+				+ "\t" + metadata.getFileSize() + "\t" + metadata.getDescription());
 	}
 
 

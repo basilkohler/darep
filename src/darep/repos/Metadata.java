@@ -72,6 +72,18 @@ public class Metadata implements Serializable {
 		this.setFileSize(size);
 	}
 	
+	public void update(Metadata m) {
+		String desc = m.getDescription();
+		if (m != null && !desc.isEmpty()) {
+			this.setDescription(desc);
+		}
+		
+		this.setOriginalName(m.getOriginalName());
+		this.setTimestamp(m.getTimeStamp());
+		this.setFileSize(m.getFileSize());
+		this.setNumberOfFiles(m.getNumberOfFiles());
+	}
+	
 	private static void updateMaxLengthValues(Metadata m) {
 		if (maxNameLength < m.name.length()) {
 			maxNameLength = m.name.length();
@@ -135,8 +147,8 @@ public class Metadata implements Serializable {
 				"\ndescription: " + description + "\nnumberOfFiles: " + numberOfFiles + "\nsize: " + size;
 	}
 
-	public long getTimeStamp() {
-		return timestamp.getTime();
+	public Date getTimeStamp() {
+		return (Date)timestamp.clone();
 	}
 
 	public int getNumberOfFiles() {
@@ -147,7 +159,7 @@ public class Metadata implements Serializable {
 		return description;
 	}
 
-	public long getSize() {
+	public long getFileSize() {
 		return size;
 	}
 
@@ -172,11 +184,11 @@ public class Metadata implements Serializable {
 		sb.append("|");
 		sb.append(Helper.stringToLength(getOriginalName(), Metadata.getMaxOrigNameLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength(new Date(getTimeStamp()).toString(), Metadata.getMaxTimestampLength()));
+		sb.append(Helper.stringToLength(getTimeStamp().toString(), Metadata.getMaxTimestampLength()));
 		sb.append("|");
 		sb.append(Helper.stringToLength(""+getNumberOfFiles(), Metadata.getMaxNumFilesLength()));
 		sb.append("|");
-		sb.append(Helper.stringToLength(""+getSize(), Metadata.getMaxSizeLength()));
+		sb.append(Helper.stringToLength(""+getFileSize(), Metadata.getMaxSizeLength()));
 		sb.append("|");
 		sb.append(Helper.stringToLength(getDescription(), Metadata.getMaxDescriptionLength()));
 		sb.append("|\n");

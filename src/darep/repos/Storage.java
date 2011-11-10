@@ -16,8 +16,6 @@ public interface Storage {
 	
 	public void store(DataSet ds) throws StorageException;
 	
-	public void replace(String name, DataSet ds) throws StorageException;
-	
 	public void delete(String name) throws StorageException;
 	
 }
