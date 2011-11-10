@@ -1,4 +1,4 @@
-package darep.repos;
+package darep.repos.fileStorage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -16,13 +16,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import darep.Helper;
+import darep.repos.Metadata;
+import darep.repos.RepositoryException;
+import darep.repos.StorageException;
 import darep.repos.fileStorage.FileStorage;
 
-public class DatabaseTest {
+public class FileStorageTest {
 	FileStorage db;
 	File testDir;
 	File testRepo;
-	File testDataSet;
+	File testData;
+	FileDataSet testDataSet;
 	Metadata meta;
 	
 	File filedb;
@@ -32,9 +36,12 @@ public class DatabaseTest {
 	public void setUp() throws Exception {
 		testDir = new File("jUnitDatabaseTestDir");
 		testDir.mkdir();
-		testDataSet = new File(testDir.getAbsolutePath(), "/testDataSet");
-		testDataSet.createNewFile();
-		fillWithTestContent(testDataSet);
+		testData = new File(testDir.getAbsolutePath(), "/testDataSet");
+		testData.createNewFile();
+		fillWithTestContent(testData);
+		
+		testDataSet = new FileDataSet();
+		
 		testRepo = new File(testDir.getAbsolutePath(), "/testRepo");
 		testRepo.mkdir();
 		
@@ -43,6 +50,10 @@ public class DatabaseTest {
 		
 		meta = new Metadata("TESTDATASET", "testDataSet", "", 0, 0,
 				testRepo.getAbsolutePath());
+		
+		testDataSet.setFile(testData);
+		testDataSet.setMetaData(meta);
+		
 		db = new FileStorage(testRepo.getAbsolutePath());
 	}
 
@@ -52,17 +63,17 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testAddCopyFile() throws RepositoryException, IOException {
+	public void testAddCopyFile() throws RepositoryException, IOException, StorageException {
 		
-		db.add(testDataSet, meta, true);
+		db.store(testDataSet);
 		
 		File expectedDataset = new File(filedb, "TESTDATASET");
 		File expectedMeta = new File(metadb, "TESTDATASET");
 	
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
-		assertTrue(testDataSet.exists());
-		compareContents(expectedDataset, testDataSet);
+		assertTrue(testData.exists());
+		compareContents(expectedDataset, testData);
 	}
 	
 	private void compareContents(File expectedDataset, File testDataSet) throws IOException {
@@ -95,19 +106,19 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testAddCopyFolder() throws IOException, RepositoryException {
-		File expectedDataset = new File(filedb, "TESTDATADIR");
+	public void testAddCopyFolder() throws IOException, RepositoryException, StorageException {
+		File expectedData = new File(filedb, "TESTDATADIR");
 		File expectedMeta = new File(metadb, "TESTDATADIR");
 		File sampleFolder = createSampleFolder();
 		meta = new Metadata("TESTDATADIR", sampleFolder.getName(), "", 0, 0,
 				testRepo.getAbsolutePath());
 
-		db.add(sampleFolder, meta, true);
+		db.store(testDataSet);
 	
-		assertTrue(expectedDataset.exists());
+		assertTrue(expectedData.exists());
 		assertTrue(expectedMeta.exists());
-		assertTrue(testDataSet.exists());
-		checkFolderContents(expectedDataset);
+		assertTrue(testData.exists());
+		checkFolderContents(expectedData);
 	}
 	
 	private void checkFolderContents(File dirToCheck) {
@@ -146,25 +157,25 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testAddMove() throws RepositoryException {
+	public void testAddMove() throws RepositoryException, StorageException {
 		File expectedDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File expectedMeta = new File(testRepo + "/metadata/TESTDATASET");
 
-		db.add(testDataSet, meta, false);
+		db.store(testDataSet);
 		
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
-		assertFalse(testDataSet.exists());
+		assertFalse(testData.exists());
 	}
 
 	@Test
-	public void testAddMultiple() throws RepositoryException {
+	public void testAddMultiple() throws RepositoryException, StorageException {
 		File expectedDataset = null;
 		File expectedMeta = null;
 		for (int i = 0; i < 4; i++) {
 			meta.setName("TESTDATASET" + i);
 			
-			db.add(testDataSet, meta, true);
+			db.store(testDataSet);
 		
 			for (int j = 0; j <= i; j++) {
 				expectedDataset = new File(filedb, "TESTDATASET" + j);
@@ -176,8 +187,8 @@ public class DatabaseTest {
 	}
 
 	@Test
-	public void testDelete() throws IOException, RepositoryException {
-		db.add(testDataSet, meta, true);
+	public void testDelete() throws IOException, RepositoryException, StorageException {
+		db.store(testDataSet);
 		
 		File existingDataset = new File(testRepo + "/datasets/TESTDATASET");
 		File existingMetadata = new File(testRepo + "/metadata/TESTDATASET");

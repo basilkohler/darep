@@ -1,4 +1,4 @@
-package darep.repos;
+package darep.repos.fileStorage;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,10 +12,10 @@ import org.junit.Test;
 
 import darep.DarepController;
 import darep.Helper;
-import darep.repos.fileStorage.FileDataSet;
+import darep.repos.Metadata;
 import darep.repos.fileStorage.FileStorage;
 
-public class DatasetTest {
+public class FileDataSetTest {
 	
 	private DarepController darep = new DarepController();
 	private FileStorage database;
@@ -48,17 +48,17 @@ public class DatasetTest {
 		Helper.deleteRecursive(new File(repoName));
 	}
 
-	@Test
+/*	@Test
 	public void testReadDataset() throws RepositoryException {
 		FileDataSet.readDataset("TESTFILE.TXT", database);
-	}
+	}*/
 	
-	@Test
+/*	@Test
 	public void testCreateDataset() throws RepositoryException {
 		FileDataSet ds = FileDataSet.createNewDataset(testFileNotInRepo, metadata, database);
 		Assert.assertEquals(1, ds.getMetadata().getNumberOfFiles());
 		Assert.assertEquals(testFileNotInRepo.length(), ds.getMetadata().getSize());
-	}
+	}*/
 	
 	private String[] getArgs(String str) {
 		return (str + " -r " + repoName).split(" "); 
