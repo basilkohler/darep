@@ -138,6 +138,10 @@ public class Helper {
 		File canonicalFrom = from.getCanonicalFile();
 		File canonicalTo = to.getCanonicalFile();
 		
+		if (canonicalTo.exists()) {
+			deleteRecursive(canonicalTo);
+		}
+		
 		if (canonicalFrom.isDirectory()) {
 			canonicalTo.mkdir();
 			File[] content = canonicalFrom.listFiles();
