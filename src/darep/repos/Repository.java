@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import darep.Command;
 import darep.Command.ActionType;
-import darep.Helper;
 import darep.renderer.tabSeparatedRenderer.TabSeparatedRenderer;
 import darep.storage.DataSet;
 import darep.storage.Metadata;
@@ -266,10 +265,10 @@ public class Repository {
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(getHeaderline());
+//		sb.append(getHeaderline());
 		
 		for (DataSet dataset: datasets) {
-			sb.append(dataset.getMetadata().getPrettyString()); // TODO prettyStrings (renderer?)
+//			sb.append(dataset.getMetadata().getPrettyString()); // TODO prettyStrings (renderer?)
 			totalFiles += dataset.getMetadata().getNumberOfFiles();
 			totalSize += dataset.getMetadata().getFileSize();
 		}
@@ -289,54 +288,32 @@ public class Repository {
 			throw new RepositoryException(e);
 		}
 		
-		
-//		StringBuilder sb = new StringBuilder();
-//		
-//		sb.append("Name\t");
-//		sb.append("Original Name\t");
-//		sb.append("Timestamp\t");
-//		sb.append("Number of Files\t");
-//		sb.append("Size\t");
-//		sb.append("Description\t");
-//		sb.append("\n");
-//		
-//		DataSet[] datasets;
-//		try {
-//			datasets = db.getAllDataSets();
-//		} catch (StorageException e) {
-//			throw new RepositoryException("Could not fetch Datasets", e);
-//		}
-//		
-//		for (DataSet dataset : datasets) {
-//			sb.append(dataset + "\n");
-//		}
-//		return sb.toString();
 	}
 
-	private String getHeaderline() {		
-		StringBuilder sb = new StringBuilder();
-		sb.append("|");
-		sb.append(Helper.stringToLength("Name", Metadata.getMaxNameLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength("Original Name", Metadata.getMaxOrigNameLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength("Timestamp", Metadata.getMaxTimestampLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength("Number of Files", Metadata.getMaxNumFilesLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength("Size", Metadata.getMaxSizeLength()));
-		sb.append("|");
-		sb.append(Helper.stringToLength("Description", Metadata.getMaxDescriptionLength()));
-		sb.append("|\n");
-		
-		int numDashes = (Metadata.getTotalMaxWidth()) + 7;
-		for (int i = 0; i < numDashes; i++) {
-			sb.append("-");
-		}
-		sb.append("\n");
-		
-		return sb.toString();
-	}
+//	private String getHeaderline() {		
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("|");
+//		sb.append(Helper.stringToLength("Name", Metadata.getMaxNameLength()));
+//		sb.append("|");
+//		sb.append(Helper.stringToLength("Original Name", Metadata.getMaxOrigNameLength()));
+//		sb.append("|");
+//		sb.append(Helper.stringToLength("Timestamp", Metadata.getMaxTimestampLength()));
+//		sb.append("|");
+//		sb.append(Helper.stringToLength("Number of Files", Metadata.getMaxNumFilesLength()));
+//		sb.append("|");
+//		sb.append(Helper.stringToLength("Size", Metadata.getMaxSizeLength()));
+//		sb.append("|");
+//		sb.append(Helper.stringToLength("Description", Metadata.getMaxDescriptionLength()));
+//		sb.append("|\n");
+//		
+//		int numDashes = (Metadata.getTotalMaxWidth()) + 7;
+//		for (int i = 0; i < numDashes; i++) {
+//			sb.append("-");
+//		}
+//		sb.append("\n");
+//		
+//		return sb.toString();
+//	}
 
 	public void replace(Command command) throws RepositoryException {
 		
