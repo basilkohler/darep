@@ -57,7 +57,8 @@ public class FileStorageTest {
 		
 		testDataSet = new FileDataSet(testData, meta);
 		
-		db = new FileStorage(testRepo.getAbsolutePath());
+		db = new FileStorage();
+		db.setRepositoryPath(testRepo);
 	}
 
 	@After

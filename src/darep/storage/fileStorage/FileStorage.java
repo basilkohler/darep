@@ -20,24 +20,11 @@ import darep.storage.StorageException;
  */
 public class FileStorage implements Storage {
 	
+	private static final String dataDirName = "data";
+	private static final String metadataDirName = "metadata";
+	
 	private File filedb;
 	private File metadb;
-
-	/*
-	 * loads(/creates if 'reposPath' doesnt exits) a db in 'reposPath' doesnt
-	 * open any files/folders just loads the paths
-	 * 
-	 * @param reposPath the location of the repository (parent folder od
-	 * 'filedb' and 'metadb')
-	 */
-	public FileStorage(String reposPath) {
-		filedb = new File(reposPath, "data");
-		metadb = new File(reposPath, "metadata");
-		if (!filedb.exists())
-			filedb.mkdirs();
-		if (!metadb.exists())
-			metadb.mkdirs();
-	}
 
 	File getMetaDB() {
 		return metadb;
@@ -193,8 +180,12 @@ public class FileStorage implements Storage {
 
 	@Override
 	public void setRepositoryPath(File repoPath) {
-		// TODO Auto-generated method stub
-		
+		filedb = new File(repoPath, dataDirName);
+		metadb = new File(repoPath, metadataDirName);
+		if (!filedb.exists())
+			filedb.mkdirs();
+		if (!metadb.exists())
+			metadb.mkdirs();
 	}
 
 	@Override

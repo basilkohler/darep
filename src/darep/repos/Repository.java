@@ -62,7 +62,8 @@ public class Repository {
 			}
 			System.out.println("created new repository " + path);
 		}
-		db = new FileStorage(location.getPath());
+		db = new FileStorage();
+		db.setRepositoryPath(location);
 	}
 
 	/*
