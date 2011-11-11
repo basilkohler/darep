@@ -99,6 +99,10 @@ public class Helper {
 		}
 	}
 	
+	public static String stringToLength(String string, int length) {
+		return stringToLength(string, length, ALIGN_LEFT);
+	}
+	
 	public static String stringTimes(String s, int i) {
 		
 		if (i <= 0) {
