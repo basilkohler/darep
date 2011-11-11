@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 import darep.Helper;
+import darep.storage.DataSet;
+import darep.storage.Metadata;
+import darep.storage.StorageException;
 
 class RepositoryDataSet implements DataSet {
 	

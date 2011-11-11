@@ -3,9 +3,9 @@ package darep.renderer.tabSeparatedRenderer;
 import java.util.Arrays;
 
 import darep.renderer.Renderer;
-import darep.repos.DataSet;
-import darep.repos.DataSetDateComparator;
-import darep.repos.Metadata;
+import darep.storage.DataSet;
+import darep.storage.DataSetDateComparator;
+import darep.storage.Metadata;
 
 public class TabSeparatedRenderer implements Renderer {
 	

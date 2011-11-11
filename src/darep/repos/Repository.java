@@ -7,7 +7,11 @@ import darep.Command;
 import darep.Command.ActionType;
 import darep.Helper;
 import darep.renderer.tabSeparatedRenderer.TabSeparatedRenderer;
-import darep.repos.fileStorage.FileStorage;
+import darep.storage.DataSet;
+import darep.storage.Metadata;
+import darep.storage.Storage;
+import darep.storage.StorageException;
+import darep.storage.fileStorage.FileStorage;
 
 /*the repository provides methods to access the Database.class
  * and represents the physical folder located at 'location', which contains the db

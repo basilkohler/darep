@@ -1,6 +1,6 @@
 package darep.renderer;
 
-import darep.repos.DataSet;
+import darep.storage.DataSet;
 
 public interface Renderer {
 	
