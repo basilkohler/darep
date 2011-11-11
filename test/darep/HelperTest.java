@@ -103,13 +103,16 @@ public class HelperTest {
 		File subSubDir = new File(subDir, subSubDirName);
 		subSubDir.mkdir();
 		
-		File copyDir = new File("copyDir");
+		File copyDir = new File(testEnv, "copyDir");
 		copyDir.mkdir();
 		
-		Helper.copyRecursive(subDir, copyDir);
-		String[] files = copyDir.list();
-		assertTrue(new File(copyDir, subDirName).exists());
-		//TODO implement testCopyRecursive();
+		File copy = new File(copyDir, "copy");
+		
+		System.out.println(copy.toString());
+		
+		Helper.copyRecursive(subDir, copy);
+		
+		assertTrue(copy.exists());
 	}
 	
 	@Test
