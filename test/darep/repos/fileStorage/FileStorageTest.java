@@ -120,7 +120,8 @@ public class FileStorageTest {
 		assertTrue(expectedData.exists());
 		assertTrue(expectedMeta.exists());
 		assertTrue(testData.exists());
-		checkFolderContents(expectedData);
+		
+		checkFolderContents(sampleFolder);
 	}
 	
 	private void checkFolderContents(File dirToCheck) {
@@ -156,19 +157,6 @@ public class FileStorageTest {
 		    out.newLine();
 		    out.write("http://www.youtube.com/watch?v=gy5g33S0Gzo&feature=player_embedded#!");
 		    out.close();
-	}
-
-	@Test
-	public void testAddMove() throws RepositoryException, StorageException {
-		File expectedDataset = new File(testRepo, testDataFileName +"/" + testDataSet);
-		File expectedMeta = new File(testRepo + testMetadata + "/" + testMetaFileName);
-
-		db.store(testDataSet);
-		
-		//System.out.println(expectedDataset.exists());
-		assertTrue(expectedDataset.exists());
-		assertTrue(expectedMeta.exists());
-		assertFalse(testData.exists());
 	}
 
 	@Test
