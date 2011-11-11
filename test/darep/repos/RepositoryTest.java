@@ -125,7 +125,6 @@ public class RepositoryTest {
 		repo.add(command);
 	}
 	
-	// TODO test fails but seems to work...
 	@Test (expected = RepositoryException.class)
 	public void testAddParentOfRepository() throws RepositoryException {
 		// Parent folder of Repo
