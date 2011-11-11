@@ -86,26 +86,30 @@ public class Helper {
 		if (string.length() > length) {
 			return string.substring(0, length);
 		} else if (string.length() < length) {
-			StringBuilder sb = new StringBuilder();
 			
-			
-			// TODO stringToLength generate spaces smarter
-			if (alignment == ALIGN_RIGHT) {
-				while (sb.length() + string.length() < length) {
-					sb.append(" ");
-				}
+			String space = stringTimes(" ", length - string.length());
+			if (alignment == ALIGN_LEFT) {
+				return string + space;
+			} else {
+				return space + string;
 			}
-			sb.append(string);
 			
-			if (ALIGN_LEFT) {
-				while (sb.length() < length) {
-					sb.append(" ");
-				}
-			}
-			return sb.toString();
 		} else {
 			return string;
 		}
+	}
+	
+	public static String stringTimes(String s, int i) {
+		
+		if (i <= 0) {
+			return "";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for (int j = 0; j < i; j++) {
+			sb.append(s);
+		}
+		return sb.toString();
 	}
 	
 	public static String streamToString(InputStream stream) throws FileNotFoundException, IOException{

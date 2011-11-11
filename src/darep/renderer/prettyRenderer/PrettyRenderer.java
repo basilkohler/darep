@@ -69,9 +69,7 @@ public class PrettyRenderer implements Renderer {
 		sb.append("\n");
 		
 		for (int width: colWidths) {
-			for (int i = 0; i < width; i++) {
-				sb.append("-");
-			}
+			sb.append(Helper.stringTimes("-", width));
 			sb.append("+");
 		}
 		sb.append("\n");
