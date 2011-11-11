@@ -258,31 +258,6 @@ public class Repository {
 			throw new RepositoryException("Could not get Dataset " + name, e);
 		}
 	}
-	
-//	private String getHeaderline() {		
-//		StringBuilder sb = new StringBuilder();
-//		sb.append("|");
-//		sb.append(Helper.stringToLength("Name", Metadata.getMaxNameLength()));
-//		sb.append("|");
-//		sb.append(Helper.stringToLength("Original Name", Metadata.getMaxOrigNameLength()));
-//		sb.append("|");
-//		sb.append(Helper.stringToLength("Timestamp", Metadata.getMaxTimestampLength()));
-//		sb.append("|");
-//		sb.append(Helper.stringToLength("Number of Files", Metadata.getMaxNumFilesLength()));
-//		sb.append("|");
-//		sb.append(Helper.stringToLength("Size", Metadata.getMaxSizeLength()));
-//		sb.append("|");
-//		sb.append(Helper.stringToLength("Description", Metadata.getMaxDescriptionLength()));
-//		sb.append("|\n");
-//		
-//		int numDashes = (Metadata.getTotalMaxWidth()) + 7;
-//		for (int i = 0; i < numDashes; i++) {
-//			sb.append("-");
-//		}
-//		sb.append("\n");
-//		
-//		return sb.toString();
-//	}
 
 	public void replace(Command command) throws RepositoryException {
 		
