@@ -75,7 +75,9 @@ public class Helper {
 		return file.delete();
 	}
 
-	public static String stringToLength(String string, int length) {
+	public static final boolean ALIGN_LEFT = true;
+	public static final boolean ALIGN_RIGHT = false;
+	public static String stringToLength(String string, int length, boolean alignment) {
 		// TODO Helper.stringToLength left and right aligned
 		if(string == null)
 			return null;
@@ -85,10 +87,21 @@ public class Helper {
 			return string.substring(0, length);
 		} else if (string.length() < length) {
 			StringBuilder sb = new StringBuilder();
-			while (sb.length() + string.length() < length) {
-				sb.append(" ");
+			
+			
+			// TODO stringToLength generate spaces smarter
+			if (alignment == ALIGN_RIGHT) {
+				while (sb.length() + string.length() < length) {
+					sb.append(" ");
+				}
 			}
 			sb.append(string);
+			
+			if (ALIGN_LEFT) {
+				while (sb.length() < length) {
+					sb.append(" ");
+				}
+			}
 			return sb.toString();
 		} else {
 			return string;

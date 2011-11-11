@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import darep.Command;
 import darep.Command.ActionType;
+import darep.renderer.Renderer;
+import darep.renderer.prettyRenderer.PrettyRenderer;
 import darep.renderer.tabSeparatedRenderer.TabSeparatedRenderer;
 import darep.storage.DataSet;
 import darep.storage.Metadata;
@@ -234,10 +236,17 @@ public class Repository {
 
 	public String getList(Command command) throws RepositoryException {
 		
+		Renderer r;
 		if (command.hasFlag("p")) {
-			return getPrettyList();
+			r = new PrettyRenderer();
 		} else {
-			return getTabList();
+			r = new TabSeparatedRenderer();
+		}
+		
+		try {
+			return r.render(db.getAllDataSets());
+		} catch (StorageException e) {
+			throw new RepositoryException(e);
 		}
 		
 	}
@@ -250,46 +259,6 @@ public class Repository {
 		}
 	}
 	
-	private String getPrettyList() throws RepositoryException {
-		// TODO pretty list column width
-		// TODO sort list by date
-		int totalFiles = 0;
-		long totalSize = 0;
-		
-		// Metadata.maxXXXLength is now set because all datasets are loaded
-		DataSet[] datasets;
-		try {
-			datasets = db.getAllDataSets();
-		} catch (StorageException e) {
-			throw new RepositoryException("Could not fetch Datasets", e);
-		}
-		
-		StringBuilder sb = new StringBuilder();
-//		sb.append(getHeaderline());
-		
-		for (DataSet dataset: datasets) {
-//			sb.append(dataset.getMetadata().getPrettyString()); // TODO prettyStrings (renderer?)
-			totalFiles += dataset.getMetadata().getNumberOfFiles();
-			totalSize += dataset.getMetadata().getFileSize();
-		}
-		
-		sb.append("(" + totalFiles + " data sets, ");
-		sb.append(totalSize + " bytes in total)");
-		
-		return sb.toString();
-	}
-
-	private String getTabList() throws RepositoryException {
-		// TODO timestamp format (CET not needed)
-		try {
-			TabSeparatedRenderer r = new TabSeparatedRenderer();
-			return r.render(db.getAllDataSets());
-		} catch (StorageException e) {
-			throw new RepositoryException(e);
-		}
-		
-	}
-
 //	private String getHeaderline() {		
 //		StringBuilder sb = new StringBuilder();
 //		sb.append("|");
