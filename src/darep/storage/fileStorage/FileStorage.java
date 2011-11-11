@@ -1,4 +1,4 @@
-package darep.repos.fileStorage;
+package darep.storage.fileStorage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,10 +9,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import darep.Helper;
-import darep.repos.DataSet;
-import darep.repos.Metadata;
-import darep.repos.Storage;
-import darep.repos.StorageException;
+import darep.storage.DataSet;
+import darep.storage.Metadata;
+import darep.storage.Storage;
+import darep.storage.StorageException;
 
 /*representation of the physical database.
  *a database has two folders one for the datasets, located at 'filedb' 

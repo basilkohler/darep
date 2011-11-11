@@ -1,4 +1,4 @@
-package darep.repos;
+package darep.storage;
 
 import darep.DarepException;
 

@@ -1,4 +1,4 @@
-package darep.repos.fileStorage;
+package darep.storage.fileStorage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -16,10 +16,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import darep.Helper;
-import darep.repos.Metadata;
 import darep.repos.RepositoryException;
-import darep.repos.StorageException;
-import darep.repos.fileStorage.FileStorage;
+import darep.storage.Metadata;
+import darep.storage.StorageException;
+import darep.storage.fileStorage.FileDataSet;
+import darep.storage.fileStorage.FileStorage;
 
 public class FileStorageTest {
 	FileStorage db;

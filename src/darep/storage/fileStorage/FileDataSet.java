@@ -1,12 +1,12 @@
-package darep.repos.fileStorage;
+package darep.storage.fileStorage;
 
 import java.io.File;
 import java.io.IOException;
 
 import darep.Helper;
-import darep.repos.DataSet;
-import darep.repos.Metadata;
-import darep.repos.StorageException;
+import darep.storage.DataSet;
+import darep.storage.Metadata;
+import darep.storage.StorageException;
 
 /**
  * Represents a Dataset consisting of BOTH the file itself and the Metadata.

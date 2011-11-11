@@ -1,4 +1,4 @@
-package darep.repos;
+package darep.storage;
 
 import java.io.Serializable;
 import java.util.Date;
