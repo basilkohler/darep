@@ -21,10 +21,8 @@ import darep.storage.fileStorage.FileStorage;
  */
 public class Repository {
 	
-	public static final int prettyPrintColWidth = 20;
-	
-	private static final String DEFAULT_LOCATION = System
-			.getProperty("user.home") + "/.data-repository";
+	private static final String DEFAULT_LOCATION = 
+			System.getProperty("user.home") + "/.data-repository";
 	
 	/**
 	 * The CANONICAL File which contains the Repository

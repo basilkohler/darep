@@ -78,7 +78,6 @@ public class Helper {
 	public static final boolean ALIGN_LEFT = true;
 	public static final boolean ALIGN_RIGHT = false;
 	public static String stringToLength(String string, int length, boolean alignment) {
-		// TODO Helper.stringToLength left and right aligned
 		if(string == null)
 			return null;
 		if(length < 0)
