@@ -1,5 +1,8 @@
 package darep.repos.fileStorage;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,82 +16,57 @@ import org.junit.Test;
 import darep.DarepController;
 import darep.Helper;
 import darep.repos.Metadata;
+import darep.repos.RepositoryException;
+import darep.repos.StorageException;
 import darep.repos.fileStorage.FileStorage;
 
 public class FileDataSetTest {
-	
-	private DarepController darep = new DarepController();
-	private FileStorage database;
-	private File testdir = new File("testdir");
-	private File testFileInRepo;
-	private File testFileNotInRepo;
-	private Metadata metadata;
-	private String repoName = "testrepo";
-	
-	private final static String testFileName = "TESTFILE.TXT";
-	private final static String testFileNotInRepoName = "TESTFILE2.TXT";
+	File testDir;
+	File copyDir;
+	static final String testDirName = "testdir";
+	static final String copyDirName = "copydir";
 
+	FileDataSet dsFile;
+	FileDataSet dsFolder;
+	
 	@Before
 	public void setUp() throws Exception {
-		createTestFiles();
-		createMetaData();
-		darep.processCommand(getArgs("add " + testFileInRepo.getPath()));
-		
-		database = new FileStorage(repoName);
+		testDir = new File(testDirName);
+		testDir.mkdir();
+		copyDir = new File(copyDirName);
+		copyDir.mkdir();
 	}
 	
-	private void createMetaData() {
-		metadata = new Metadata(testFileNotInRepoName, testFileNotInRepoName,
-					"teh_d3scr!pto0r", 0, 0, repoName);
-	}
-
 	@After
 	public void tearDown() throws Exception {
-		Helper.deleteRecursive(testdir);
-		Helper.deleteRecursive(new File(repoName));
-	}
-
-/*	@Test
-	public void testReadDataset() throws RepositoryException {
-		FileDataSet.readDataset("TESTFILE.TXT", database);
-	}*/
-	
-/*	@Test
-	public void testCreateDataset() throws RepositoryException {
-		FileDataSet ds = FileDataSet.createNewDataset(testFileNotInRepo, metadata, database);
-		Assert.assertEquals(1, ds.getMetadata().getNumberOfFiles());
-		Assert.assertEquals(testFileNotInRepo.length(), ds.getMetadata().getSize());
-	}*/
-	
-	private String[] getArgs(String str) {
-		return (str + " -r " + repoName).split(" "); 
+		Helper.deleteRecursive(testDir);
 	}
 	
-	private void createTestFiles() {
-		testdir.mkdirs();
-		testFileInRepo = new File(testdir, testFileName);
-		testFileNotInRepo = new File(testdir, testFileNotInRepoName);
-		try {
-			testFileInRepo.createNewFile();
-			FileWriter writer = new FileWriter(testFileInRepo);
-			try {
-				writer.write("FU METADATA");
-			} finally {
-				writer.close();
-			}
-			
-			testFileNotInRepo.createNewFile();
-			writer = new FileWriter(testFileInRepo);
-			try {
-				for (int i = 0; i < 100; i++) {
-					writer.write("lal" + i + "\n");
-				}
-			} finally {
-				writer.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	@Test
+	public void testCopyFileTo() throws RepositoryException, StorageException, IOException {
+		File file = new File(testDir, "file");
+		FileWriter wr = new FileWriter(file);
+		wr.write("bla");
+		Metadata fileMeta = new Metadata("FILE", "file", "desc file", 1, 4, file.getCanonicalPath());
+		dsFile = new FileDataSet(file, fileMeta);
+		dsFile.copyFileTo(copyDir);
+		
+		assertTrue(new File(copyDir, "file").exists());
+	}
+	
+	@Test
+	public void testCopyFolderTo() throws IOException, StorageException {
+		File folder = new File(testDir, "folder");
+		folder.mkdir();
+		File subFolder = new File(folder, "subfolder");
+		subFolder.mkdir();
+		File subFolderFile = new File(subFolder, "file");
+		File subFolderFile2 = new File(subFolder, "file2");
+		Metadata folderMeta = new Metadata("FOLDER", "folder", "desc folder", 3, 12, folder.getCanonicalPath());
+		
+		dsFolder = new FileDataSet(folder, folderMeta);
+		
+		dsFolder.copyFileTo(copyDir);
 	}
 
 }
