@@ -50,11 +50,17 @@ public class PrettyRenderer implements Renderer {
 			totalSize += meta.getFileSize();
 			
 			for (int i = 0; i < values.length; i++) {
-				sb.append(Helper.stringToLength(values[i], colWidths[i], alignment[i]) + "|");
+				sb.append(
+						Helper.stringToLength(
+								values[i],
+								colWidths[i],
+								alignment[i]));
+				sb.append("|");
 			}
 			sb.append("\n");
 		}
-		sb.append("(" + dataSets.length + " data sets, " + totalSize + " bytes in total)");
+		sb.append("(" + dataSets.length + " data sets, ");
+		sb.append(totalSize + " bytes in total)");
 		
 		
 		return sb.toString();
@@ -64,7 +70,8 @@ public class PrettyRenderer implements Renderer {
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i = 0; i < columnHeaders.length; i++) {
-			sb.append(Helper.stringToLength(columnHeaders[i], colWidths[i], ALIGN_LEFT) + "|");
+			sb.append(Helper.stringToLength(columnHeaders[i],
+					colWidths[i], ALIGN_LEFT) + "|");
 		}
 		sb.append("\n");
 		
@@ -101,12 +108,14 @@ public class PrettyRenderer implements Renderer {
 		for (DataSet ds: dataSets) {
 			meta = ds.getMetadata();
 			colWidths[0] = Math.max(meta.getName().length(), colWidths[0]);
-			colWidths[1] = Math.max(meta.getOriginalName().length(), colWidths[1]);
+			colWidths[1] = Math.max(meta.getOriginalName().length(),
+									colWidths[1]);
 			colWidths[2] = Math.max(meta.getTimeStamp().toString().length(),
-								colWidths[2]);
+									colWidths[2]);
 			colWidths[3] = Math.max(
 					String.valueOf(meta.getNumberOfFiles()).length(),
-					colWidths[3]);
+					colWidths[3]
+				);
 			colWidths[4] = Math.max(String.valueOf(meta.getFileSize()).length(),
 									colWidths[4]);
 			colWidths[5] = Math.max(meta.getDescription().length(),
