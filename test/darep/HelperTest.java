@@ -108,6 +108,7 @@ public class HelperTest {
 		
 		Helper.copyRecursive(subDir, copyDir);
 		String[] files = copyDir.list();
+		assertTrue(new File(copyDir, subDirName).exists());
 		//TODO implement testCopyRecursive();
 	}
 	
