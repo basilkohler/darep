@@ -6,6 +6,7 @@ import java.io.IOException;
 import darep.Command;
 import darep.Command.ActionType;
 import darep.Helper;
+import darep.renderer.tabSeparatedRenderer.TabSeparatedRenderer;
 import darep.repos.fileStorage.FileStorage;
 
 /*the repository provides methods to access the Database.class
@@ -277,27 +278,35 @@ public class Repository {
 
 	private String getTabList() throws RepositoryException {
 		// TODO timestamp format (CET not needed)
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("Name\t");
-		sb.append("Original Name\t");
-		sb.append("Timestamp\t");
-		sb.append("Number of Files\t");
-		sb.append("Size\t");
-		sb.append("Description\t");
-		sb.append("\n");
-		
-		DataSet[] datasets;
 		try {
-			datasets = db.getAllDataSets();
+			TabSeparatedRenderer r = new TabSeparatedRenderer();
+			return r.render(db.getAllDataSets());
 		} catch (StorageException e) {
-			throw new RepositoryException("Could not fetch Datasets", e);
+			throw new RepositoryException(e);
 		}
 		
-		for (DataSet dataset : datasets) {
-			sb.append(dataset + "\n");
-		}
-		return sb.toString();
+		
+//		StringBuilder sb = new StringBuilder();
+//		
+//		sb.append("Name\t");
+//		sb.append("Original Name\t");
+//		sb.append("Timestamp\t");
+//		sb.append("Number of Files\t");
+//		sb.append("Size\t");
+//		sb.append("Description\t");
+//		sb.append("\n");
+//		
+//		DataSet[] datasets;
+//		try {
+//			datasets = db.getAllDataSets();
+//		} catch (StorageException e) {
+//			throw new RepositoryException("Could not fetch Datasets", e);
+//		}
+//		
+//		for (DataSet dataset : datasets) {
+//			sb.append(dataset + "\n");
+//		}
+//		return sb.toString();
 	}
 
 	private String getHeaderline() {		

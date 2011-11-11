@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 /**
- * This class can be user to sort DataSets by Date
+ * This class can be user to sort DataSets by Date, newest Data Sets last.
  */
 public class DataSetDateComparator implements Comparator<DataSet> {
 
