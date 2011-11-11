@@ -134,7 +134,7 @@ public class RepositoryTest {
 		try {
 			repo.add(command);
 		} catch (RepositoryException e) {
-			assertEquals(e.getMessage(), "ERROR: Dataset can not contain " +
+			assertEquals(e.getMessage(), "Dataset can not contain " +
 					"the repository itself.");
 			throw e;
 		}
