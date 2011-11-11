@@ -21,8 +21,10 @@ import darep.repos.StorageException;
 import darep.repos.fileStorage.FileStorage;
 
 public class FileDataSetTest {
+	File testEnv;
 	File testDir;
 	File copyDir;
+	static final String testEnvName = "testenv";
 	static final String testDirName = "testdir";
 	static final String copyDirName = "copydir";
 
@@ -31,15 +33,17 @@ public class FileDataSetTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		testDir = new File(testDirName);
+		testEnv = new File(testEnvName);
+		testEnv.mkdir();
+		testDir = new File(testEnv,testDirName);
 		testDir.mkdir();
-		copyDir = new File(copyDirName);
+		copyDir = new File(testEnv,copyDirName);
 		copyDir.mkdir();
 	}
 	
 	@After
 	public void tearDown() throws Exception {
-		Helper.deleteRecursive(testDir);
+		Helper.deleteRecursive(testEnv);
 	}
 	
 	@Test
@@ -49,6 +53,7 @@ public class FileDataSetTest {
 		wr.write("bla");
 		Metadata fileMeta = new Metadata("FILE", "file", "desc file", 1, 4, file.getCanonicalPath());
 		dsFile = new FileDataSet(file, fileMeta);
+		System.out.println(copyDir.getCanonicalPath());
 		dsFile.copyFileTo(copyDir);
 		
 		assertTrue(new File(copyDir, "file").exists());
