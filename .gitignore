@@ -9,3 +9,4 @@ build/*
 dist/*
 data-repository.zip
 .settings/*
+server.properties
