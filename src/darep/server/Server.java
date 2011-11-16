@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Properties;
 
 import darep.Command;
@@ -73,7 +74,16 @@ public class Server {
 	private File[] checkIncomingDirectory() {
 		File dir = new File(getProperty(INCOMING_DIRECTORY));
 		// TODO implement completeness-checker
-		return dir.listFiles();
+		File[] files = dir.listFiles();
+		if(files != null) {
+			for(File f : files) {
+				System.out.println("found " + f.getPath() + "file");
+			}
+			return files;
+		} else {
+			System.out.println("no files found");
+			return new File[0];
+		}
 	}
 	
 	private void addFile(File file) throws RepositoryException {
