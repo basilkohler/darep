@@ -11,6 +11,7 @@ import org.junit.Test;
 import darep.Command;
 import darep.Command.ActionType;
 import darep.DarepController;
+import darep.logger.SystemLogger;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 import darep.server.ServerException;
@@ -32,7 +33,7 @@ public class RepositoryTest {
 		testDataSet2 = new File(testDir, "testDataSet2");
 		testDataSet2.createNewFile();
 		testRepo = new File(testDir.getAbsolutePath(), "testRepo");
-		repo = new Repository(testRepo.getAbsolutePath());
+		repo = new Repository(testRepo.getAbsolutePath(), new SystemLogger());
 
 	}
 

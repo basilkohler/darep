@@ -8,7 +8,11 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import sun.security.action.GetLongAction;
+
 import darep.Command.ActionType;
+import darep.logger.Logger;
+import darep.logger.SystemLogger;
 import darep.parser.ArgConstraint;
 import darep.parser.CommandSyntax;
 import darep.parser.ParseException;
@@ -27,6 +31,7 @@ public class DarepController {
 	public static final String RESOURCES = "resources";
 	public static final String HELPFILE = "help.txt";
 	
+	private Logger logger;
 	/**
 	 * The {@link CommandSyntax}-Array given to the parser. Defines the allowed
 	 * syntax when calling the program. The Format for a Command is:
@@ -108,17 +113,17 @@ public class DarepController {
 		try {
 			controller.processCommand(args);
 		} catch (DarepException e) {
-			quitWithException(e);
+			quitWithError(controller, e);
 		}
 	}
 
-	private static void quitWithException(Exception e) {
-		System.err.println("ERROR: " + e.getMessage());
+	private static void quitWithError(DarepController controller,
+			DarepException e) {
+		controller.getLogger().logError(e.getMessage());
 		// TODO make build set debug mode or something
 		e.printStackTrace();
 		System.exit(1);
 	}
-
 	public void processCommand(String[] args) throws ParseException, RepositoryException, ServerException {
 		Command command = parser.parse(args);
 
@@ -146,7 +151,7 @@ public class DarepController {
 										" does not Exist");
 		}
 		
-		repository = new Repository(repoName);
+		repository = new Repository(repoName, logger);
 			
 		switch (command.getAction()) {
 		case add:
@@ -172,6 +177,7 @@ public class DarepController {
 	}
 
 	public DarepController() {
+		this.logger = new SystemLogger();
 		this.parser = new Parser(DarepController.syntax,
 				DarepController.getConstraints(), ActionType.help);
 	}
@@ -194,5 +200,8 @@ public class DarepController {
 			throw new RepositoryException("could not load helpfile " + HELPFILE +" from .jar Archive", e);
 		}
 	}
-
+	
+	private Logger getLogger() {
+		return this.logger;
+	}
 }

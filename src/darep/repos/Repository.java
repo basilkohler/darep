@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import darep.Command;
 import darep.Command.ActionType;
+import darep.logger.Logger;
 import darep.renderer.Renderer;
 import darep.renderer.prettyRenderer.PrettyRenderer;
 import darep.renderer.tabSeparatedRenderer.TabSeparatedRenderer;
@@ -23,7 +24,7 @@ public class Repository {
 	
 	private static final String DEFAULT_LOCATION = 
 			System.getProperty("user.home") + "/.data-repository";
-	
+	private Logger logger;
 	/**
 	 * The CANONICAL File which contains the Repository
 	 */
@@ -33,8 +34,8 @@ public class Repository {
 	/*
 	 * loads(/creates) the default (hidden) repo in user.home
 	 */
-	public Repository() throws RepositoryException {
-		this(DEFAULT_LOCATION);
+	public Repository(Logger logger) throws RepositoryException {
+		this(DEFAULT_LOCATION, logger);
 	}
 
 	/*
@@ -42,7 +43,8 @@ public class Repository {
 	 * 
 	 * @param path where to find/create repo
 	 */
-	public Repository(String path) throws RepositoryException {
+	public Repository(String path, Logger logger) throws RepositoryException {
+		this.logger = logger;
 		try {
 			location = new File(path).getCanonicalFile();
 		} catch (IOException e) {
@@ -58,7 +60,7 @@ public class Repository {
 				throw new RepositoryException("Tried to create Repository " +
 						location.getPath() + " but failed." );
 			}
-			System.out.println("created new repository " + path);
+			logger.logSuccess("created new repository " + path);
 		}
 		db = new FileStorage();
 		db.setRepositoryPath(location);
@@ -81,7 +83,7 @@ public class Repository {
 		
 		try {
 			db.store(ds);
-			System.out.println(msg);
+			logger.logSuccess(msg);
 		} catch (StorageException e) {
 			throw new RepositoryException(e);
 		}
@@ -122,7 +124,7 @@ public class Repository {
 			String dsName = command.getParams()[0];
 			DataSet ds = db.getDataSet(dsName);
 			db.delete(command.getParams()[0]);
-			System.out.println("The data set " + command.getParams()[0] +
+			logger.logSuccess("The data set " + command.getParams()[0] +
 							" (original name: " + ds.getMetadata().getOriginalName() +
 							") has been successfully removed from the " +
 							"repository.");
@@ -277,7 +279,7 @@ public class Repository {
 			throw new RepositoryException(e);
 		}
 		
-		System.out.println("The data set named " + command.getParams()[0]
+		logger.logSuccess("The data set named " + command.getParams()[0]
 				+ " has been successfully"
 				+ " replaced by the file/folder.");
 	}
@@ -314,17 +316,18 @@ public class Repository {
 						"in destination folder '" + exportPath + "'.");
 			}
 			ds.copyFileTo(destination);
+			String message = "The data set " + command.getParams()[0]
+					+ " (original name: " + ds.getMetadata().getName() + ")"
+					+ " has been successfully exported to "
+					+ command.getParams()[1];
 			
-			System.out.println("The data set " + command.getParams()[0]
-							+ " (original name: " + ds.getMetadata().getName() + ")"
-							+ " has been successfully exported to "
-							+ command.getParams()[1]);
+			logger.logSuccess(message);
 		} catch (IOException e) {
 			throw new RepositoryException("Could not get Canonical Path for " +
 					command.getParams()[1], e);
 		} catch (StorageException e) {
 			throw new RepositoryException("Error in Database", e);
-		}
+		} 
 	}
 
 	public File getLocation() {
@@ -334,5 +337,8 @@ public class Repository {
 	public static String getDefaultLocation() {
 		return DEFAULT_LOCATION;
 	}
-
+	
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 }
