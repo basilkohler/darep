@@ -21,6 +21,25 @@ public class ServerLogger extends Logger{
 		}
 	}
 	
+	@Override
+	public void log(String message, LOGLEVEL logLevel) {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		// TODO replace SUCCESS with INFO
+		// TODO append timestamp
+		sb.append("[" + logLevel + "] ");
+		sb.append(message);
+
+		writeLog(sb.toString());
+		// TODO close file
+		try {
+			logWriter.flush();
+		} catch (IOException e) {
+			System.err.println("could not flush to logfile in serverlog");
+		}
+	}
+	
 	private void writeLog(String message)  {
 		try {
 			this.logWriter.write(message);
@@ -29,14 +48,4 @@ public class ServerLogger extends Logger{
 		}
 	}
 
-	@Override
-	public void log(String message, LOGLEVEL logLevel) {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("[" + logLevel + "] ");
-		sb.append(message);
-
-		writeLog(sb.toString());
-	}
 }
