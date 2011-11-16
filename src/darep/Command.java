@@ -1,6 +1,7 @@
 package darep;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -50,13 +51,13 @@ public class Command {
 
 	private String[] parameters;
 
-	public Command(ActionType action, String[] arguments, 
+	public Command(ActionType action, String[] parameters, 
 			Map<String, String> options, String[] flags) {
 
 		this.action = action;
-		this.options = options;
-		this.flags = flags;
-		this.parameters = arguments;
+		this.options = options != null ? options : new HashMap<String, String>();
+		this.flags = flags != null ? flags : new String[0];
+		this.parameters = parameters != null ? parameters : new String[0];
 	}
 
 	public ActionType getAction() {
