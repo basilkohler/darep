@@ -13,7 +13,7 @@
 		<pathelement location="lib/junit-4.10.jar" />
 	</path>
 	
-	<target name="clean">
+	<target name="clean" description="Deletes build and distribution files">
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
 		<delete file="${distZip}" />
@@ -55,7 +55,7 @@
 		</junit>
 	</target>
 	
-	<target name="dist" depends="jar, test">
+	<target name="dist" depends="jar, test" description="Creates a complete distribution in folder 'dist'">
 		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
 		<chmod file="${dist}/data-repository" perm="u+x" />
 		<copy tofile="${dist}/data-repository.cmd" file="${wrapperScriptWindows}" />
@@ -63,7 +63,7 @@
 		<copy tofile="${dist}/server-default.properties" file="${serverDefaultProperties}" />
 	</target>
 	
-	<target name="zipdist" depends="dist">
+	<target name="zipdist" depends="dist" description="Creates a distribution zip-archive">
 		<zip destfile="${distZip}">
 			<fileset dir="dist" />
 		</zip>
