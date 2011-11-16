@@ -8,7 +8,7 @@
 	<property name="README" location="README" />
 	<property name="distZip" location="data-repository.zip" />
 	<property name="resources" location="resources" />
-	<property name="serverDefaultProperties" location="server-default.properties" />
+	<property name="serverDefaultProperties" location="${src}/server-default.properties" />
 	<path id="junitLib">
 		<pathelement location="lib/junit-4.10.jar" />
 	</path>
