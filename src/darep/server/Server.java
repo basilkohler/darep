@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Properties;
 
 import darep.Command;
@@ -16,7 +15,6 @@ public class Server {
 	
 	private Repository repository;
 	private Properties properties = new Properties();
-	private Command userCommand;
 	private static final String[] propertyNames = {"incoming-directory", "html-overview", "log-file", 
 											"checking-interval-in-seconds", "completeness-checker.class-name" };
 	
@@ -29,7 +27,6 @@ public class Server {
 	private boolean running = true;
 	public Server(Repository repository, Command command) throws ServerException {
 		this.repository = repository;
-		this.userCommand = command;
 		loadPropertiesFile(command.getParams()[0]);
 	}
 	
