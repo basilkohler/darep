@@ -13,6 +13,7 @@ import darep.Command.ActionType;
 import darep.DarepController;
 import darep.parser.ParseException;
 import darep.parser.Parser;
+import darep.server.ServerException;
 
 public class RepositoryTest {
 	File testDir;
@@ -95,7 +96,7 @@ public class RepositoryTest {
 	
 	@Test(expected = RepositoryException.class)
 	public void testRepositoryNotFoundAndCommandIsNotAdd()
-			throws RepositoryException {
+			throws RepositoryException, ServerException {
 		DarepController controller = new DarepController();
 		String[] arg = { "export", "-r", "NONEXISTINGREPO",
 				testDataSet.getAbsolutePath(), "." };
