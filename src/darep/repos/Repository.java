@@ -341,4 +341,7 @@ public class Repository {
 	public void setLogger(Logger logger) {
 		this.logger = logger;
 	}
+	public Logger getLogger() {
+		return this.logger;
+	}
 }

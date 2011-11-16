@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import darep.Command;
 import darep.Command.ActionType;
+import darep.logger.Logger;
 import darep.repos.Repository;
 import darep.repos.RepositoryException;
 
@@ -39,6 +40,9 @@ public class Server {
 		
 		this.repository = repository;
 		loadPropertiesFile(command.getParams()[0]);
+		repository.getLogger().logSuccess("Data Repository Server successfully started");
+		Logger serverLogger = new ServerLogger(getProperty(LOG_FILE));
+		repository.setLogger(serverLogger);
 	}
 	
 	public void start() throws ServerException {
