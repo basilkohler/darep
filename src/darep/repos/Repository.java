@@ -327,7 +327,7 @@ public class Repository {
 		}
 	}
 
-	protected File getLocation() {
+	public File getLocation() {
 		return this.location;
 	}
 

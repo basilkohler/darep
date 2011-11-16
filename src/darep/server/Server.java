@@ -17,6 +17,7 @@ public class Server {
 	private Properties properties = new Properties();
 	private static final String[] propertyNames = {"incoming-directory", "html-overview", "log-file", 
 											"checking-interval-in-seconds", "completeness-checker.class-name" };
+	private final String[] propertyValues;
 	
 	private static final int INCOMING_DIRECTORY = 0;
 	private static final int HTML_OVERVIEW = 1;
@@ -25,7 +26,17 @@ public class Server {
 	private static final int COMPLETENESS_CHECKER_CLASS_NAME = 4;
 	
 	private boolean running = true;
+	
 	public Server(Repository repository, Command command) throws ServerException {
+		
+		propertyValues = new String[] {
+				null,
+				null,
+				new File(repository.getLocation(), "server.log").toString(),
+				null,
+				null
+		};
+		
 		this.repository = repository;
 		loadPropertiesFile(command.getParams()[0]);
 	}
@@ -50,15 +61,15 @@ public class Server {
 	}
 	
 	private String getProperty(int propertyKey) {
-		return properties.getProperty(propertyNames[propertyKey]);
+		return properties.getProperty(propertyNames[propertyKey], propertyValues[propertyKey]);
 	}
 	
 	private void loadPropertiesFile(String propertiesPath) throws ServerException {
 		try {
 			properties.load(new FileInputStream(propertiesPath));
-			for(String p : propertyNames) {
-				if(properties.getProperty(p) == null) {
-					throw new ServerException("Missing property " + p + " in the property file " + propertiesPath);
+			for(int i = 0; i < propertyNames.length; i++) {
+				if(getProperty(i) == null) {
+					throw new ServerException("Missing property " + propertyNames[i] + " in the property file " + propertiesPath);
 				}
 			}
 		} catch (FileNotFoundException e) {
