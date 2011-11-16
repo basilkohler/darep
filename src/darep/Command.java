@@ -38,6 +38,7 @@ public class Command {
 		delete,
 		export,
 		list,
+		server,
 		help
 	}
 
