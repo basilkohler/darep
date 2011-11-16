@@ -8,6 +8,7 @@
 	<property name="README" location="README" />
 	<property name="distZip" location="data-repository.zip" />
 	<property name="resources" location="resources" />
+	<property name="serverDefaultProperties" location="server-default.properties" />
 	<path id="junitLib">
 		<pathelement location="lib/junit-4.10.jar" />
 	</path>
@@ -59,6 +60,7 @@
 		<chmod file="${dist}/data-repository" perm="u+x" />
 		<copy tofile="${dist}/data-repository.cmd" file="${wrapperScriptWindows}" />
 		<copy tofile="${dist}/README" file="${README}" />
+		<copy tofile="${dist}/server-default.properties" file="${serverDefaultProperties}" />
 	</target>
 	
 	<target name="zipdist" depends="dist">
