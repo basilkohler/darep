@@ -15,6 +15,8 @@ import darep.parser.ParseException;
 import darep.parser.Parser;
 import darep.repos.Repository;
 import darep.repos.RepositoryException;
+import darep.server.Server;
+import darep.server.ServerException;
 
 /**
  * Controls the flow of the program. Contains the main-method.
@@ -41,7 +43,10 @@ public class DarepController {
 			new CommandSyntax(ActionType.list, 0, new String[] { "r" },
 					new String[] { "p" }),
 			new CommandSyntax(ActionType.export, 2, new String[] { "r" },
-					new String[0]) };
+					new String[0]),
+			new CommandSyntax(ActionType.server, 1,
+					new String[] {"r"}, new String[0])
+			};
 
 	/**
 	 * Map with {@link ArgConstraint}s for the Parser. Values are added in
@@ -114,7 +119,7 @@ public class DarepController {
 		System.exit(1);
 	}
 
-	public void processCommand(String[] args) throws ParseException, RepositoryException {
+	public void processCommand(String[] args) throws ParseException, RepositoryException, ServerException {
 		Command command = parser.parse(args);
 
 		// check if command=help => dont need to load the repo, just print help
@@ -155,6 +160,9 @@ public class DarepController {
 			break;
 		case export:
 			repository.export(command);
+			break;
+		case server:
+			new Server(repository, command).start();
 			break;
 		case list:
 			System.out.println(repository.getList(command));
