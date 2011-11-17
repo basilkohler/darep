@@ -19,6 +19,7 @@ import darep.repos.Repository;
 import darep.repos.RepositoryException;
 import darep.server.Server;
 import darep.server.ServerException;
+import darep.storage.Storage;
 import darep.storage.fileStorage.FileStorage;
 
 /**
@@ -106,6 +107,8 @@ public class DarepController {
 
 	private Parser parser;
 	private Repository repository;
+	
+	private Storage storage = new FileStorage();
 
 	public static void main(String[] args) {
 		DarepController controller = new DarepController();
@@ -141,7 +144,7 @@ public class DarepController {
 			repoName = Repository.getDefaultLocation();
 		}
 		
-		repository = new Repository(repoName, logger, new FileStorage());
+		repository = new Repository(repoName, logger, this.storage);
 			
 		switch (command.getAction()) {
 		case add:
@@ -170,6 +173,10 @@ public class DarepController {
 		this.logger = new SystemLogger();
 		this.parser = new Parser(DarepController.syntax,
 				DarepController.getConstraints(), ActionType.help);
+	}
+	
+	void setStorage(Storage storage) {
+		this.storage = storage;
 	}
 	
 	private void printHelp() throws RepositoryException{
