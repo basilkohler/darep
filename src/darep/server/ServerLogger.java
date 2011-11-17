@@ -3,6 +3,9 @@ package darep.server;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import darep.logger.*;
 
@@ -26,11 +29,24 @@ public class ServerLogger extends Logger{
 		
 		StringBuilder sb = new StringBuilder();
 		
-		// TODO replace SUCCESS with INFO
-		// TODO append timestamp
-		sb.append("[" + logLevel + "] ");
+		// append timestamp
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String timeStamp = sdf.format(cal.getTime());	
+		sb.append("[" + timeStamp + "] ");
+		
+		// append loglevel
+		String status = logLevel.toString();
+		if(logLevel == LOGLEVEL.SUCCESS) {
+			status = "INFO";
+		}
+		sb.append("[" + status + "] ");
+	
+		// write mesage
 		sb.append(message);
-
+		sb.append("\n");
+		
+		// flush to file
 		writeLog(sb.toString());
 		// TODO close file
 		try {
