@@ -19,6 +19,7 @@ import darep.repos.Repository;
 import darep.repos.RepositoryException;
 import darep.server.Server;
 import darep.server.ServerException;
+import darep.storage.fileStorage.FileStorage;
 
 /**
  * Controls the flow of the program. Contains the main-method.
@@ -140,7 +141,7 @@ public class DarepController {
 			repoName = Repository.getDefaultLocation();
 		}
 		
-		repository = new Repository(repoName, logger);
+		repository = new Repository(repoName, logger, new FileStorage());
 			
 		switch (command.getAction()) {
 		case add:

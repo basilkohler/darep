@@ -34,8 +34,8 @@ public class Repository {
 	/*
 	 * loads(/creates) the default (hidden) repo in user.home
 	 */
-	public Repository(Logger logger) throws RepositoryException {
-		this(DEFAULT_LOCATION, logger);
+	public Repository(Logger logger, Storage storage) throws RepositoryException {
+		this(DEFAULT_LOCATION, logger, storage);
 	}
 
 	/*
@@ -43,7 +43,7 @@ public class Repository {
 	 * 
 	 * @param path where to find/create repo
 	 */
-	public Repository(String path, Logger logger) throws RepositoryException {
+	public Repository(String path, Logger logger, Storage storage) throws RepositoryException {
 		this.logger = logger;
 		try {
 			location = new File(path).getCanonicalFile();
@@ -51,10 +51,10 @@ public class Repository {
 			throw new RepositoryException("Could not get canonical " +
 					"File for " + path, e);
 		}
-		initRepository(path);
+		initRepository(path, storage);
 	}
 
-	private void initRepository(String path) throws RepositoryException {
+	private void initRepository(String path, Storage storage) throws RepositoryException {
 		if (!location.exists()) {
 			if (!location.mkdirs()) {
 				throw new RepositoryException("Tried to create Repository " +
@@ -62,7 +62,7 @@ public class Repository {
 			}
 			logger.logSuccess("created new repository " + path);
 		}
-		db = new FileStorage();
+		db = storage;
 		db.setRepositoryPath(location);
 	}
 
