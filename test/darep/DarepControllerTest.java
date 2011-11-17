@@ -39,6 +39,7 @@ public class DarepControllerTest {
 	@Test
 	public void testProcess() throws DarepException {
 		// add the test-folder
+		// TODO DarepControllerTest.testProcess() this actually seems more like a repository test
 		
 		controller.processCommand(makeArgs("add test"));
 		assertEquals(storage.getCalls("store"), 1);
