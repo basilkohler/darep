@@ -127,7 +127,9 @@ public class Helper {
 				sb.append(s).append(System.getProperty("line.separator"));
 			}
 		} finally {
-			reader.close();
+			if (reader != null) {
+				reader.close();
+			}
 		}
 		return sb.toString();
 	}

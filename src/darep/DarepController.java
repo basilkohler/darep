@@ -132,14 +132,11 @@ public class DarepController {
 		}
 		
 		// check if option -r is set or default repos, and setup repos.
-		File repo;
 		String repoName;
 		if (command.isSet("r")) {
 			repoName = command.getOptionParam("r");
-			repo = new File(repoName);
 		} else {
 			repoName = Repository.getDefaultLocation();
-			repo = new File(Repository.getDefaultLocation());
 		}
 		
 		repository = new Repository(repoName, logger);

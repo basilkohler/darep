@@ -1,9 +1,20 @@
 package darep;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import darep.logger.Logger;
+import darep.parser.ParseException;
+import darep.repos.RepositoryException;
+import darep.server.ServerException;
 
 public class DarepControllerTest {
 	
@@ -17,8 +28,17 @@ public class DarepControllerTest {
 	}
 
 	@Test
-	public void testPrintHelp() {
+	public void testPrintHelp() throws ParseException, RepositoryException, ServerException, FileNotFoundException, IOException {
 		
+		InputStream is = new FileInputStream(new File("./resources/help.txt"));
+		String expected = Helper.streamToString(is).trim();
+		
+		controller.processCommand(makeArgs("help"));
+		assertEquals(logger.getContent().trim(), expected);
+	}
+	
+	private String[] makeArgs(String cmd) {
+		return cmd.split("\\s+");
 	}
 	
 }
