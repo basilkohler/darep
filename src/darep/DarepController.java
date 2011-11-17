@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import sun.security.action.GetLongAction;
-
 import darep.Command.ActionType;
 import darep.logger.Logger;
 import darep.logger.SystemLogger;
@@ -163,7 +161,7 @@ public class DarepController {
 			new Server(repository, command).start();
 			break;
 		case list:
-			System.out.println(repository.getList(command));
+			logger.logSuccess(repository.getList(command));
 			break;
 		}
 
@@ -184,7 +182,7 @@ public class DarepController {
 			if(is == null) {
 				is = new FileInputStream(new File(path));
 			}
-			System.out.println(Helper.streamToString(is));
+			logger.logSuccess(Helper.streamToString(is));
 		} catch (FileNotFoundException e) {
 			throw new RepositoryException("could not find the helpfile: " + path, e);
 		} catch (IOException e) {
@@ -194,7 +192,7 @@ public class DarepController {
 		}
 	}
 	
-	private Logger getLogger() {
+	Logger getLogger() {
 		return this.logger;
 	}
 }
