@@ -122,6 +122,7 @@ public class DarepController {
 		e.printStackTrace();
 		System.exit(1);
 	}
+	
 	public void processCommand(String[] args) throws ParseException, RepositoryException, ServerException {
 		Command command = parser.parse(args);
 
