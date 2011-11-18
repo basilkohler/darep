@@ -136,32 +136,42 @@ public class Helper {
 	
 	public static boolean compareFilesRecursive(File f1, File f2) throws IOException {
 		
+		// Same files should be equal, don't need to compare
+		if (f1.equals(f2)) return true;
+		
 		try {
 			if (f1.isFile()) {
+				// if f1 is a file and f2 not, they are not equal
 				if (!f2.isFile()) return false;
 				
+				// if both are files, compare contents
 				FileInputStream fIn1 = new FileInputStream(f1);
 				FileInputStream fIn2 = new FileInputStream(f2);
 				
-				return (Helper.streamToString(fIn1) == Helper.streamToString(fIn2));
+				return Helper.streamToString(fIn1).equals(Helper.streamToString(fIn2));
 			}
 			
 			if (f1.isDirectory()) {
+				// if f1 is a directory and f2 not, they are not equal
 				if (!f2.isDirectory()) return false;
 				
+				// if both are directories, compare each file within
 				for (File subfile1: f1.listFiles()) {
 					File subfile2 = new File(f2, subfile1.getName());
-					if (!f2.exists() ||
-							!compareFilesRecursive(subfile1, subfile2)) {
+					if (!f2.exists()
+							|| !compareFilesRecursive(subfile1, subfile2)) {
 						return false;
 					}
 				}
 				return true;
 			}
+		
+		// if any file somewhere is not found, it can't be equal to anything
 		} catch (FileNotFoundException e) {
 			return false;
 		}
 		
+		// if not a directory or file - whatever it is - its not equal to anything
 		return false;
 	}
 	
