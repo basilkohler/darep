@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -205,5 +206,14 @@ public class Helper {
 		}
 	}
 	
+	public static void stringToFile(String content, File file) throws IOException {
+		FileWriter fw = new FileWriter(file);
+		try {
+			fw.write(content);
+			fw.flush();
+		} finally {
+			fw.close();
+		}
+	}
 	
 }	
