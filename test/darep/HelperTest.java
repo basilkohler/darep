@@ -114,6 +114,60 @@ public class HelperTest {
 	}
 	
 	// TODO testCompareFilesRecursive
+	@Test
+	public void testCompareFilesRecursive() throws IOException {
+		File original = new File(testEnv, "testOrig");
+		original.mkdirs();
+		File copy = new File(testEnv, "testCopy");
+		copy.mkdirs();
+		
+		assertTrue(Helper.compareFilesRecursive(original, original));
+		assertTrue(Helper.compareFilesRecursive(original, copy));
+		
+		// put some files in original folder
+		File subFile = new File(original, "test");
+		Helper.stringToFile("Hallo 42", subFile);
+		File subFile2 = new File(original, "test2");
+		Helper.stringToFile("Hallo 42", subFile2);
+		// those two files should be equal
+		assertTrue(Helper.compareFilesRecursive(subFile, subFile2));
+		
+		// original and copy now have different content
+		assertFalse(Helper.compareFilesRecursive(original, copy));
+		// file should not be equal to a folder
+		assertFalse(Helper.compareFilesRecursive(copy, subFile));
+		
+		// put some files in copied folder
+		File copySub = new File(copy, "test");
+		Helper.stringToFile("Hallo 42", copySub);
+		File copySub2 = new File(copy, "test2");
+		Helper.stringToFile("Hallo 43", copySub2);
+		
+		// slightly different file content, should NOT be equal
+		assertFalse(Helper.compareFilesRecursive(original, copy));
+		
+		copySub2.delete();
+		File copySub3 = new File(copy, "blabla");
+		Helper.stringToFile("Hallo 42", copySub3);
+		
+		// different filenames, should NOT be equal
+		assertFalse(Helper.compareFilesRecursive(original, copy));
+		
+		copySub3.delete();
+		Helper.stringToFile("Hallo 42", copySub2);
+		// dirs have same content, should be equal now
+		Helper.compareFilesRecursive(original, copy);
+		
+		// create subdir
+		File subdir = new File(original, "subdir");
+		subdir.mkdirs();
+		assertFalse(Helper.compareFilesRecursive(original, copy));
+		
+		File copySubdir = new File(copy, "subdir");
+		copySubdir.mkdirs();
+		assertTrue(Helper.compareFilesRecursive(original, copy));
+		
+	}
 	
 	@Test
 	public void testStringToLength() {
