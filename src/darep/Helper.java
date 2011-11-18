@@ -134,6 +134,37 @@ public class Helper {
 		return sb.toString();
 	}
 	
+	public static boolean compareFilesRecursive(File f1, File f2) throws IOException {
+		
+		try {
+			if (f1.isFile()) {
+				if (!f2.isFile()) return false;
+				
+				FileInputStream fIn1 = new FileInputStream(f1);
+				FileInputStream fIn2 = new FileInputStream(f2);
+				
+				return (Helper.streamToString(fIn1) == Helper.streamToString(fIn2));
+			}
+			
+			if (f1.isDirectory()) {
+				if (!f2.isDirectory()) return false;
+				
+				for (File subfile1: f1.listFiles()) {
+					File subfile2 = new File(f2, subfile1.getName());
+					if (!f2.exists() ||
+							!compareFilesRecursive(subfile1, subfile2)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		} catch (FileNotFoundException e) {
+			return false;
+		}
+		
+		return false;
+	}
+	
 	public static void copyRecursive(File from, File to) throws IOException {
 	
 		File canonicalFrom = from.getCanonicalFile();
