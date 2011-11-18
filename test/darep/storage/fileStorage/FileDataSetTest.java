@@ -55,7 +55,6 @@ public class FileDataSetTest {
 		Metadata fileMeta = new Metadata("FILE", "file", "desc file", 1, 4, file.getCanonicalPath());
 		dsFile = new FileDataSet(file, fileMeta);
 		
-		System.out.println(copyDir.getCanonicalPath());
 		File destination = new File(copyDir, "copied");
 		assertFalse(destination.exists());
 		
@@ -79,7 +78,13 @@ public class FileDataSetTest {
 		
 		dsFolder = new FileDataSet(folder, folderMeta);
 		
-		dsFolder.copyFileTo(copyDir);
+		File destination = new File(copyDir, "copied");
+		assertFalse(destination.exists());
+		
+		dsFolder.copyFileTo(destination);
+		assertTrue(destination.exists());
+		assertTrue(destination.isDirectory());
+		assertTrue(Helper.compareFilesRecursive(folder, destination));
 	}
 
 }
