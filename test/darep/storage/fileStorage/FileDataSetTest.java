@@ -1,25 +1,20 @@
 package darep.storage.fileStorage;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import darep.DarepController;
 import darep.Helper;
 import darep.repos.RepositoryException;
 import darep.storage.Metadata;
 import darep.storage.StorageException;
-import darep.storage.fileStorage.FileDataSet;
-import darep.storage.fileStorage.FileStorage;
 
 public class FileDataSetTest {
 	File testEnv;
@@ -46,18 +41,30 @@ public class FileDataSetTest {
 	public void tearDown() throws Exception {
 		Helper.deleteRecursive(testEnv);
 	}
-	// TODO finish testCopyFileTo 
+	
 	@Test
 	public void testCopyFileTo() throws RepositoryException, StorageException, IOException {
 		File file = new File(testDir, "file");
 		FileWriter wr = new FileWriter(file);
-		wr.write("bla");
+		
+		try {
+			wr.write("bla");
+		} finally {
+			wr.close();
+		}
 		Metadata fileMeta = new Metadata("FILE", "file", "desc file", 1, 4, file.getCanonicalPath());
 		dsFile = new FileDataSet(file, fileMeta);
-		System.out.println(copyDir.getCanonicalPath());
-		//dsFile.copyFileTo(copyDir);
 		
-		//assertTrue(new File(copyDir, "file").exists());
+		System.out.println(copyDir.getCanonicalPath());
+		File destination = new File(copyDir, "copied");
+		assertFalse(destination.exists());
+		
+		dsFile.copyFileTo(destination);
+		assertTrue(destination.exists());
+		
+		FileInputStream copiedIn = new FileInputStream(destination);
+		FileInputStream fileIn = new FileInputStream(file);
+		assertEquals(Helper.streamToString(copiedIn), Helper.streamToString(fileIn));
 	}
 	
 	@Test
