@@ -93,7 +93,6 @@ public class HelperTest {
 		}
 	}
 	
-	// TODO finish HelperTest.testCopyRecursive
 	@Test
 	public void testCopyRecursive() throws IOException {
 		String subDirName = "subdir";
@@ -111,9 +110,10 @@ public class HelperTest {
 		System.out.println(copy.toString());
 		
 		Helper.copyRecursive(subDir, copy);
-		
-		assertTrue(copy.exists());
+		assertTrue(Helper.compareFilesRecursive(subDir, copy));		
 	}
+	
+	// TODO testCompareFilesRecursive
 	
 	@Test
 	public void testStringToLength() {
