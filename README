@@ -2,4 +2,9 @@ This is a project for the software engineering course of the University of Basel
 Contributors: Kevin Urban, Basil Kohler, Severin Gsponer, Aeneas Kaiser
 
 usage:
-sh data-repository add [-r <repository path>] [-n <name>] [-d <description>] [-m] <file/folder>
+	add 	[-r <repository path>] [-n <name>] [-d <description>] [-m] <file/folder>
+	replace [-r <repository path>]  [-d <description>] [-m] <data set name> <file/folder>
+	delete 	[-r <repository path>] <data set name>
+	export 	[-r <repository path>] <data set name> <destination folder>
+	server [-r <repository path>] <properties file>
+	[help]
