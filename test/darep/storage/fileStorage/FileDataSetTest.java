@@ -73,7 +73,9 @@ public class FileDataSetTest {
 		File subFolder = new File(folder, "subfolder");
 		subFolder.mkdir();
 		File subFolderFile = new File(subFolder, "file");
+		subFolderFile.createNewFile();
 		File subFolderFile2 = new File(subFolder, "file2");
+		subFolderFile2.createNewFile();
 		Metadata folderMeta = new Metadata("FOLDER", "folder", "desc folder", 3, 12, folder.getCanonicalPath());
 		
 		dsFolder = new FileDataSet(folder, folderMeta);
