@@ -207,6 +207,10 @@ public class Helper {
 	}
 	
 	public static void stringToFile(String content, File file) throws IOException {
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		
 		FileWriter fw = new FileWriter(file);
 		try {
 			fw.write(content);
