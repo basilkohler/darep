@@ -1,13 +1,9 @@
 package darep.storage.fileStorage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -19,8 +15,6 @@ import darep.Helper;
 import darep.repos.RepositoryException;
 import darep.storage.Metadata;
 import darep.storage.StorageException;
-import darep.storage.fileStorage.FileDataSet;
-import darep.storage.fileStorage.FileStorage;
 
 public class FileStorageTest {
 	FileStorage db;
@@ -77,38 +71,9 @@ public class FileStorageTest {
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
 		assertTrue(testData.exists());
-		compareContents(expectedDataset, testData);
+		Helper.compareFilesRecursive(expectedDataset, testData);
 	}
 	
-	private void compareContents(File expectedDataset, File testDataSet) throws IOException {
-		FileReader frA = new FileReader(expectedDataset);
-		FileReader frB = new FileReader(testDataSet);
-        BufferedReader readerA = new BufferedReader(frA);
-        BufferedReader readerB = new BufferedReader(frB);
-
-        try {
-			String expectedContent = getReaderContent(readerA);
-			String testContent = getReaderContent(readerB);
-	        
-	        assertEquals(expectedContent, testContent);
-        } finally {
-        	readerA.close();
-        	readerB.close();
-        	frA.close();
-        	frB.close();
-        }
-	}
-
-	private String getReaderContent(BufferedReader reader) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		String str = reader.readLine();
-		while (str != null) {
-			sb.append(str + "\n");
-			str = reader.readLine();
-		}
-		return sb.toString();
-	}
-
 	@Test
 	public void testAddCopyFolder() throws IOException, RepositoryException, StorageException {
 		File expectedData = new File(filedb, testMetaFileName);
