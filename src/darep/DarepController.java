@@ -123,7 +123,8 @@ public class DarepController {
 			DarepException e) {
 		controller.getLogger().logError(e.getMessage());
 		// TODO make build set debug mode or something
-		e.printStackTrace();
+		// TODO removed for distribution
+		//e.printStackTrace();
 		System.exit(1);
 	}
 	
