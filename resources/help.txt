@@ -22,8 +22,11 @@ usage:
 		<destination folder> Path to the destination folder.
 		-r <repository path> Absolute or relative path to the repository.
 
-	data-repository list [-r <repository path>] [-p]
+	list [-r <repository path>] [-p]
 		-r <repository path> Absolute or relative path to the repository. 
 		-p Pretty output instead of TAB-separated output.
-	
+
+	server [-r <repository path>] <properties file>
+		-r <repository path> Absolute or relative path to the repository. <properties file> Java properties file with configuration parameters.	
+		
 	[help]

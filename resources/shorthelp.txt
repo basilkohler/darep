@@ -3,4 +3,5 @@ usage:
 	replace [-r <repository path>]  [-d <description>] [-m] <data set name> <file/folder>
 	delete 	[-r <repository path>] <data set name>
 	export 	[-r <repository path>] <data set name> <destination folder>
+	server [-r <repository path>] <properties file>
 	[help]
