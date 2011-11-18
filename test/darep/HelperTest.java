@@ -113,7 +113,6 @@ public class HelperTest {
 		assertTrue(Helper.compareFilesRecursive(subDir, copy));		
 	}
 	
-	// TODO testCompareFilesRecursive
 	@Test
 	public void testCompareFilesRecursive() throws IOException {
 		File original = new File(testEnv, "testOrig");

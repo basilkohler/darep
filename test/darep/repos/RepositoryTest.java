@@ -3,6 +3,7 @@ package darep.repos;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,11 +12,15 @@ import org.junit.Test;
 import darep.Command;
 import darep.Command.ActionType;
 import darep.DarepController;
+import darep.Helper;
 import darep.logger.SystemLogger;
 import darep.parser.ParseException;
 import darep.parser.Parser;
 import darep.server.ServerException;
 import darep.storage.fileStorage.FileStorage;
+
+
+// TODO RepositoryTest is more like a FileStorageTest
 
 public class RepositoryTest {
 	File testDir;
@@ -40,11 +45,11 @@ public class RepositoryTest {
 
 	@After
 	public void tearDown() throws Exception {
-		deleteFile(testDir);
+		Helper.deleteRecursive(testDir);
 	}
 
 	@Test
-	public void testAdd() {
+	public void testAdd() throws IOException {
 		command = getCommand("add " + testDataSet.getAbsolutePath());
 		File newDataset = new File(testRepo + "/data/TESTDATASET");
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
@@ -56,6 +61,7 @@ public class RepositoryTest {
 			e.printStackTrace();
 		}
 		assertTrue(newDataset.exists());
+		assertTrue(Helper.compareFilesRecursive(testDataSet, newDataset));
 		assertTrue(newMetadata.exists());
 	}
 
@@ -76,12 +82,13 @@ public class RepositoryTest {
 	}
 
 	@Test
-	public void testAddMultiple() throws RepositoryException {
+	public void testAddMultiple() throws RepositoryException, IOException {
 		File newDataset = new File(testRepo + "/data/TESTDATASET");
 		File newMetadata = new File(testRepo + "/metadata/TESTDATASET");
 		command = getCommand("add " + testDataSet.getAbsolutePath());
 		repo.add(command);
 		assertTrue(newDataset.exists());
+		assertTrue(Helper.compareFilesRecursive(testDataSet, newDataset));
 		assertTrue(newMetadata.exists());
 		for (int i = 1; i < 4; i++) {
 
@@ -91,6 +98,7 @@ public class RepositoryTest {
 				newDataset = new File(testRepo + "/data/TESTDATASET" + j);
 				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + j);
 				assertTrue(newDataset.exists());
+				assertTrue(Helper.compareFilesRecursive(testDataSet, newDataset));
 				assertTrue(newMetadata.exists());
 			}
 		}
@@ -165,16 +173,6 @@ public class RepositoryTest {
 			e.printStackTrace();
 		}
 		return command;
-	}
-
-	private void deleteFile(File file) {
-		if (file.isDirectory()) {
-			File[] content = file.listFiles();
-			for (int i = 0; i < content.length; i++) {
-				deleteFile(content[i]);
-			}
-		}
-		file.delete();
 	}
 
 }
