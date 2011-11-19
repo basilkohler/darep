@@ -15,6 +15,7 @@ import darep.repos.RepositoryException;
 public class Server {
 	
 	private Repository repository;
+	private Logger serverLogger;
 	private Properties properties = new Properties();
 	private static final String[] propertyNames = {"incoming-directory", "html-overview", "log-file", 
 											"checking-interval-in-seconds", "completeness-checker.class-name" };
@@ -41,26 +42,34 @@ public class Server {
 		this.repository = repository;
 		loadPropertiesFile(command.getParams()[0]);
 		repository.getLogger().logSuccess("Data Repository Server successfully started");
-		Logger serverLogger = new ServerLogger(getProperty(LOG_FILE));
+		serverLogger = new ServerLogger(getProperty(LOG_FILE));
 		repository.setLogger(serverLogger);
 	}
 	
-	public void start() throws ServerException {
-		while(running) {
-			File[] files = checkIncomingDirectory();
-			for(File f : files) {
+	public void start() {
+		try {
+			int seconds = Integer.parseInt(getProperty(CHECKING_INTERVAL_IN_SECONDS));
+			if(seconds < 0) {
+				throw new ServerException("checking-interval-in-seconds property must be bigger 1 or bigger");
+			}
+			while(running) {
+				File[] files = checkIncomingDirectory();
+				for(File f : files) {
+					try {
+						addFile(f); 
+					} catch (RepositoryException e) {
+						throw new ServerException("server could not add file " + f.getPath());
+					}
+				}
 				try {
-					addFile(f); 
-				} catch (RepositoryException e) {
-					throw new ServerException("server could not add file " + f.getPath());
+					Thread.sleep(seconds*1000);
+				} catch (InterruptedException e) {
+					throw new ServerException(e);
 				}
 			}
-			int seconds = Integer.parseInt(getProperty(CHECKING_INTERVAL_IN_SECONDS));
-			try {
-				Thread.sleep(seconds*1000);
-			} catch (InterruptedException e) {
-				throw new ServerException(e);
-			}
+		} catch (ServerException e) {
+			// TODO the Application need to return 1 in case of failure. Maybe better make one static logger in darep controller?
+			serverLogger.logError(e.getMessage());
 		}
 	}
 	
@@ -69,10 +78,8 @@ public class Server {
 	}
 	
 	private void loadPropertiesFile(String propertiesPath) throws ServerException {
-		FileInputStream in = null; 
 		try {
-			in = new FileInputStream(propertiesPath);
-			properties.load(in);
+			properties.load(new FileInputStream(propertiesPath));
 			for(int i = 0; i < propertyNames.length; i++) {
 				if(getProperty(i) == null) {
 					throw new ServerException("Missing property " + propertyNames[i] + " in the property file " + propertiesPath);
@@ -82,8 +89,6 @@ public class Server {
 			throw new ServerException("could not find properties file " + propertiesPath, e);
 		} catch (IOException e) {
 			throw new ServerException("could not read properties file " + propertiesPath, e);
-		} finally {
-			in.close();
 		}
 	}
 	
