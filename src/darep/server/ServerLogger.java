@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import darep.Helper;
 import darep.logger.Logger;
@@ -32,9 +33,8 @@ public class ServerLogger extends Logger{
 		StringBuilder sb = new StringBuilder();
 		
 		// append timestamp
-		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		String timeStamp = sdf.format(cal.getTime());	
+		String timeStamp = sdf.format(new Date().getTime());	
 		sb.append("[" + timeStamp + "] ");
 		
 		// append loglevel
