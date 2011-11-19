@@ -69,8 +69,10 @@ public class Server {
 	}
 	
 	private void loadPropertiesFile(String propertiesPath) throws ServerException {
+		FileInputStream in = null; 
 		try {
-			properties.load(new FileInputStream(propertiesPath));
+			in = new FileInputStream(propertiesPath);
+			properties.load(in);
 			for(int i = 0; i < propertyNames.length; i++) {
 				if(getProperty(i) == null) {
 					throw new ServerException("Missing property " + propertyNames[i] + " in the property file " + propertiesPath);
@@ -80,6 +82,8 @@ public class Server {
 			throw new ServerException("could not find properties file " + propertiesPath, e);
 		} catch (IOException e) {
 			throw new ServerException("could not read properties file " + propertiesPath, e);
+		} finally {
+			in.close();
 		}
 	}
 	
