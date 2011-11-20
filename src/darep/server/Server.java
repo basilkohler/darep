@@ -79,7 +79,12 @@ public class Server {
 	
 	private void loadPropertiesFile(String propertiesPath) throws ServerException {
 		try {
-			properties.load(new FileInputStream(propertiesPath));
+			FileInputStream is = new FileInputStream(propertiesPath);
+			try {
+				properties.load(is);
+			} finally {
+				is.close();
+			}
 			for(int i = 0; i < propertyNames.length; i++) {
 				if(getProperty(i) == null) {
 					throw new ServerException("Missing property " + propertyNames[i] + " in the property file " + propertiesPath);
