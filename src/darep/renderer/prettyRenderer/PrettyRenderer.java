@@ -8,6 +8,11 @@ import darep.storage.DataSet;
 import darep.storage.DataSetDateComparator;
 import darep.storage.Metadata;
 
+/**
+ * Generates the ASCII table of all DataSets that is shown by the command
+ * "data-repository list -p"
+ *
+ */
 public class PrettyRenderer implements Renderer {
 	
 	private final static boolean ALIGN_LEFT = Helper.ALIGN_LEFT;

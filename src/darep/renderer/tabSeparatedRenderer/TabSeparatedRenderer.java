@@ -7,6 +7,11 @@ import darep.storage.DataSet;
 import darep.storage.DataSetDateComparator;
 import darep.storage.Metadata;
 
+/**
+ * Generates the tab-separated list that is shown by the command
+ * "data-repository list"
+ *
+ */
 public class TabSeparatedRenderer implements Renderer {
 	
 	private DataSetDateComparator comp = new DataSetDateComparator();

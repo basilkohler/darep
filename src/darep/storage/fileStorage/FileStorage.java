@@ -102,34 +102,6 @@ public class FileStorage implements Storage {
 		return datasets.toArray(new FileDataSet[0]);
 	}
 
-//	public File export(String sourceName, String destFolder)
-//			throws RepositoryException {
-//		FileDataset dataset = getDataSet(sourceName);
-//
-//		File sourceFile = dataset.getFile();
-//		if (!sourceFile.exists())
-//			throw new RepositoryException("There is no File with name \'"
-//					+ sourceName + "\' in this Repository");
-//
-//		String originalName = dataset.getMetadata().getOriginalName();
-//		File destFile = new File(destFolder, originalName);
-//
-//		if (!(new File(destFolder).exists()))
-//			throw new RepositoryException("Destination folder \'" + destFolder
-//					+ "\' does not exist.");
-//		if (!(new File(destFolder).isDirectory()))
-//			throw new RepositoryException("Destination folder \'" + destFolder
-//					+ "\' is a file and not a folder.");
-//		if (destFile.exists())
-//			throw new RepositoryException("There is already a file/folder"
-//					+ " named \"" + originalName + "\""
-//					+ " in destination folder \"" + destFolder + "\"");
-//
-//		copyFile(sourceFile, destFile);
-//		return destFile;
-//
-//	}
-
 	@Override
 	public DataSet getDataSet(String name) throws StorageException {
 		
@@ -165,7 +137,6 @@ public class FileStorage implements Storage {
 			 Object obj = in.readObject();
 			 if (obj instanceof Metadata) {
 				 Metadata m = (Metadata) obj;
-//					 updateMaxLengthValues(m);
 				 return m;
 			 } else {
 				 throw new StorageException("File " + metadataFile.getName()

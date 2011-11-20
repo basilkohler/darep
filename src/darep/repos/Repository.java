@@ -14,20 +14,32 @@ import darep.storage.Metadata;
 import darep.storage.Storage;
 import darep.storage.StorageException;
 
-/*the repository provides methods to access the Database.class
- * and represents the physical folder located at 'location', which contains the db
- * the repository ensures he correctness of the contents of the db !!!!
- * 
+/**
+ * Provides the functionality of the Repository.
+ * Uses a {@link Storage} object to actually store Data permanenty on disk.
+ *
  */
 public class Repository {
 	
+	/**
+	 * The Default location of the data-repository, which is "~/.data-repository"
+	 */
 	private static final String DEFAULT_LOCATION = 
 			System.getProperty("user.home") + "/.data-repository";
+	
+	/**
+	 * The logger object to which the repository logs messages.
+	 */
 	private Logger logger;
+	
 	/**
 	 * The CANONICAL File which contains the Repository
 	 */
 	private final File location;
+	
+	/**
+	 * The {@link Storage} instance which actually saves data on disk
+	 */
 	private Storage db;
 
 	/*

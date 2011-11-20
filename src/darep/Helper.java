@@ -59,6 +59,11 @@ public class Helper {
 		return (true && sameLength);
 	}
 	
+	/**
+	 * Deletes the file or folder file recursively
+	 * @param file
+	 * @return
+	 */
 	public static boolean deleteRecursive(File file) {
 		if(file == null)
 			return true;
@@ -76,15 +81,38 @@ public class Helper {
 		return file.delete();
 	}
 
+	/**
+	 * Used as a parameter to {@link Helper}.stringToLength()
+	 */
 	public static final boolean ALIGN_LEFT = true;
+	
+	/**
+	 * Used as a parameter to {@link Helper}.stringToLength()
+	 */
 	public static final boolean ALIGN_RIGHT = false;
+	
+	/**
+	 * Shortens or lengthens a string to the given length.
+	 * Alignment defines which end of the string is being edited.
+	 * If Alignment is ALIGN_LEFT, the string es shortened or lengthened
+	 * at the right side, so it can be aligned left.
+	 * @param string
+	 * @param length
+	 * @param alignment
+	 * @return
+	 */
 	public static String stringToLength(String string, int length, boolean alignment) {
 		if(string == null)
 			return null;
 		if(length < 0)
 			return null;
 		if (string.length() > length) {
-			return string.substring(0, length);
+			if (alignment == ALIGN_LEFT) {
+				return string.substring(0, length);
+			} else {
+				int begin = string.length() - length;
+				return string.substring(begin, string.length());
+			}
 		} else if (string.length() < length) {
 			
 			String space = stringTimes(" ", length - string.length());
@@ -99,10 +127,22 @@ public class Helper {
 		}
 	}
 	
+	/**
+	 * Calls Helper.stringToLength(string, length, ALIGN_LEFT)
+	 * @param string
+	 * @param length
+	 * @return
+	 */
 	public static String stringToLength(String string, int length) {
 		return stringToLength(string, length, ALIGN_LEFT);
 	}
 	
+	/**
+	 * Returns a string that is s repeated i times
+	 * @param s
+	 * @param i
+	 * @return
+	 */
 	public static String stringTimes(String s, int i) {
 		
 		if (i <= 0) {
@@ -116,6 +156,13 @@ public class Helper {
 		return sb.toString();
 	}
 	
+	/**
+	 * Reads the hole {@link InputStream} into a string.
+	 * @param stream
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public static String streamToString(InputStream stream) throws FileNotFoundException, IOException{
 		BufferedReader reader = null;
 		StringBuffer sb = new StringBuffer();
@@ -135,6 +182,13 @@ public class Helper {
 		return sb.toString();
 	}
 	
+	/**
+	 * Compares the content of a file or folder recursively to another.
+	 * @param f1
+	 * @param f2
+	 * @return
+	 * @throws IOException
+	 */
 	public static boolean compareFilesRecursive(File f1, File f2) throws IOException {
 		
 		// Same files should be equal, don't need to compare
@@ -176,6 +230,12 @@ public class Helper {
 		return false;
 	}
 	
+	/**
+	 * Copies a the file or folder <i>from</i> recursively into the file <i>to</i> 
+	 * @param from
+	 * @param to
+	 * @throws IOException
+	 */
 	public static void copyRecursive(File from, File to) throws IOException {
 	
 		File canonicalFrom = from.getCanonicalFile();
@@ -206,6 +266,13 @@ public class Helper {
 		}
 	}
 	
+	/**
+	 * Writes the String <i>content</i> into the file <i>file</i>.
+	 * Tries to create that file if it doesn't exit.
+	 * @param content
+	 * @param file
+	 * @throws IOException
+	 */
 	public static void stringToFile(String content, File file) throws IOException {
 		if (!file.exists()) {
 			file.createNewFile();

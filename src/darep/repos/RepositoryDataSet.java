@@ -6,8 +6,15 @@ import java.io.IOException;
 import darep.Helper;
 import darep.storage.DataSet;
 import darep.storage.Metadata;
+import darep.storage.Storage;
 import darep.storage.StorageException;
 
+/**
+ * Used by {@link Repository} to hand the file that should be stored in
+ * the repository to the {@link Storage}. Has copyMode flag to
+ * enable copying and moving to the Storage.
+ *
+ */
 class RepositoryDataSet implements DataSet {
 	
 	private Metadata metaData;
