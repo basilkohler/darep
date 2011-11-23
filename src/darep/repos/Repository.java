@@ -90,7 +90,7 @@ public class Repository {
 		String fileFolder = ds.getType().toString();
 		String msg = "The "+fileFolder+" '"+meta.getOriginalName()+"' has" +
 				" been successfully added to the repository as data set" +
-				" named " + meta.getName();
+				" named " + meta.getName()+".";
 		
 		try {
 			db.store(ds);
@@ -292,7 +292,7 @@ public class Repository {
 		
 		logger.logSuccess("The data set named " + command.getParams()[0]
 				+ " has been successfully"
-				+ " replaced by the file/folder.");
+				+ " replaced by the file/folder '"+newDs.getMetadata().getOriginalName()+"'.");
 	}
 
 	public void export(Command command) throws RepositoryException {
@@ -307,12 +307,12 @@ public class Repository {
 			DataSet ds = db.getDataSet(command.getParams()[0]);
 			if (ds == null) {
 				throw new RepositoryException("Unknown data set "
-						+ command.getParams()[0]);
+						+ command.getParams()[0]+".");
 			}
 			
 			if (!canonicalExportFile.exists()) {
 				throw new RepositoryException("Destination folder '" +
-						exportPath + "' does not exist");
+						exportPath + "' does not exist.");
 			} else if (canonicalExportFile.isFile()) {
 				throw new RepositoryException("Destination folder '" +
 						exportPath + "' is a file not a folder.");
@@ -328,9 +328,9 @@ public class Repository {
 			}
 			ds.copyFileTo(destination);
 			String message = "The data set " + command.getParams()[0]
-					+ " (original name: " + ds.getMetadata().getName() + ")"
-					+ " has been successfully exported to "
-					+ command.getParams()[1];
+					+ " (original name: " + ds.getMetadata().getOriginalName() + ")"
+					+ " has been successfully exported to '"
+					+ command.getParams()[1]+"'.";
 			
 			logger.logSuccess(message);
 		} catch (IOException e) {
