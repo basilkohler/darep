@@ -328,7 +328,7 @@ public class Repository {
 			}
 			ds.copyFileTo(destination);
 			String message = "The data set " + command.getParams()[0]
-					+ " (original name: " + ds.getMetadata().getName() + ")"
+					+ " (original name: " + ds.getMetadata().getOriginalName() + ")"
 					+ " has been successfully exported to "
 					+ command.getParams()[1];
 			
