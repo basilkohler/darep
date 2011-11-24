@@ -41,14 +41,36 @@ public class Server {
 		
 		this.repository = repository;
 		loadPropertiesFile(command.getParams()[0]);
+		createServerFiles();
 		repository.getLogger().logSuccess("Data Repository Server successfully started");
 		serverLogger = new ServerLogger(getProperty(LOG_FILE));
 		repository.setLogger(serverLogger);
 	}
 	
+	private void createServerFiles() throws ServerException {
+		File incoming = new File(getProperty(INCOMING_DIRECTORY));
+		if(incoming.exists() == false) {
+			throw new ServerException("incoming directory " + incoming.getAbsolutePath() + " does not exist.");
+		}		
+		
+		File log = new File(getProperty(LOG_FILE));
+		if(log.exists() == false) {
+			try {
+				log.createNewFile();
+			} catch (IOException e) {
+				throw new ServerException("could not create logfile " + log.getAbsolutePath() + " because the folder does not exist", e);
+			}
+		}
+	}
+	
 	public void start() {
 		try {
-			int seconds = Integer.parseInt(getProperty(CHECKING_INTERVAL_IN_SECONDS));
+			int seconds;
+			try {
+				seconds = Integer.parseInt(getProperty(CHECKING_INTERVAL_IN_SECONDS));
+			} catch (NumberFormatException e) {
+				throw new ServerException("checking-interval-in-seconds property must be a number");
+			}
 			if(seconds < 0) {
 				throw new ServerException("checking-interval-in-seconds property must be bigger 1 or bigger");
 			}
@@ -68,7 +90,6 @@ public class Server {
 				}
 			}
 		} catch (ServerException e) {
-			// TODO the Application need to return 1 in case of failure. Maybe better make one static logger in darep controller?
 			serverLogger.logError(e.getMessage());
 		}
 	}
@@ -78,6 +99,7 @@ public class Server {
 	}
 	
 	private void loadPropertiesFile(String propertiesPath) throws ServerException {
+		
 		try {
 			FileInputStream is = new FileInputStream(propertiesPath);
 			try {
