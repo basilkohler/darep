@@ -331,7 +331,6 @@ public class Repository {
 					+ " (original name: " + ds.getMetadata().getOriginalName() + ")"
 					+ " has been successfully exported to '"
 					+ command.getParams()[1]+"'.";
-
 			
 			logger.logSuccess(message);
 		} catch (IOException e) {

@@ -40,7 +40,7 @@ public class FileStorage implements Storage {
 		String name = ds.getMetadata().getName();
 		if (getDataSet(name) != null) {
 			throw new StorageException("There is already a data set named "
-										+ name + " in the repository");
+										+ name + " in the repository.");
 		}
 		
 		try {
