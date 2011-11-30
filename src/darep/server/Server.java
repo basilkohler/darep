@@ -97,18 +97,25 @@ public class Server extends Thread {
 			File dir = new File(getProperty(INCOMING_DIRECTORY));
 			
 			while(running) {
-				File[] files = completenessChecker.getCompletedFiles(dir);
+				try {
+					Thread.sleep(seconds*1000);
+				} catch (InterruptedException e) {
+					throw new ServerException(e);
+				}
+				File[] files;
+				try {
+					files = completenessChecker.getCompletedFiles(dir);
+				} catch (Exception e) {
+					repository.getLogger().logError("There was an Error in CompletenessChecker");
+					repository.getLogger().logError(e.getMessage());
+					continue;
+				}
 				for(File f : files) {
 					try {
 						addFile(f); 
 					} catch (RepositoryException e) {
 						throw new ServerException("server could not add file " + f.getPath());
 					}
-				}
-				try {
-					Thread.sleep(seconds*1000);
-				} catch (InterruptedException e) {
-					throw new ServerException(e);
 				}
 			}
 		} catch (ServerException e) {
