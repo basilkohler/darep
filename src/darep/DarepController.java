@@ -162,6 +162,7 @@ public class DarepController {
 			break;
 		case server:
 			new Server(repository, command).start();
+			repository.getLogger().logSuccess("Data Repository Server successfully started");
 			break;
 		case list:
 			logger.logSuccess(repository.getList(command));

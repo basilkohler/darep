@@ -12,22 +12,23 @@ import darep.logger.Logger;
 import darep.repos.Repository;
 import darep.repos.RepositoryException;
 
-public class Server {
+public class Server extends Thread {
 	
 	private Repository repository;
 	private Logger serverLogger;
 	private Properties properties = new Properties();
-	private static final String[] propertyNames = {"incoming-directory", "html-overview", "log-file", 
-											"checking-interval-in-seconds", "completeness-checker.class-name" };
 	private final String[] propertyValues;
+	private boolean running = true;
+	private CompletenessChecker completenessChecker;
 	
+	private static final String[] propertyNames = {"incoming-directory", "html-overview", "log-file", 
+		"checking-interval-in-seconds", "completeness-checker.class-name" };
 	private static final int INCOMING_DIRECTORY = 0;
 	private static final int HTML_OVERVIEW = 1;
 	private static final int LOG_FILE = 2;
 	private static final int CHECKING_INTERVAL_IN_SECONDS = 3;
 	private static final int COMPLETENESS_CHECKER_CLASS_NAME = 4;
 	
-	private boolean running = true;
 	
 	public Server(Repository repository, Command command) throws ServerException {
 		
@@ -42,11 +43,28 @@ public class Server {
 		this.repository = repository;
 		loadPropertiesFile(command.getParams()[0]);
 		createServerFiles();
-		repository.getLogger().logSuccess("Data Repository Server successfully started");
+		completenessChecker = getCompletenessChecker();
 		serverLogger = new ServerLogger(getProperty(LOG_FILE));
 		repository.setLogger(serverLogger);
 	}
 	
+	private CompletenessChecker getCompletenessChecker() throws ServerException {
+		try {
+			Class<?> cls = Class.forName(getProperty(COMPLETENESS_CHECKER_CLASS_NAME));
+			Object o = cls.newInstance();
+			if (o instanceof CompletenessChecker) {
+				return (CompletenessChecker) o;
+			} 
+			throw new ServerException("Specified class does not implement CompletenessChecker");
+		} catch (ClassNotFoundException e) {
+			throw new ServerException(e);
+		} catch (InstantiationException e) {
+			throw new ServerException(e);
+		} catch (IllegalAccessException e) {
+			throw new ServerException(e);
+		}
+	}
+
 	private void createServerFiles() throws ServerException {
 		File incoming = new File(getProperty(INCOMING_DIRECTORY));
 		if(incoming.exists() == false) {
@@ -63,7 +81,8 @@ public class Server {
 		}
 	}
 	
-	public void start() {
+	@Override
+	public void run() {
 		try {
 			int seconds;
 			try {
@@ -74,8 +93,11 @@ public class Server {
 			if(seconds < 0) {
 				throw new ServerException("checking-interval-in-seconds property must be bigger 1 or bigger");
 			}
+			
+			File dir = new File(getProperty(INCOMING_DIRECTORY));
+			
 			while(running) {
-				File[] files = checkIncomingDirectory();
+				File[] files = completenessChecker.getCompletedFiles(dir);
 				for(File f : files) {
 					try {
 						addFile(f); 
@@ -116,17 +138,6 @@ public class Server {
 			throw new ServerException("could not find properties file " + propertiesPath, e);
 		} catch (IOException e) {
 			throw new ServerException("could not read properties file " + propertiesPath, e);
-		}
-	}
-	
-	private File[] checkIncomingDirectory() {
-		File dir = new File(getProperty(INCOMING_DIRECTORY));
-		// TODO implement completeness-checker
-		File[] files = dir.listFiles();
-		if(files != null) {
-			return files;
-		} else {
-			return new File[0];
 		}
 	}
 	

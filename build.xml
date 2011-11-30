@@ -34,6 +34,7 @@
 			<fileset dir="${resources}"/>
 			<manifest>
 				<attribute name="Main-Class" value="darep.DarepController"/>
+				<attribute name="Class-Path" value="data-repository-plugin.jar"/>
 			</manifest>
 		</jar>
 	</target>
