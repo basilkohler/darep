@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import darep.Command;
@@ -20,6 +23,7 @@ public class Server extends Thread {
 	private final String[] propertyValues;
 	private boolean running = true;
 	private CompletenessChecker completenessChecker;
+	private Map<String, String> completenessCheckerProperties;
 	
 	private static final String[] propertyNames = {"incoming-directory", "html-overview", "log-file", 
 		"checking-interval-in-seconds", "completeness-checker.class-name" };
@@ -42,18 +46,36 @@ public class Server extends Thread {
 		
 		this.repository = repository;
 		loadPropertiesFile(command.getParams()[0]);
+		completenessCheckerProperties = getCompletenessCheckerProperties(properties);
 		createServerFiles();
 		completenessChecker = getCompletenessChecker();
 		serverLogger = new ServerLogger(getProperty(LOG_FILE));
 		repository.setLogger(serverLogger);
 	}
 	
+	private Map<String, String> getCompletenessCheckerProperties(Properties p) {
+		HashMap<String, String> m = new HashMap<String, String>();
+		
+		for (String key: p.stringPropertyNames()) {
+			if (key.startsWith("completeness-checker.")) {
+				String newKey = key.substring("completeness-checker.".length());
+				m.put(newKey, p.getProperty(key));
+			}
+		}
+		
+		return m;
+	}
+
 	private CompletenessChecker getCompletenessChecker() throws ServerException {
 		try {
 			Class<?> cls = Class.forName(getProperty(COMPLETENESS_CHECKER_CLASS_NAME));
 			Object o = cls.newInstance();
 			if (o instanceof CompletenessChecker) {
-				return (CompletenessChecker) o;
+				CompletenessChecker c = (CompletenessChecker) o;
+				for (Entry<String, String> prop: completenessCheckerProperties.entrySet()) {
+					c.setProperty(prop.getKey(), prop.getValue());
+				}
+				return c;
 			} 
 			throw new ServerException("Specified class does not implement CompletenessChecker");
 		} catch (ClassNotFoundException e) {
