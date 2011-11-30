@@ -59,6 +59,10 @@ public class Server extends Thread {
 		for (String key: p.stringPropertyNames()) {
 			if (key.startsWith("completeness-checker.")) {
 				String newKey = key.substring("completeness-checker.".length());
+				
+				if (newKey.equals("class-name")) {
+					continue;
+				}
 				m.put(newKey, p.getProperty(key));
 			}
 		}
