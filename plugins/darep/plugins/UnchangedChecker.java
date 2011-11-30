@@ -26,7 +26,7 @@ public class UnchangedChecker implements CompletenessChecker{
 	@Override
 	public void setProperty(String key, String value)
 			throws IllegalArgumentException {
-		String expectedKey = "quiet-period-in-second";
+		String expectedKey = "quiet-period-in-seconds";
 		if(key.equals(expectedKey) == false) {
 			throw new IllegalArgumentException("UnchangedChecker only accepts the property " + expectedKey);
 		}
