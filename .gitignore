@@ -1,6 +1,7 @@
 .project
 .classpath
 bin/*
+binPlugins/*
 *.swp
 .DS_Store
 nbproject/*
@@ -10,5 +11,4 @@ dist/*
 data-repository.zip
 .settings/*
 server.properties
-personal.properties
 personal.properties

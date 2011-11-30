@@ -1,16 +1,27 @@
 <project name="darep" default="zipdist" basedir=".">
 	<property name="src" location="src" />
+	<property name="srcPlugins" location="plugins" />
 	<property name="srcTest" location="test" />
 	<property name="build" location="bin" />
+	<property name="buildPlugins" location="binPlugins" />
 	<property name="dist" location="dist" />
+	<property name="sdkDist" location="${dist}/sdk" />
 	<property name="wrapperScript" location="${src}/data-repository" />
 	<property name="wrapperScriptWindows" location="${src}/data-repository.cmd" />
 	<property name="README" location="README" />
 	<property name="distZip" location="data-repository.zip" />
 	<property name="resources" location="resources" />
 	<property name="serverDefaultProperties" location="${src}/server-default.properties" />
+	<property name="pluginJarName" value="data-repository-plugin.jar" />
+	
 	<path id="junitLib">
 		<pathelement location="lib/junit-4.10.jar" />
+	</path>
+	
+	<path id="plugin-classpath">
+		<fileset dir="${sdkDist}">
+			<include name="*.jar" />
+		</fileset>
 	</path>
 	
 	<target name="clean" description="Deletes build and distribution files">
@@ -21,12 +32,23 @@
 	
 	<target name="init" depends="clean" description="Init">
 		<mkdir dir="${build}" />
+		<mkdir dir="${buildPlugins}" />
 		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/sdk" />
 		<tstamp />
 	</target>
 	
 	<target name="compile" depends="init" description="Compile sources">
 		<javac srcdir="${src}" destdir="${build}" includeantruntime="false" />
+	</target>
+	
+	<target name="makeSDK" depends="compile" description="Generate the data-repository sdk">
+		<jar jarfile="${sdkDist}/darepLib.jar" basedir="${build}" includes="darep/server/CompletenessChecker.class" />
+		<javadoc sourcefiles="src/darep/server/CompletenessChecker.java" destdir="${sdkDist}/doc" />
+	</target>
+	
+	<target name="compilePlugins" depends="init, makeSDK" description="Compile Plugins">
+		<javac srcdir="${srcPlugins}" destdir="${buildPlugins}" classpathref="plugin-classpath" includeantruntime="false" />
 	</target>
 	
 	<target name="jar" depends="compile" description="Generate JAR">
@@ -37,6 +59,10 @@
 				<attribute name="Class-Path" value="data-repository-plugin.jar"/>
 			</manifest>
 		</jar>
+	</target>
+	
+	<target name="jarPlugins" depends="compilePlugins" description="Generate Plugins JAR">
+		<jar jarfile="${dist}/${pluginJarName}" basedir="${buildPlugins}" />
 	</target>
 
 	<target name="compile-test" depends="compile" description="Compile test sources.">
@@ -56,7 +82,7 @@
 		</junit>
 	</target>
 	
-	<target name="dist" depends="jar, test" description="Creates a complete distribution in folder 'dist'">
+	<target name="dist" depends="jar, test, jarPlugins" description="Creates a complete distribution in folder 'dist'">
 		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
 		<chmod file="${dist}/data-repository" perm="u+x" />
 		<copy tofile="${dist}/data-repository.cmd" file="${wrapperScriptWindows}" />
