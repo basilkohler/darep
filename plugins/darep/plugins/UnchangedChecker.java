@@ -19,7 +19,7 @@ public class UnchangedChecker implements CompletenessChecker{
 				completedFiles.add(f);
 			}
 		}
-		return (File[])completedFiles.toArray();
+		return completedFiles.toArray(new File[0]);
 	}
 	
 
