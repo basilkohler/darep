@@ -15,12 +15,13 @@ public class UnchangedChecker implements CompletenessChecker{
 		ArrayList<File> completedFiles = new ArrayList<File>(files.length);
 		long time = new Date().getTime();
 		for(File f:files) {
-			if(f.lastModified() <= time - quietPeriodInSeconds) {
+			if(f.lastModified() <= time - quietPeriodInSeconds * 1000) {
 				completedFiles.add(f);
 			}
 		}
 		return (File[])completedFiles.toArray();
 	}
+	
 
 	@Override
 	public void setProperty(String key, String value)
