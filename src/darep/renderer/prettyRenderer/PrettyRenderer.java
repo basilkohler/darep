@@ -18,15 +18,6 @@ public class PrettyRenderer implements Renderer {
 	private final static boolean ALIGN_LEFT = Helper.ALIGN_LEFT;
 	private final static boolean ALIGN_RIGHT = Helper.ALIGN_RIGHT;
 	
-	private String[] columnHeaders = new String[] {
-			"Name",
-			"Original Name",
-			"Timestamp",
-			"Number of Files",
-			"Size",
-			"Description"
-	};
-	
 	private boolean[] alignment = new boolean[] {
 			ALIGN_LEFT,
 			ALIGN_LEFT,
@@ -50,7 +41,7 @@ public class PrettyRenderer implements Renderer {
 		for (DataSet ds : dataSets) {
 			
 			Metadata meta = ds.getMetadata();
-			String[] values = makeStringValues(meta);
+			String[] values = meta.toStringArray();
 			
 			totalSize += meta.getFileSize();
 			
@@ -74,8 +65,8 @@ public class PrettyRenderer implements Renderer {
 	private Object generateHeaderLine(int[] colWidths) {
 		StringBuilder sb = new StringBuilder();
 		
-		for (int i = 0; i < columnHeaders.length; i++) {
-			sb.append(Helper.stringToLength(columnHeaders[i],
+		for (int i = 0; i < Metadata.columnHeaders.length; i++) {
+			sb.append(Helper.stringToLength(Metadata.columnHeaders[i],
 					colWidths[i], ALIGN_LEFT) + "|");
 		}
 		sb.append("\n");
@@ -89,24 +80,11 @@ public class PrettyRenderer implements Renderer {
 		return sb.toString();
 	}
 
-	private String[] makeStringValues(Metadata metadata) {
-		String[] values = new String[columnHeaders.length];
-		
-		values[0] = metadata.getName();
-		values[1] = metadata.getOriginalName();
-		values[2] = metadata.getTimeStamp().toString();
-		values[3] = String.valueOf(metadata.getNumberOfFiles());
-		values[4] = String.valueOf(metadata.getFileSize());
-		values[5] = metadata.getDescription();
-		
-		return values;
-	}
-
 	private int[] calculateColumnWidths(DataSet[] dataSets) {
-		int[] colWidths = new int[columnHeaders.length];
+		int[] colWidths = new int[Metadata.columnHeaders.length];
 		
-		for (int i = 0; i < columnHeaders.length; i++) {
-			colWidths[i] = columnHeaders[i].length();
+		for (int i = 0; i < Metadata.columnHeaders.length; i++) {
+			colWidths[i] = Metadata.columnHeaders[i].length();
 		}
 		
 		Metadata meta;

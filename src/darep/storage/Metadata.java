@@ -14,6 +14,15 @@ public class Metadata implements Serializable {
 	private int numberOfFiles;
 	private long size;
 	
+	public static final String[] columnHeaders = new String[] {
+			"Name",
+			"Original Name",
+			"Timestamp",
+			"Number of Files",
+			"Size",
+			"Description"
+	};
+
 	public Metadata() {
 		timestamp = new Date();
 		description = "";
@@ -42,6 +51,18 @@ public class Metadata implements Serializable {
 		this.setNumberOfFiles(m.getNumberOfFiles());
 	}
 	
+	public String[] toStringArray() {
+		String[] values = new String[columnHeaders.length];
+		
+		values[0] = getName();
+		values[1] = getOriginalName();
+		values[2] = getTimeStamp().toString();
+		values[3] = String.valueOf(getNumberOfFiles());
+		values[4] = String.valueOf(getFileSize());
+		values[5] = getDescription();
+		
+		return values;
+	}
 	public void setTimestamp(Date date) {
 		this.timestamp = date;
 	}
