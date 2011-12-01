@@ -1,0 +1,4 @@
+step 1: implement class CompletenessChecker (see javadoc)
+step 2: compile with javac ...
+step 3:	generate data-repository-plugin.jar 
+step 4: copy this jar to the directory which contains the darep.jar
