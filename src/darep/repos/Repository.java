@@ -270,6 +270,14 @@ public class Repository {
 			throw new RepositoryException("Could not get Dataset " + name, e);
 		}
 	}
+	
+	public DataSet[] getDatasets() throws RepositoryException {
+		try {
+			return db.getAllDataSets();
+		} catch (StorageException e) {
+			throw new RepositoryException("Could not get all Datasets ", e);
+		}
+	}
 
 	public void replace(Command command) throws RepositoryException {
 		
