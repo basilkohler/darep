@@ -15,7 +15,7 @@ import java.nio.channels.FileChannel;
  * Contains some useful static methods that don't specifically belong
  * to a package.
  */
-public class Helper {
+public class $ {
 
 	/**
 	 * Returns true, if the given array contains the object "search".
@@ -82,12 +82,12 @@ public class Helper {
 	}
 
 	/**
-	 * Used as a parameter to {@link Helper}.stringToLength()
+	 * Used as a parameter to {@link $}.stringToLength()
 	 */
 	public static final boolean ALIGN_LEFT = true;
 	
 	/**
-	 * Used as a parameter to {@link Helper}.stringToLength()
+	 * Used as a parameter to {@link $}.stringToLength()
 	 */
 	public static final boolean ALIGN_RIGHT = false;
 	
@@ -203,7 +203,7 @@ public class Helper {
 				FileInputStream fIn1 = new FileInputStream(f1);
 				FileInputStream fIn2 = new FileInputStream(f2);
 				
-				return Helper.streamToString(fIn1).equals(Helper.streamToString(fIn2));
+				return $.streamToString(fIn1).equals($.streamToString(fIn2));
 			}
 			
 			if (f1.isDirectory()) {

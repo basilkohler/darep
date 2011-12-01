@@ -190,7 +190,7 @@ public class DarepController {
 			if(is == null) {
 				is = new FileInputStream(new File(path));
 			}
-			logger.logSuccess(Helper.streamToString(is));
+			logger.logSuccess($.streamToString(is));
 		} catch (FileNotFoundException e) {
 			throw new RepositoryException("could not find the helpfile: " + path, e);
 		} catch (IOException e) {

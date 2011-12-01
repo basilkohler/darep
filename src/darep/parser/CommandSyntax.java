@@ -1,7 +1,7 @@
 package darep.parser;
 
 import darep.Command;
-import darep.Helper;
+import darep.$;
 
 /**
  * Defines the syntax for one action. There should be one CommandSyntax-object
@@ -26,11 +26,11 @@ public class CommandSyntax {
 	}
 
 	public boolean allowsOption(String name) {
-		return Helper.arrayContains(name, options);
+		return $.arrayContains(name, options);
 	}
 
 	public boolean allowsFlag(String name) {
-		return Helper.arrayContains(name, flags);
+		return $.arrayContains(name, flags);
 	}
 
 	public Command.ActionType getAction() {

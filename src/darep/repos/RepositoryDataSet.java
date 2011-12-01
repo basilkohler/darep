@@ -3,7 +3,7 @@ package darep.repos;
 import java.io.File;
 import java.io.IOException;
 
-import darep.Helper;
+import darep.$;
 import darep.storage.DataSet;
 import darep.storage.Metadata;
 import darep.storage.Storage;
@@ -44,7 +44,7 @@ class RepositoryDataSet implements DataSet {
 	public void copyFileTo(File path) throws StorageException {
 		if (this.copyMode) {
 			try {
-				Helper.copyRecursive(file, path);
+				$.copyRecursive(file, path);
 			} catch (IOException e) {
 				throw new StorageException("Could not copy file " + file +
 											" to path " + path, e);

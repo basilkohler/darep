@@ -21,17 +21,17 @@ public class HelperTest {
 	}
 	@After
 	public void tearDown() {
-		Helper.deleteRecursive(testEnv);
+		$.deleteRecursive(testEnv);
 	}
 	@Test
 	public void testArrayContains() {
 		String[] test1 = new String[] {"hallo", "omg", "wtf", "sehr langer string"};
 		for (String element: test1) {
-			assertTrue(Helper.arrayContains(element, test1));
+			assertTrue($.arrayContains(element, test1));
 		}
 		String[] notIncluded = new String[] {"no", "", null, "not included long string"};
 		for (String element: notIncluded) {
-			assertFalse(Helper.arrayContains(element, test1));
+			assertFalse($.arrayContains(element, test1));
 		}
 	}
 	
@@ -45,12 +45,12 @@ public class HelperTest {
 		String[] empty = new String[0];
 		String[] theSame = test1.clone();
 		
-		assertTrue(Helper.arrayIsPermutation(test1, permutation));
-		assertTrue(Helper.arrayIsPermutation(test1, theSame));
-		assertFalse(Helper.arrayIsPermutation(test1, toFew));
-		assertFalse(Helper.arrayIsPermutation(test1, toMany));
-		assertFalse(Helper.arrayIsPermutation(test1, notPermutation));
-		assertFalse(Helper.arrayIsPermutation(test1, empty));
+		assertTrue($.arrayIsPermutation(test1, permutation));
+		assertTrue($.arrayIsPermutation(test1, theSame));
+		assertFalse($.arrayIsPermutation(test1, toFew));
+		assertFalse($.arrayIsPermutation(test1, toMany));
+		assertFalse($.arrayIsPermutation(test1, notPermutation));
+		assertFalse($.arrayIsPermutation(test1, empty));
 	}
 	
 	@Test
@@ -58,7 +58,7 @@ public class HelperTest {
 		String[] files = null;
 		
 		// border cases
-		assertTrue(Helper.deleteRecursive(null));
+		assertTrue($.deleteRecursive(null));
 		
 		// delete directory with sub Directories
 		String subDirName = "subdir";
@@ -67,7 +67,7 @@ public class HelperTest {
 		subDir.mkdir();
 		File subSubDir = new File(subDir, subSubDirName);
 		subSubDir.mkdir();
-		assertTrue(Helper.deleteRecursive(subDir));
+		assertTrue($.deleteRecursive(subDir));
 		files = testEnv.list();
 		for(String f : files) {
 			assertFalse(f.equals(subDirName));
@@ -77,8 +77,8 @@ public class HelperTest {
 		String dirName = "testdir";
 		File dir = new File(testEnv, dirName);
 		dir.mkdir();
-		Helper.deleteRecursive(dir);		
-		assertTrue(Helper.deleteRecursive(dir));
+		$.deleteRecursive(dir);		
+		assertTrue($.deleteRecursive(dir));
 		files = testEnv.list();
 		for(String f : files) {
 			assertFalse(f.equals(dirName));
@@ -86,7 +86,7 @@ public class HelperTest {
 		
 		// delete a file
 		File file = new File(testEnv,"file");
-		assertTrue(Helper.deleteRecursive(file));
+		assertTrue($.deleteRecursive(file));
 		files = testEnv.list();
 		for(String f : files) {
 			assertFalse(f.equals("file"));
@@ -109,8 +109,8 @@ public class HelperTest {
 		
 		System.out.println(copy.toString());
 		
-		Helper.copyRecursive(subDir, copy);
-		assertTrue(Helper.compareFilesRecursive(subDir, copy));		
+		$.copyRecursive(subDir, copy);
+		assertTrue($.compareFilesRecursive(subDir, copy));		
 	}
 	
 	@Test
@@ -120,64 +120,64 @@ public class HelperTest {
 		File copy = new File(testEnv, "testCopy");
 		copy.mkdirs();
 		
-		assertTrue(Helper.compareFilesRecursive(original, original));
-		assertTrue(Helper.compareFilesRecursive(original, copy));
+		assertTrue($.compareFilesRecursive(original, original));
+		assertTrue($.compareFilesRecursive(original, copy));
 		
 		// put some files in original folder
 		File subFile = new File(original, "test");
-		Helper.stringToFile("Hallo 42", subFile);
+		$.stringToFile("Hallo 42", subFile);
 		File subFile2 = new File(original, "test2");
-		Helper.stringToFile("Hallo 42", subFile2);
+		$.stringToFile("Hallo 42", subFile2);
 		// those two files should be equal
-		assertTrue(Helper.compareFilesRecursive(subFile, subFile2));
+		assertTrue($.compareFilesRecursive(subFile, subFile2));
 		
 		// original and copy now have different content
-		assertFalse(Helper.compareFilesRecursive(original, copy));
+		assertFalse($.compareFilesRecursive(original, copy));
 		// file should not be equal to a folder
-		assertFalse(Helper.compareFilesRecursive(copy, subFile));
+		assertFalse($.compareFilesRecursive(copy, subFile));
 		
 		// put some files in copied folder
 		File copySub = new File(copy, "test");
-		Helper.stringToFile("Hallo 42", copySub);
+		$.stringToFile("Hallo 42", copySub);
 		File copySub2 = new File(copy, "test2");
-		Helper.stringToFile("Hallo 43", copySub2);
+		$.stringToFile("Hallo 43", copySub2);
 		
 		// slightly different file content, should NOT be equal
-		assertFalse(Helper.compareFilesRecursive(original, copy));
+		assertFalse($.compareFilesRecursive(original, copy));
 		
 		copySub2.delete();
 		File copySub3 = new File(copy, "blabla");
-		Helper.stringToFile("Hallo 42", copySub3);
+		$.stringToFile("Hallo 42", copySub3);
 		
 		// different filenames, should NOT be equal
-		assertFalse(Helper.compareFilesRecursive(original, copy));
+		assertFalse($.compareFilesRecursive(original, copy));
 		
 		copySub3.delete();
-		Helper.stringToFile("Hallo 42", copySub2);
+		$.stringToFile("Hallo 42", copySub2);
 		// dirs have same content, should be equal now
-		Helper.compareFilesRecursive(original, copy);
+		$.compareFilesRecursive(original, copy);
 		
 		// create subdir
 		File subdir = new File(original, "subdir");
 		subdir.mkdirs();
-		assertFalse(Helper.compareFilesRecursive(original, copy));
+		assertFalse($.compareFilesRecursive(original, copy));
 		
 		File copySubdir = new File(copy, "subdir");
 		copySubdir.mkdirs();
-		assertTrue(Helper.compareFilesRecursive(original, copy));
+		assertTrue($.compareFilesRecursive(original, copy));
 		
 	}
 	
 	@Test
 	public void testStringToLength() {
-		assertEquals(Helper.stringToLength("0123456789", 10), "0123456789");
-		assertEquals(Helper.stringToLength("0123456789", 5), "01234");
-		assertEquals(Helper.stringToLength("", 10).length(), 10);
-		assertEquals(Helper.stringToLength("abc",5, Helper.ALIGN_LEFT), "abc  ");
-		assertEquals(Helper.stringToLength("abc",5, Helper.ALIGN_RIGHT), "  abc");
-		assertEquals(Helper.stringToLength("", 3), "   ");
-		assertEquals(Helper.stringToLength(null, 10), null);
-		assertEquals(Helper.stringToLength("bla", -10), null);
+		assertEquals($.stringToLength("0123456789", 10), "0123456789");
+		assertEquals($.stringToLength("0123456789", 5), "01234");
+		assertEquals($.stringToLength("", 10).length(), 10);
+		assertEquals($.stringToLength("abc",5, $.ALIGN_LEFT), "abc  ");
+		assertEquals($.stringToLength("abc",5, $.ALIGN_RIGHT), "  abc");
+		assertEquals($.stringToLength("", 3), "   ");
+		assertEquals($.stringToLength(null, 10), null);
+		assertEquals($.stringToLength("bla", -10), null);
 	}
 
 }

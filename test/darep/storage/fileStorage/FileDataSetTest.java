@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import darep.Helper;
+import darep.$;
 import darep.repos.RepositoryException;
 import darep.storage.Metadata;
 import darep.storage.StorageException;
@@ -39,7 +39,7 @@ public class FileDataSetTest {
 	
 	@After
 	public void tearDown() throws Exception {
-		Helper.deleteRecursive(testEnv);
+		$.deleteRecursive(testEnv);
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class FileDataSetTest {
 		
 		FileInputStream copiedIn = new FileInputStream(destination);
 		FileInputStream fileIn = new FileInputStream(file);
-		assertEquals(Helper.streamToString(copiedIn), Helper.streamToString(fileIn));
+		assertEquals($.streamToString(copiedIn), $.streamToString(fileIn));
 	}
 	
 	@Test
@@ -86,7 +86,7 @@ public class FileDataSetTest {
 		dsFolder.copyFileTo(destination);
 		assertTrue(destination.exists());
 		assertTrue(destination.isDirectory());
-		assertTrue(Helper.compareFilesRecursive(folder, destination));
+		assertTrue($.compareFilesRecursive(folder, destination));
 	}
 
 }
