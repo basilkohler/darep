@@ -1,8 +1,10 @@
 package darep.server;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,8 @@ import java.util.Properties;
 import darep.Command;
 import darep.Command.ActionType;
 import darep.logger.Logger;
+import darep.renderer.Renderer;
+import darep.renderer.htmlRenderer.HtmlRenderer;
 import darep.repos.Repository;
 import darep.repos.RepositoryException;
 
@@ -24,7 +28,8 @@ public class Server extends Thread {
 	private boolean running = true;
 	private CompletenessChecker completenessChecker;
 	private Map<String, String> completenessCheckerProperties;
-	
+	private BufferedWriter htmlListWriter;
+	private Renderer htmlRenderer;
 	private static final String[] propertyNames = {"incoming-directory", "html-overview", "log-file", 
 		"checking-interval-in-seconds", "completeness-checker.class-name" };
 	private static final int INCOMING_DIRECTORY = 0;
@@ -51,6 +56,7 @@ public class Server extends Thread {
 		completenessChecker = getCompletenessChecker();
 		serverLogger = new ServerLogger(getProperty(LOG_FILE));
 		repository.setLogger(serverLogger);
+		htmlRenderer = new HtmlRenderer();
 	}
 	
 	private Map<String, String> getCompletenessCheckerProperties(Properties p) {
@@ -94,22 +100,33 @@ public class Server extends Thread {
 	private void createServerFiles() throws ServerException {
 		File incoming = new File(getProperty(INCOMING_DIRECTORY));
 		if(incoming.exists() == false) {
-			throw new ServerException("incoming directory " + incoming.getAbsolutePath() + " does not exist.");
+			throw new ServerException("incoming directory " + incoming.getAbsolutePath() + 
+					" does not exist.");
 		}		
 		
 		File log = new File(getProperty(LOG_FILE));
-		if(log.exists() == false) {
-			try {
-				log.createNewFile();
-			} catch (IOException e) {
-				throw new ServerException("could not create logfile " + log.getAbsolutePath() + " because the folder does not exist", e);
-			}
+		try {
+			log.createNewFile();
+		} catch (IOException e) {
+			throw new ServerException("could not create logfile " + log.getAbsolutePath() + 
+					" because the folder does not exist", e);
 		}
+		File htmlOverview = new File(getProperty(HTML_OVERVIEW));
+		try {
+			htmlOverview.createNewFile();
+		} catch (IOException e) {
+			throw new ServerException("could not create htmloverviewfile " + htmlOverview.getAbsolutePath() + 
+					" because folder does not exist");
+		}
+		
+		
 	}
 	
 	@Override
 	public void run() {
 		try {
+			renderHtmlOverview();
+			
 			int seconds;
 			try {
 				seconds = Integer.parseInt(getProperty(CHECKING_INTERVAL_IN_SECONDS));
@@ -143,9 +160,33 @@ public class Server extends Thread {
 						throw new ServerException("server could not add file " + f.getPath());
 					}
 				}
+				if(files.length > 0) {
+					renderHtmlOverview();
+				}
 			}
 		} catch (ServerException e) {
 			serverLogger.logError(e.getMessage());
+		}
+	}
+
+	private void renderHtmlOverview() throws ServerException {
+		File htmlList = new File(getProperty(HTML_OVERVIEW));
+		try {
+			htmlListWriter = new BufferedWriter(new FileWriter(htmlList));
+		} catch (IOException e) {
+			throw new ServerException("Could not write the data-repository list to the html file " + getProperty(HTML_OVERVIEW));
+		}
+		try {
+			htmlListWriter.write(htmlRenderer.render(repository.getDatasets()));
+		} catch (RepositoryException e1) {
+			throw new ServerException("could not render html list", e1);
+		} catch (IOException e1) {
+			throw new ServerException("could not write list to html file");
+		}
+		try {
+			htmlListWriter.close();
+		} catch (IOException e) {
+			throw new ServerException("could not close html file. file might be broken or in a wrong state");
 		}
 	}
 	
