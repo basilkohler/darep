@@ -2,6 +2,7 @@ step 1: implement class CompletenessChecker (see javadoc)
 step 2: compile with "javac -cp darepLib.jar <your java file>"
 step 3:	generate data-repository-plugin.jar with "jar cf data-repository-plugin.jar <your-class-file>"
 step 4: copy this jar to the directory which contains the darep.jar
+step 5: specify your class in your properties file
 
 Example:
 
@@ -34,6 +35,12 @@ Jar it:
 =======
 
 jar cf data-repository-plugin.jar MyCompletenessChecker.class
+
+
+Write the following in your properties file:
+============================================
+
+completeness-checker.class-name = MyCompletenessChecker
 
 
 Be Happy
