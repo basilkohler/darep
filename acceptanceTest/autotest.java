@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-import darep.Helper;
+import darep.$;
 
 
 public class autotest {
@@ -32,9 +32,9 @@ public class autotest {
 	}
 
 	private static void cleanUp() {
-		Helper.deleteRecursive(playground);	
+		$.deleteRecursive(playground);	
 		String defaultRep=System.getProperty("user.home")+"/.data-repository";
-		Helper.deleteRecursive(new File(defaultRep));	
+		$.deleteRecursive(new File(defaultRep));	
 	}
 
 	private static void prepare(String distPath) {
@@ -51,7 +51,7 @@ public class autotest {
 			e.printStackTrace();
 		}
 		String oldRep=System.getProperty("user.home")+"/.data-repository";
-		Helper.deleteRecursive(new File(oldRep));		
+		$.deleteRecursive(new File(oldRep));		
 	}
 
 }
