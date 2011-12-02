@@ -1,4 +1,40 @@
 step 1: implement class CompletenessChecker (see javadoc)
-step 2: compile with javac ...
-step 3:	generate data-repository-plugin.jar 
+step 2: compile with "javac -cp darepLib.jar <your java file>"
+step 3:	generate data-repository-plugin.jar with "jar cf data-repository-plugin.jar <your-class-file>"
 step 4: copy this jar to the directory which contains the darep.jar
+
+Example:
+
+Create MyCompletenessChecker.java in the sdk-directory with the following content:
+==================================================================================
+
+import java.io.File;
+
+public class MyCompletenessChecker implements darep.server.CompletenessChecker {
+	
+	@Override
+	public File[] getCompletedFiles(File directory) throws Exception {
+		return directory.listFiles();
+	}
+
+	@Override
+	public void setProperty(String key, String value) throws IllegalArgumentException {
+		// No Properties
+	}
+}
+
+
+Compile it:
+===========
+
+javac -cp darepLib.jar MyCompletenessChecker.java
+
+
+Jar it:
+=======
+
+jar cf data-repository-plugin.jar MyCompletenessChecker.class
+
+
+Be Happy
+========
