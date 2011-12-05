@@ -13,6 +13,7 @@
 	<property name="resources" location="resources" />
 	<property name="serverDefaultProperties" location="${src}/server-default.properties" />
 	<property name="pluginJarName" value="data-repository-plugin.jar" />
+	<property name="pluginHowTo" value="how-to-plugin.txt"/>
 	
 	<path id="junitLib">
 		<pathelement location="lib/junit-4.10.jar" />
@@ -44,6 +45,7 @@
 	
 	<target name="makeSDK" depends="compile" description="Generate the data-repository sdk">
 		<jar jarfile="${sdkDist}/darepLib.jar" basedir="${build}" includes="darep/server/CompletenessChecker.class" />
+		<copy tofile="${sdkDist}/how-to-plugin.txt" file="${pluginHowTo}" />
 		<javadoc sourcefiles="src/darep/server/CompletenessChecker.java" destdir="${sdkDist}/doc" />
 	</target>
 	
