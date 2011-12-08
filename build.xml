@@ -1,9 +1,7 @@
 <project name="darep" default="zipdist" basedir=".">
 	<property name="src" location="src" />
-	<property name="srcPlugins" location="plugins" />
 	<property name="srcTest" location="test" />
 	<property name="build" location="bin" />
-	<property name="buildPlugins" location="binPlugins" />
 	<property name="dist" location="dist" />
 	<property name="sdkDist" location="${dist}/sdk" />
 	<property name="wrapperScript" location="${src}/data-repository" />
@@ -33,7 +31,6 @@
 	
 	<target name="init" depends="clean" description="Init">
 		<mkdir dir="${build}" />
-		<mkdir dir="${buildPlugins}" />
 		<mkdir dir="${dist}" />
 		<mkdir dir="${dist}/sdk" />
 		<tstamp />
@@ -49,10 +46,6 @@
 		<javadoc sourcefiles="src/darep/server/CompletenessChecker.java" destdir="${sdkDist}/doc" />
 	</target>
 	
-	<target name="compilePlugins" depends="init, makeSDK" description="Compile Plugins">
-		<javac srcdir="${srcPlugins}" destdir="${buildPlugins}" classpathref="plugin-classpath" includeantruntime="false" />
-	</target>
-	
 	<target name="jar" depends="compile" description="Generate JAR">
 		<jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
 			<fileset dir="${resources}"/>
@@ -63,10 +56,6 @@
 		</jar>
 	</target>
 	
-	<target name="jarPlugins" depends="compilePlugins" description="Generate Plugins JAR">
-		<jar jarfile="${dist}/${pluginJarName}" basedir="${buildPlugins}" />
-	</target>
-
 	<target name="compile-test" depends="compile" description="Compile test sources.">
 		<javac srcdir="${srcTest}" destdir="${build}" classpathref="junitLib" includeantruntime="false" />
 	</target>
@@ -84,7 +73,7 @@
 		</junit>
 	</target>
 	
-	<target name="dist" depends="jar, test, jarPlugins" description="Creates a complete distribution in folder 'dist'">
+	<target name="dist" depends="jar, test" description="Creates a complete distribution in folder 'dist'">
 		<copy tofile="${dist}/data-repository" file="${wrapperScript}" />
 		<chmod file="${dist}/data-repository" perm="u+x" />
 		<copy tofile="${dist}/data-repository.cmd" file="${wrapperScriptWindows}" />

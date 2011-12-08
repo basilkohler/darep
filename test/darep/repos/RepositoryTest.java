@@ -46,6 +46,7 @@ public class RepositoryTest {
 	@After
 	public void tearDown() throws Exception {
 		Helper.deleteRecursive(testDir);
+		Helper.deleteRecursive(new File("NONEXISTINGREPO"));
 	}
 
 	@Test
