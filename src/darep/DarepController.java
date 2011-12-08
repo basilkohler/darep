@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sun.tools.javac.resources.version;
+
 import darep.Command.ActionType;
 import darep.logger.Logger;
 import darep.logger.SystemLogger;
@@ -27,6 +29,8 @@ import darep.storage.fileStorage.FileStorage;
  * 
  */
 public class DarepController {
+	
+	public static final String VERSION = "0.42";
 	
 	public static final String RESOURCES = "resources";
 	public static final String HELPFILE = "help.txt";
@@ -182,6 +186,8 @@ public class DarepController {
 	}
 	
 	private void printHelp() throws RepositoryException{
+		
+		logger.logSuccess("Version: " + VERSION);
 
 		String path = RESOURCES+"/"+HELPFILE; 
 		try {

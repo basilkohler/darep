@@ -288,6 +288,7 @@ public class Repository {
 		
 		try {
 			DataSet oldDs = db.getDataSet(name);
+			// TODO fix Nullpointer exception for oldDs
 			Metadata oldMeta = oldDs.getMetadata();
 			oldMeta.update(newMeta);
 			newDs.setMetadata(oldMeta);
