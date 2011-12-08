@@ -2,7 +2,6 @@ package darep.renderer.htmlRenderer;
 
 import java.util.Arrays;
 
-import darep.Helper;
 import darep.renderer.Renderer;
 import darep.storage.DataSet;
 import darep.storage.DataSetDateComparator;
