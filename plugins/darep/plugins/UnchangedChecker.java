@@ -30,7 +30,7 @@ public class UnchangedChecker implements CompletenessChecker{
 		if(key.equals(expectedKey) == false) {
 			throw new IllegalArgumentException("UnchangedChecker only accepts the property " + expectedKey);
 		}
-		if(value == null || value == "") {
+		if(value == null || value.trim().length() == 0) {
 			throw new IllegalArgumentException("value for " + key + " can not be null or empty");
 		}	
 		try {
