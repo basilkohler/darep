@@ -12,7 +12,7 @@ import org.junit.Test;
 import darep.Command;
 import darep.Command.ActionType;
 import darep.DarepController;
-import darep.$;
+import darep.Helper;
 import darep.logger.SystemLogger;
 import darep.parser.ParseException;
 import darep.parser.Parser;
@@ -45,7 +45,7 @@ public class RepositoryTest {
 
 	@After
 	public void tearDown() throws Exception {
-		$.deleteRecursive(testDir);
+		Helper.deleteRecursive(testDir);
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class RepositoryTest {
 			e.printStackTrace();
 		}
 		assertTrue(newDataset.exists());
-		assertTrue($.compareFilesRecursive(testDataSet, newDataset));
+		assertTrue(Helper.compareFilesRecursive(testDataSet, newDataset));
 		assertTrue(newMetadata.exists());
 	}
 
@@ -88,7 +88,7 @@ public class RepositoryTest {
 		command = getCommand("add " + testDataSet.getAbsolutePath());
 		repo.add(command);
 		assertTrue(newDataset.exists());
-		assertTrue($.compareFilesRecursive(testDataSet, newDataset));
+		assertTrue(Helper.compareFilesRecursive(testDataSet, newDataset));
 		assertTrue(newMetadata.exists());
 		for (int i = 1; i < 4; i++) {
 
@@ -98,7 +98,7 @@ public class RepositoryTest {
 				newDataset = new File(testRepo + "/data/TESTDATASET" + j);
 				newMetadata = new File(testRepo + "/metadata/TESTDATASET" + j);
 				assertTrue(newDataset.exists());
-				assertTrue($.compareFilesRecursive(testDataSet, newDataset));
+				assertTrue(Helper.compareFilesRecursive(testDataSet, newDataset));
 				assertTrue(newMetadata.exists());
 			}
 		}

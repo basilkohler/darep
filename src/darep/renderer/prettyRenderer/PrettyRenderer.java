@@ -2,7 +2,7 @@ package darep.renderer.prettyRenderer;
 
 import java.util.Arrays;
 
-import darep.$;
+import darep.Helper;
 import darep.renderer.Renderer;
 import darep.storage.DataSet;
 import darep.storage.DataSetDateComparator;
@@ -15,8 +15,8 @@ import darep.storage.Metadata;
  */
 public class PrettyRenderer implements Renderer {
 	
-	private final static boolean ALIGN_LEFT = $.ALIGN_LEFT;
-	private final static boolean ALIGN_RIGHT = $.ALIGN_RIGHT;
+	private final static boolean ALIGN_LEFT = Helper.ALIGN_LEFT;
+	private final static boolean ALIGN_RIGHT = Helper.ALIGN_RIGHT;
 	
 	private boolean[] alignment = new boolean[] {
 			ALIGN_LEFT,
@@ -47,7 +47,7 @@ public class PrettyRenderer implements Renderer {
 			
 			for (int i = 0; i < values.length; i++) {
 				sb.append(
-						$.stringToLength(
+						Helper.stringToLength(
 								values[i],
 								colWidths[i],
 								alignment[i]));
@@ -66,13 +66,13 @@ public class PrettyRenderer implements Renderer {
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i = 0; i < Metadata.columnHeaders.length; i++) {
-			sb.append($.stringToLength(Metadata.columnHeaders[i],
+			sb.append(Helper.stringToLength(Metadata.columnHeaders[i],
 					colWidths[i], ALIGN_LEFT) + "|");
 		}
 		sb.append("\n");
 		
 		for (int width: colWidths) {
-			sb.append($.stringTimes("-", width));
+			sb.append(Helper.stringTimes("-", width));
 			sb.append("+");
 		}
 		sb.append("\n");

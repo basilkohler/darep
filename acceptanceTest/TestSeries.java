@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 
-import darep.$;
+import darep.Helper;
 
 public class TestSeries {
 
@@ -237,7 +237,7 @@ stupidName2+"\tmy_27._data_set_with_a_really_long_&_and_stupid_name\t<:>\t4\t27\
 		
 		env.openTest(34);
 		hello=env.makeFile(playground, "hello.txt", "hello universe");
-		$.deleteRecursive(helloCopy);
+		Helper.deleteRecursive(helloCopy);
 		helloCopy=env.makeFile(copies, "hello.txt", "hello universe");		
 		env.check("replace -d data-replaced DS-42 hello.txt", 
 				0, 
@@ -250,7 +250,7 @@ stupidName2+"\tmy_27._data_set_with_a_really_long_&_and_stupid_name\t<:>\t4\t27\
 						name2+"| hello.txt     | <:> |               1 |  11 | this_is_a_test_data_set |\n" +
 						"DS-42    | hello.txt     | <:> |               1 |  14 | data-replaced           |\n" +
 						"(3 data sets, 36 bytes in total)\n");
-		$.deleteRecursive(new File(exports,"hello.txt"));
+		Helper.deleteRecursive(new File(exports,"hello.txt"));
 		env.check("export DS-42 exports", 0, "-");
 		env.checkExists(new File(exports,"hello.txt")); 
 		env.compareFilesRecursive(helloCopy, new File(exports,"hello.txt"));
@@ -416,7 +416,7 @@ stupidName2+"\tmy_27._data_set_with_a_really_long_&_and_stupid_name\t<:>\t4\t27\
 		
 		env.openTest(49);
 		server.destroy();
-		$.deleteRecursive(properties);
+		Helper.deleteRecursive(properties);
 		properties=env.makeFile(playground, "server.properties", 
 				"incoming-directory = incoming\n"+
 		"html-overview = my-webserver/public-stuff/overview.html\n"+
@@ -426,7 +426,7 @@ stupidName2+"\tmy_27._data_set_with_a_really_long_&_and_stupid_name\t<:>\t4\t27\
 		env.closeTest();
 		
 		env.openTest(50);
-				$.deleteRecursive(properties);
+				Helper.deleteRecursive(properties);
 				properties=env.makeFile(playground, "server.properties", 
 						"incoming-directory = incoming\n"+
 				"html-overview = my-webserver/public-stuff/overview.html\n"+
@@ -436,7 +436,7 @@ stupidName2+"\tmy_27._data_set_with_a_really_long_&_and_stupid_name\t<:>\t4\t27\
 				env.closeTest();
 				
 				env.openTest(51);
-				$.deleteRecursive(properties);
+				Helper.deleteRecursive(properties);
 				properties=env.makeFile(playground, "server.properties", 
 						"incoming-directory = incoming\n"+
 				"html-overview = my-webserver/public-stuff/overview.html\n"+
@@ -450,7 +450,7 @@ stupidName2+"\tmy_27._data_set_with_a_really_long_&_and_stupid_name\t<:>\t4\t27\
 				env.closeTest();
 		
 				env.openTest(52);
-				$.deleteRecursive(properties);
+				Helper.deleteRecursive(properties);
 				properties=env.makeFile(playground, "server.properties", 
 						"incoming-directory = incoming\n"+
 				"#html-overview = my-webserver/public-stuff/overview.html\n"+
@@ -460,7 +460,7 @@ stupidName2+"\tmy_27._data_set_with_a_really_long_&_and_stupid_name\t<:>\t4\t27\
 				env.closeTest();
 				
 				env.openTest(53);
-				$.deleteRecursive(properties);
+				Helper.deleteRecursive(properties);
 				properties=env.makeFile(playground, "server.properties", 
 						"#incoming-directory = incoming\n"+
 				"html-overview = my-webserver/public-stuff/overview.html\n"+

@@ -78,7 +78,7 @@ public class Command {
 	 * @return
 	 */
 	public boolean hasFlag(String name) {
-		return $.arrayContains(name, flags);
+		return Helper.arrayContains(name, flags);
 	}
 	
 	/**
@@ -154,9 +154,9 @@ public class Command {
 
 		if(this.action != other.action)
 			return false;
-		if($.arrayIsPermutation(this.flags,other.flags) == false)
+		if(Helper.arrayIsPermutation(this.flags,other.flags) == false)
 			return false;
-		if($.arrayIsPermutation(this.parameters, other.parameters) == false)
+		if(Helper.arrayIsPermutation(this.parameters, other.parameters) == false)
 			return false;
 		if(this.options.equals(other.options) == false) 
 			return false;

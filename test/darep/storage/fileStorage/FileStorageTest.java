@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import darep.$;
+import darep.Helper;
 import darep.repos.RepositoryException;
 import darep.storage.Metadata;
 import darep.storage.StorageException;
@@ -57,7 +57,7 @@ public class FileStorageTest {
 
 	@After
 	public void tearDown() throws Exception {
-		$.deleteRecursive(testDir);
+		Helper.deleteRecursive(testDir);
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class FileStorageTest {
 		assertTrue(expectedDataset.exists());
 		assertTrue(expectedMeta.exists());
 		assertTrue(testData.exists());
-		$.compareFilesRecursive(expectedDataset, testData);
+		Helper.compareFilesRecursive(expectedDataset, testData);
 	}
 	
 	@Test

@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import darep.$;
+import darep.Helper;
 import darep.storage.DataSet;
 import darep.storage.Metadata;
 import darep.storage.Storage;
@@ -81,7 +81,7 @@ public class FileStorage implements Storage {
 	@Override
 	public void delete(String name) throws StorageException {
 		File data = new File(filedb, name);
-		boolean successData = $.deleteRecursive(data);
+		boolean successData = Helper.deleteRecursive(data);
 		
 		File metadata = new File(metadb, name);
 		boolean successMeta = metadata.delete();

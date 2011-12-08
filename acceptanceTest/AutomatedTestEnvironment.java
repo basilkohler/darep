@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import darep.$;
+import darep.Helper;
 
 public class AutomatedTestEnvironment {
 	private File playground;
@@ -214,7 +214,7 @@ public class AutomatedTestEnvironment {
 
 	public void compareFilesRecursive(File f1, File f2) {
 		try {
-			if (!$.compareFilesRecursive(f1, f2)) {
+			if (!Helper.compareFilesRecursive(f1, f2)) {
 				fail();
 				print(f1.getAbsolutePath()+" should have the same content as "+f2.getAbsolutePath());
 			}

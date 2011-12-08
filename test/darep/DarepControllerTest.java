@@ -30,7 +30,7 @@ public class DarepControllerTest {
 	@Test
 	public void testPrintHelp() throws DarepException, IOException {
 		InputStream is = new FileInputStream(new File("./resources/help.txt"));
-		String expected = $.streamToString(is).trim();
+		String expected = Helper.streamToString(is).trim();
 		
 		controller.processCommand(makeArgs("help"));
 		assertEquals(logger.getContent().trim(), expected);

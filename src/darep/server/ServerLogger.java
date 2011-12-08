@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import darep.$;
+import darep.Helper;
 import darep.logger.Logger;
 
 
@@ -65,7 +65,7 @@ public class ServerLogger extends Logger{
 		InputStream is = new FileInputStream(new File(logFilePath));
 		String result;
 		try {
-			result = $.streamToString(is);
+			result = Helper.streamToString(is);
 		} finally {
 			is.close();
 		}

@@ -3,7 +3,7 @@ package darep.storage.fileStorage;
 import java.io.File;
 import java.io.IOException;
 
-import darep.$;
+import darep.Helper;
 import darep.storage.DataSet;
 import darep.storage.Metadata;
 import darep.storage.StorageException;
@@ -75,7 +75,7 @@ class FileDataSet implements DataSet {
 	@Override
 	public void copyFileTo(File path) throws StorageException {
 		try {
-			$.copyRecursive(file, path);
+			Helper.copyRecursive(file, path);
 		} catch (IOException e) {
 			throw new StorageException("Could not copy file to " + path, e);
 		}
