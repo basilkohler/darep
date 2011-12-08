@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Contains some useful static methods that don't specifically belong
@@ -31,6 +33,11 @@ public class Helper {
 			}
 		}
 		return false;
+	}
+	
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+	public static String formatDate(Date date) {
+		return dateFormat.format(date);
 	}
 	
 	/**

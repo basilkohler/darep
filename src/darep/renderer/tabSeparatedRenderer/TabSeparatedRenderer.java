@@ -2,6 +2,7 @@ package darep.renderer.tabSeparatedRenderer;
 
 import java.util.Arrays;
 
+import darep.Helper;
 import darep.renderer.Renderer;
 import darep.storage.DataSet;
 import darep.storage.DataSetDateComparator;
@@ -32,7 +33,7 @@ public class TabSeparatedRenderer implements Renderer {
 			m = set.getMetadata();
 			sb.append(m.getName() + '\t');
 			sb.append(m.getOriginalName() + '\t');
-			sb.append(m.getTimeStamp().toString() + '\t');
+			sb.append(Helper.formatDate(m.getTimeStamp()) + '\t');
 			sb.append(m.getNumberOfFiles() + '\t');
 			sb.append(m.getFileSize() + '\t');
 			sb.append(m.getDescription());

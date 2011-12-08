@@ -3,6 +3,8 @@ package darep.storage;
 import java.io.Serializable;
 import java.util.Date;
 
+import darep.Helper;
+
 public class Metadata implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -56,7 +58,7 @@ public class Metadata implements Serializable {
 		
 		values[0] = getName();
 		values[1] = getOriginalName();
-		values[2] = getTimeStamp().toString();
+		values[2] = Helper.formatDate(getTimeStamp());
 		values[3] = String.valueOf(getNumberOfFiles());
 		values[4] = String.valueOf(getFileSize());
 		values[5] = getDescription();

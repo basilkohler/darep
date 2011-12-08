@@ -93,7 +93,7 @@ public class PrettyRenderer implements Renderer {
 			colWidths[0] = Math.max(meta.getName().length(), colWidths[0]);
 			colWidths[1] = Math.max(meta.getOriginalName().length(),
 									colWidths[1]);
-			colWidths[2] = Math.max(meta.getTimeStamp().toString().length(),
+			colWidths[2] = Math.max(Helper.formatDate(meta.getTimeStamp()).length(),
 									colWidths[2]);
 			colWidths[3] = Math.max(
 					String.valueOf(meta.getNumberOfFiles()).length(),

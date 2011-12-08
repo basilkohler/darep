@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import darep.Helper;
@@ -32,8 +31,7 @@ public class ServerLogger extends Logger{
 		StringBuilder sb = new StringBuilder();
 		
 		// append timestamp
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		String timeStamp = sdf.format(new Date().getTime());	
+		String timeStamp = Helper.formatDate(new Date());	
 		sb.append("[" + timeStamp + "] ");
 		
 		// append loglevel
