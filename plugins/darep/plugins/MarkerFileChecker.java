@@ -26,6 +26,7 @@ public class MarkerFileChecker implements CompletenessChecker {
 				}
 				
 				complete.add(newFile);
+				file.delete();
 			}
 		}
 		
@@ -37,7 +38,7 @@ public class MarkerFileChecker implements CompletenessChecker {
 			throws IllegalArgumentException {
 		if (value == null)
 			throw new IllegalArgumentException("value for " + key + " can not be null");
-		if (key != "prefix")
+		if (key.equals("prefix"))
 			throw new IllegalArgumentException("MarkerFileChecker only accepts the property 'prefix'");
 		if (value.contains("/"))
 			throw new IllegalArgumentException("Prefix can not contain '/'");
