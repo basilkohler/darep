@@ -15,7 +15,7 @@ public class UnchangedChecker implements CompletenessChecker{
 		ArrayList<File> completedFiles = new ArrayList<File>(files.length);
 		long time = new Date().getTime();
 		for(File f:files) {
-			if(f.lastModified() <= time - quietPeriodInSeconds * 1000) {
+			if(getYoungestLastModified(f) <= time - quietPeriodInSeconds * 1000) {
 				completedFiles.add(f);
 			}
 		}
@@ -41,6 +41,23 @@ public class UnchangedChecker implements CompletenessChecker{
 		if(quietPeriodInSeconds <= 0) {
 			throw new IllegalArgumentException(key + " must be greater than 0");
 		}
+	}
+	
+	private long getYoungestLastModified(File f) {
+		return getYoungestLastModified(f, 0);
+	}
+	
+	private long getYoungestLastModified(File file, long timestamp) {
+		timestamp = Math.max(timestamp, file.lastModified());
+		
+		if (file.isDirectory()) {
+			for (File f: file.listFiles()) {
+				timestamp = getYoungestLastModified(f, timestamp);
+			}
+			return timestamp;
+		}
+		
+		return timestamp;
 	}
 
 }
