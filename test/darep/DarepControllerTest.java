@@ -33,7 +33,7 @@ public class DarepControllerTest {
 		String expected = Helper.streamToString(is).trim();
 		
 		controller.processCommand(makeArgs("help"));
-		// TODO
+		// TODO fix this test
 		//assertEquals(logger.getContent().trim(), expected);
 	}
 	
