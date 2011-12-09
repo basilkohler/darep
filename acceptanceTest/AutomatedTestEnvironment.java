@@ -47,14 +47,22 @@ public class AutomatedTestEnvironment {
 
 	public void print(String msg) {
 		System.out.println(msg);
+		FileWriter fstream = null;
+		BufferedWriter out = null;
 		try {
-			FileWriter fstream = new FileWriter(report, true);
-			BufferedWriter out = new BufferedWriter(fstream);
+			fstream = new FileWriter(report, true);
+			out = new BufferedWriter(fstream);
 			out.write(msg + "\n");
-			out.close();
-			fstream.close();
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
+		} finally {
+			try {
+				out.close();
+				fstream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -186,15 +194,22 @@ public class AutomatedTestEnvironment {
 
 	public File makeFile(File dir, String name, String content) {
 		File file=new File(dir,name);
+		FileWriter fstream = null;
+		BufferedWriter out = null;
 		try {
 			file.createNewFile();
-			FileWriter fstream = new FileWriter(file, true);
-			BufferedWriter out = new BufferedWriter(fstream);
+			fstream = new FileWriter(file, true);
+			out = new BufferedWriter(fstream);
 			out.write(content);
-			out.close();
-			fstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+				fstream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return file;
 	}
