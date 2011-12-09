@@ -77,8 +77,9 @@ public class Server extends Thread {
 	}
 
 	private CompletenessChecker getCompletenessChecker() throws ServerException {
+		String completenessCheckerClassName = getProperty(COMPLETENESS_CHECKER_CLASS_NAME);
 		try {
-			Class<?> cls = Class.forName(getProperty(COMPLETENESS_CHECKER_CLASS_NAME));
+			Class<?> cls = Class.forName(completenessCheckerClassName);
 			Object o = cls.newInstance();
 			if (o instanceof CompletenessChecker) {
 				CompletenessChecker c = (CompletenessChecker) o;
@@ -87,11 +88,12 @@ public class Server extends Thread {
 				}
 				return c;
 			} 
-			throw new ServerException("Specified class does not implement CompletenessChecker");
+			throw new ServerException("Specified class: " + completenessCheckerClassName + 
+													" does not implement CompletenessChecker");
 		} catch (ClassNotFoundException e) {
-			throw new ServerException(e);
+			throw new ServerException("Could not found the specified class: " + completenessCheckerClassName, e);
 		} catch (InstantiationException e) {
-			throw new ServerException(e);
+			throw new ServerException("Could not instantiate specified class: " + completenessCheckerClassName, e);
 		} catch (IllegalAccessException e) {
 			throw new ServerException(e);
 		}
