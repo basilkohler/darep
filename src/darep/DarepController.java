@@ -149,6 +149,13 @@ public class DarepController {
 			repoName = Repository.getDefaultLocation();
 		}
 		
+		//Check if Repository exists
+		if (!new File(repoName).exists() &&
+				!command.getAction().equals(ActionType.add)) {
+			throw new RepositoryException("Repository " + repoName +
+										" does not Exist");
+		}
+		
 		repository = new Repository(repoName, logger, this.storage);
 			
 		switch (command.getAction()) {
