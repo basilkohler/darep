@@ -1,6 +1,6 @@
 package darep;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,8 +33,7 @@ public class DarepControllerTest {
 		String expected = Helper.streamToString(is).trim();
 		
 		controller.processCommand(makeArgs("help"));
-		// TODO fix this test
-		//assertEquals(logger.getContent().trim(), expected);
+		assertTrue(logger.getContent().trim().endsWith(expected));
 	}
 	
 	@Test
